@@ -239,7 +239,7 @@ export function ChatWindow() {
           role="log"
           aria-live="polite"
           aria-label="Chat messages history"
-          className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 space-y-3"
+          className="flex-1 min-h-0 overflow-y-auto chat-scrollbar p-3 sm:p-4 space-y-3"
         >
           {isLoadingMessages ? (
             <div className="flex justify-center py-8 text-xs text-slate-500">
@@ -317,7 +317,7 @@ export function ChatWindow() {
               placeholder={`Send message to +${activeLead.phone}...`}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 min-w-0 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
+              className="flex-1 min-w-0 px-3.5 sm:px-4 py-2 sm:py-2.5 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
             />
             <button
               type="submit"
@@ -342,7 +342,7 @@ export function ChatWindow() {
           />
           <aside
             aria-label="Customer profile details"
-            className="fixed inset-y-0 right-0 z-30 w-80 max-w-[85vw] bg-white p-4 overflow-y-auto space-y-4 shadow-2xl xl:static xl:w-80 xl:shadow-none xl:border-l xl:border-slate-200/70 animate-in slide-in-from-right duration-150 text-slate-800 shrink-0"
+            className="fixed inset-y-0 right-0 z-30 w-80 max-w-[85vw] bg-white p-4 overflow-y-auto chat-scrollbar space-y-4 shadow-2xl xl:static xl:w-80 xl:shadow-none xl:border-l xl:border-slate-200/70 animate-in slide-in-from-right duration-150 text-slate-800 shrink-0"
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <h4 className="font-bold text-slate-900 text-sm">Customer Details</h4>
@@ -416,7 +416,7 @@ export function ChatWindow() {
                   onChange={(e) => setNotes(e.target.value)}
                   onBlur={handleSaveNotes}
                   placeholder="Add meeting notes, customer preferences..."
-                  className="w-full p-3 neu-input rounded-2xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
+                  className="w-full p-3 neu-input rounded-2xl text-base sm:text-xs text-slate-900 placeholder-slate-400 focus:outline-none"
                 />
                 <span className="text-[10px] text-slate-500">
                   Notes auto-save when you click away.
