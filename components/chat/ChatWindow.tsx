@@ -431,30 +431,33 @@ export function ChatWindow() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Guaranteed Visual Neumorphic & Royal Blue Scrollbar (Visible on Mobile & Desktop) */}
+          {/* True Neumorphic Interactive Scrollbar (Tactile Extruded Thumb & Debossed Well) */}
           {messages.length > 0 && scrollInfo.hasScroll && (
             <div
-              className="absolute right-1 top-2 bottom-2 w-3 sm:w-3.5 z-20 flex flex-col justify-start items-center py-0.5 select-none"
+              className="absolute right-1.5 top-2.5 bottom-2.5 w-3 sm:w-3.5 z-20 flex flex-col justify-start items-center py-0.5 select-none"
             >
-              {/* Soft Neumorphic Track Groove */}
+              {/* Tactile Inset / Debossed Track Groove */}
               <div
                 ref={trackRef}
                 onClick={handleTrackClick}
                 title="Click or drag to scroll chat"
-                className="w-2 sm:w-2.5 h-full rounded-full bg-slate-200/95 shadow-[inset_1px_1px_3px_rgba(160,178,204,0.45)] border border-white/60 relative cursor-pointer"
+                className="w-2 sm:w-2.5 h-full rounded-full bg-[#ebf1f8] shadow-[inset_2px_2px_4px_#c9d6e7,inset_-2px_-2px_4px_#ffffff] border border-slate-300/50 relative cursor-pointer"
               >
-                {/* Royal Blue Themed Thumb */}
+                {/* Extruded Neumorphic Tactile Knob Thumb */}
                 <div
                   onMouseDown={handleMouseDown}
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                  className="w-full rounded-full bg-blue-600 shadow-[0_2px_8px_rgba(37,99,235,0.65)] border border-white cursor-grab active:cursor-grabbing transition-transform duration-75 ease-out touch-none"
+                  className="w-full rounded-full bg-gradient-to-b from-[#ffffff] via-[#f3f7fb] to-[#d8e3f0] shadow-[2px_3px_6px_rgba(160,178,204,0.55),-2px_-2px_5px_#ffffff] border border-white hover:shadow-[3px_4px_9px_rgba(150,170,200,0.65),-2px_-2px_6px_#ffffff] active:shadow-[inset_1px_1px_3px_#c2d1e4,inset_-1px_-1px_3px_#ffffff] cursor-grab active:cursor-grabbing transition-transform duration-75 ease-out touch-none flex items-center justify-center group"
                   style={{
                     height: `${scrollInfo.thumbHeight}px`,
                     transform: `translateY(${scrollInfo.top}px)`,
                   }}
-                />
+                >
+                  {/* Subtle Tactile Ridge / Grip Line */}
+                  <span className="w-0.5 sm:w-1 h-3.5 rounded-full bg-slate-400/50 shadow-[inset_1px_1px_1px_rgba(0,0,0,0.15)] group-hover:bg-blue-600/70 group-active:bg-blue-600 transition-colors pointer-events-none" />
+                </div>
               </div>
             </div>
           )}

@@ -293,7 +293,7 @@ body {
   background: #3b82f6;
 }
 
-/* WhatsApp Chat Messages Stream: Hide native scrollbar so ONLY the single theme-aligned Royal Blue scrollbar rail is displayed */
+/* WhatsApp Chat Messages Stream: Hide native scrollbar so ONLY the single pure Neumorphic scrollbar rail is displayed */
 .chat-scrollbar {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
