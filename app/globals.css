@@ -277,20 +277,24 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
 }
 
+/* Debossed / Inset Well Track */
 ::-webkit-scrollbar-track {
   background: #ebf1f8 !important;
   border-radius: 9999px;
   margin: 3px 2px;
-  box-shadow: inset 2px 2px 4px #c9d6e7, inset -2px -2px 4px #ffffff;
-  border: 1px solid rgba(203, 213, 225, 0.45);
+  box-shadow: inset 2px 2px 4px #c9d6e7, inset -2px -2px 4px #ffffff !important;
+  border: 1px solid rgba(203, 213, 225, 0.5) !important;
 }
 
+/* Extruded 3D Tactile Neumorphic Thumb with Center Ridge */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(145deg, #ffffff, #d8e3f0) !important;
+  background: 
+    linear-gradient(90deg, transparent 40%, rgba(148, 163, 184, 0.45) 46%, rgba(148, 163, 184, 0.45) 54%, transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f3f7fb 40%, #d8e3f0 100%) !important;
   border-radius: 9999px;
   border: 1.5px solid #ffffff !important;
   box-shadow: 2px 3px 6px rgba(160, 178, 204, 0.55), -2px -2px 5px #ffffff !important;
@@ -299,13 +303,28 @@ body {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Horizontal scrollbar thumb grip */
+::-webkit-scrollbar-thumb:horizontal {
+  background: 
+    linear-gradient(0deg, transparent 40%, rgba(148, 163, 184, 0.45) 46%, rgba(148, 163, 184, 0.45) 54%, transparent 60%),
+    linear-gradient(90deg, #ffffff 0%, #f3f7fb 40%, #d8e3f0 100%) !important;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(145deg, #ffffff, #cddcee) !important;
+  background: 
+    linear-gradient(90deg, transparent 40%, rgba(37, 99, 235, 0.6) 46%, rgba(37, 99, 235, 0.6) 54%, transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #eef4fc 40%, #c8d8ec 100%) !important;
   box-shadow: 3px 4px 9px rgba(150, 170, 200, 0.65), -2px -2px 6px #ffffff !important;
 }
 
+::-webkit-scrollbar-thumb:horizontal:hover {
+  background: 
+    linear-gradient(0deg, transparent 40%, rgba(37, 99, 235, 0.6) 46%, rgba(37, 99, 235, 0.6) 54%, transparent 60%),
+    linear-gradient(90deg, #ffffff 0%, #eef4fc 40%, #c8d8ec 100%) !important;
+}
+
 ::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(145deg, #d8e3f0, #ffffff) !important;
+  background: linear-gradient(180deg, #d8e3f0 0%, #edf3fb 100%) !important;
   box-shadow: inset 1px 1px 3px #c2d1e4, inset -1px -1px 3px #ffffff !important;
 }
 
