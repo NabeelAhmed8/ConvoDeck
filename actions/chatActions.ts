@@ -20,8 +20,8 @@ export async function getMessages(leadId: string) {
       .sort({ createdAt: 1 })
       .lean();
 
-    // If chat has 0 or 1 message, seed realistic demo conversation so user can test scrolling immediately
-    if (messages.length <= 1) {
+    // If chat has 3 or fewer messages, seed realistic demo conversation so user can test scrolling immediately
+    if (messages.length <= 3) {
       const demoMessages = [
         {
           leadId,

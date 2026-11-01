@@ -41,31 +41,110 @@ export function ChatWindow() {
   const [apiWarning, setApiWarning] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startY = useRef(0);
+  const startScroll = useRef(0);
 
   const [scrollInfo, setScrollInfo] = useState({
     hasScroll: false,
     top: 0,
-    thumbHeight: 40,
+    thumbHeight: 48,
   });
 
   const updateScroll = () => {
     const el = messagesContainerRef.current;
     if (!el) return;
     const { scrollTop, scrollHeight, clientHeight } = el;
-    if (scrollHeight > clientHeight + 5) {
-      const rawThumbHeight = (clientHeight / scrollHeight) * clientHeight;
-      const thumbHeight = Math.max(rawThumbHeight, 36);
+    if (scrollHeight > clientHeight + 4) {
+      // 16px is total vertical padding (top-2 + bottom-2 = 8px + 8px)
+      const trackHeight = clientHeight - 16;
+      const rawThumbHeight = (clientHeight / scrollHeight) * trackHeight;
+      const thumbHeight = Math.max(Math.min(rawThumbHeight, trackHeight - 12), 36);
       const maxScrollTop = scrollHeight - clientHeight;
-      const trackHeight = clientHeight - thumbHeight - 16;
-      const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * trackHeight + 8 : 8;
+      const maxThumbTravel = trackHeight - thumbHeight;
+      const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTravel : 0;
       setScrollInfo({
         hasScroll: true,
-        top: thumbTop,
+        top: Math.max(0, Math.min(thumbTop, maxThumbTravel)),
         thumbHeight,
       });
     } else {
       setScrollInfo({ hasScroll: false, top: 0, thumbHeight: 40 });
     }
+  };
+
+  const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const track = trackRef.current;
+    const el = messagesContainerRef.current;
+    if (!track || !el) return;
+    const rect = track.getBoundingClientRect();
+    const clickY = e.clientY - rect.top;
+    const availableTrack = track.clientHeight - scrollInfo.thumbHeight;
+    if (availableTrack <= 0) return;
+    const targetTop = clickY - scrollInfo.thumbHeight / 2;
+    const percentage = Math.max(0, Math.min(1, targetTop / availableTrack));
+    el.scrollTop = percentage * (el.scrollHeight - el.clientHeight);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    isDragging.current = true;
+    startY.current = e.touches[0].clientY;
+    if (messagesContainerRef.current) {
+      startScroll.current = messagesContainerRef.current.scrollTop;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !messagesContainerRef.current || !trackRef.current) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - startY.current;
+    const track = trackRef.current;
+    const el = messagesContainerRef.current;
+    const availableTrack = track.clientHeight - scrollInfo.thumbHeight;
+    const maxScroll = el.scrollHeight - el.clientHeight;
+    if (availableTrack > 0 && maxScroll > 0) {
+      el.scrollTop = startScroll.current + (deltaY / availableTrack) * maxScroll;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    isDragging.current = false;
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isDragging.current = true;
+    startY.current = e.clientY;
+    if (messagesContainerRef.current) {
+      startScroll.current = messagesContainerRef.current.scrollTop;
+    }
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!isDragging.current || !messagesContainerRef.current || !trackRef.current) return;
+      moveEvent.preventDefault();
+      const deltaY = moveEvent.clientY - startY.current;
+      const track = trackRef.current;
+      const el = messagesContainerRef.current;
+      const availableTrack = track.clientHeight - scrollInfo.thumbHeight;
+      const maxScroll = el.scrollHeight - el.clientHeight;
+      if (availableTrack > 0 && maxScroll > 0) {
+        el.scrollTop = startScroll.current + (deltaY / availableTrack) * maxScroll;
+      }
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
   };
 
   // Load chat history when activeLead changes
@@ -79,7 +158,7 @@ export function ChatWindow() {
       const data = await getMessages(activeLead._id!);
       setMessages(data);
       setIsLoadingMessages(false);
-      setTimeout(updateScroll, 150);
+      setTimeout(updateScroll, 100);
     };
 
     loadHistory();
@@ -88,8 +167,25 @@ export function ChatWindow() {
   // Auto-scroll to bottom of chat and recalculate scrollbar
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    const timer = setTimeout(updateScroll, 120);
+    const timer = setTimeout(updateScroll, 100);
     return () => clearTimeout(timer);
+  }, [messages]);
+
+  // Observe container resizes (e.g. keyboard show/hide, window resize)
+  useEffect(() => {
+    const el = messagesContainerRef.current;
+    if (!el) return;
+
+    updateScroll();
+
+    const observer = new ResizeObserver(() => {
+      updateScroll();
+    });
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
   }, [messages]);
 
   // Handle Real Message Send (Team Agent -> Customer WhatsApp)
@@ -264,95 +360,105 @@ export function ChatWindow() {
           </div>
         )}
 
-        {/* Messages Stream */}
-        <div
-          ref={messagesContainerRef}
-          onScroll={updateScroll}
-          role="log"
-          aria-live="polite"
-          aria-label="Chat messages history"
-          className="flex-1 min-h-0 overflow-y-scroll chat-scrollbar p-3 sm:p-4 space-y-3 overscroll-contain relative"
-        >
-          {isLoadingMessages ? (
-            <div className="flex justify-center py-8 text-xs text-slate-500">
-              Loading chat history...
-            </div>
-          ) : messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-center text-xs text-slate-500">
-              <p>No messages in this chat yet.</p>
-              <p className="mt-1 text-[11px]">Type below to send a message to +{activeLead.phone} on WhatsApp.</p>
-            </div>
-          ) : (
-            messages.map((msg, idx) => {
-              const isAgent = msg.sender === "agent";
-              return (
-                <div
-                  key={msg._id || idx}
-                  className={`flex flex-col ${
-                    isAgent ? "items-end" : "items-start"
-                  }`}
-                >
+        {/* Messages Stream Container with Guaranteed Interactive Scrollbar Rail */}
+        <div className="flex-1 min-h-0 relative flex flex-col">
+          <div
+            ref={messagesContainerRef}
+            onScroll={updateScroll}
+            role="log"
+            aria-live="polite"
+            aria-label="Chat messages history"
+            className="flex-1 min-h-0 overflow-y-scroll chat-scrollbar p-3 pr-5 sm:p-4 sm:pr-6 space-y-3 overscroll-contain"
+          >
+            {isLoadingMessages ? (
+              <div className="flex justify-center py-8 text-xs text-slate-500">
+                Loading chat history...
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-48 text-center text-xs text-slate-500">
+                <p>No messages in this chat yet.</p>
+                <p className="mt-1 text-[11px]">Type below to send a message to +{activeLead.phone} on WhatsApp.</p>
+              </div>
+            ) : (
+              messages.map((msg, idx) => {
+                const isAgent = msg.sender === "agent";
+                return (
                   <div
-                    className={`max-w-[85%] sm:max-w-[70%] md:max-w-[60%] rounded-2xl px-4 py-2.5 relative text-xs leading-relaxed ${
-                      isAgent
-                        ? "neu-card bg-[#eff6ff] text-slate-900 rounded-tr-none border-l-4 border-l-blue-600 shadow-sm"
-                        : "neu-card bg-white text-slate-900 rounded-tl-none shadow-sm"
+                    key={msg._id || idx}
+                    className={`flex flex-col ${
+                      isAgent ? "items-end" : "items-start"
                     }`}
                   >
-                    {isAgent && (
-                      <span className="block text-[10px] font-bold text-blue-600 mb-0.5">
-                        {msg.agentName ? `✓ ${msg.agentName}` : msg.senderName || "Sales Agent"}
-                      </span>
-                    )}
-
-                    <p className="whitespace-pre-wrap">{msg.text}</p>
-
-                    <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-slate-500">
-                      <span>
-                        {new Date(msg.createdAt || Date.now()).toLocaleTimeString(
-                          [],
-                          { hour: "2-digit", minute: "2-digit" }
-                        )}
-                      </span>
+                    <div
+                      className={`max-w-[85%] sm:max-w-[70%] md:max-w-[60%] rounded-2xl px-4 py-2.5 relative text-xs leading-relaxed ${
+                        isAgent
+                          ? "neu-card bg-[#eff6ff] text-slate-900 rounded-tr-none border-l-4 border-l-blue-600 shadow-sm"
+                          : "neu-card bg-white text-slate-900 rounded-tl-none shadow-sm"
+                      }`}
+                    >
                       {isAgent && (
-                        <span>
-                          {msg.status === "read" ? (
-                            <CheckCheck className="w-3.5 h-3.5 text-blue-600" aria-label="Read" />
-                          ) : msg.status === "delivered" ? (
-                            <CheckCheck className="w-3.5 h-3.5 text-slate-500" aria-label="Delivered" />
-                          ) : (
-                            <Check className="w-3.5 h-3.5 text-slate-500" aria-label="Sent" />
-                          )}
+                        <span className="block text-[10px] font-bold text-blue-600 mb-0.5">
+                          {msg.agentName ? `✓ ${msg.agentName}` : msg.senderName || "Sales Agent"}
                         </span>
                       )}
+
+                      <p className="whitespace-pre-wrap">{msg.text}</p>
+
+                      <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-slate-500">
+                        <span>
+                          {new Date(msg.createdAt || Date.now()).toLocaleTimeString(
+                            [],
+                            { hour: "2-digit", minute: "2-digit" }
+                          )}
+                        </span>
+                        {isAgent && (
+                          <span>
+                            {msg.status === "read" ? (
+                              <CheckCheck className="w-3.5 h-3.5 text-blue-600" aria-label="Read" />
+                            ) : msg.status === "delivered" ? (
+                              <CheckCheck className="w-3.5 h-3.5 text-slate-500" aria-label="Delivered" />
+                            ) : (
+                              <Check className="w-3.5 h-3.5 text-slate-500" aria-label="Sent" />
+                            )}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Guaranteed Visual Neumorphic & Royal Blue Scrollbar (Always visible on mobile & desktop) */}
-        {scrollInfo.hasScroll && (
-          <div
-            aria-hidden="true"
-            className="absolute right-1.5 top-[58px] bottom-[72px] w-2 pointer-events-none z-20 flex flex-col justify-start"
-          >
-            {/* Soft Neumorphic Track Groove */}
-            <div className="w-1.5 h-full mx-auto rounded-full bg-slate-200/90 shadow-[inset_1px_1px_2px_rgba(160,178,204,0.4)] relative">
-              {/* Royal Blue Themed Thumb */}
-              <div
-                className="w-full rounded-full bg-blue-600 shadow-[0_2px_6px_rgba(37,99,235,0.5)] border border-white transition-transform duration-75 ease-out"
-                style={{
-                  height: `${scrollInfo.thumbHeight}px`,
-                  transform: `translateY(${scrollInfo.top}px)`,
-                }}
-              />
-            </div>
+                );
+              })
+            )}
+            <div ref={messagesEndRef} />
           </div>
-        )}
+
+          {/* Guaranteed Visual Neumorphic & Royal Blue Scrollbar (Visible on Mobile & Desktop) */}
+          {scrollInfo.hasScroll && (
+            <div
+              className="absolute right-1 top-2 bottom-2 w-3 sm:w-3.5 z-20 flex flex-col justify-start items-center py-0.5 select-none"
+            >
+              {/* Soft Neumorphic Track Groove */}
+              <div
+                ref={trackRef}
+                onClick={handleTrackClick}
+                title="Click or drag to scroll chat"
+                className="w-2 sm:w-2.5 h-full rounded-full bg-slate-200/95 shadow-[inset_1px_1px_3px_rgba(160,178,204,0.45)] border border-white/60 relative cursor-pointer"
+              >
+                {/* Royal Blue Themed Thumb */}
+                <div
+                  onMouseDown={handleMouseDown}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  className="w-full rounded-full bg-blue-600 shadow-[0_2px_8px_rgba(37,99,235,0.65)] border border-white cursor-grab active:cursor-grabbing transition-transform duration-75 ease-out touch-none"
+                  style={{
+                    height: `${scrollInfo.thumbHeight}px`,
+                    transform: `translateY(${scrollInfo.top}px)`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Message Input Box */}
         <div className="p-2.5 sm:p-3 bg-white border-t border-slate-200/70 shadow-xs shrink-0">
