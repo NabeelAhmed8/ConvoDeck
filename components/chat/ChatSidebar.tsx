@@ -120,7 +120,11 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
       </div>
 
       {/* Leads List */}
-      <div id="chat-list" role="tabpanel" className="flex-1 min-h-0 overflow-y-auto chat-scrollbar divide-y divide-slate-200/50">
+      <div
+        id="chat-list"
+        role="tabpanel"
+        className="flex-1 min-h-0 overflow-y-scroll chat-scrollbar divide-y divide-slate-200/50 overscroll-contain"
+      >
         {filteredLeads.map((lead) => {
           const isSelected = activeLead?._id === lead._id;
           const initials = lead.name

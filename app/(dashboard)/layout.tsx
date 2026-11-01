@@ -33,10 +33,10 @@ export default async function DashboardLayout({
       />
 
       {/* Main Content Area: Natural scroll on mobile, contained scroll on desktop */}
-      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full lg:h-full lg:overflow-hidden relative z-10 pb-8 lg:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full lg:h-full lg:overflow-hidden relative z-10">
         <main
           aria-label="Main Content"
-          className="flex-1 p-3 sm:p-4 lg:p-5 w-full max-w-full flex flex-col lg:overflow-y-auto min-w-0"
+          className="flex-1 p-2.5 sm:p-4 lg:p-5 w-full max-w-full flex flex-col lg:overflow-y-auto min-w-0"
         >
           {children}
         </main>

@@ -296,37 +296,37 @@ body {
 /* Dedicated WhatsApp Chatbox Neumorphic Scrollbar */
 .chat-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #94a3b8 rgba(226, 232, 240, 0.6);
+  scrollbar-color: #64748b #e2e8f0;
   -webkit-overflow-scrolling: touch;
 }
 
 .chat-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px !important;
+  height: 7px !important;
+  display: block !important;
 }
 
 .chat-scrollbar::-webkit-scrollbar-track {
-  background: rgba(226, 232, 240, 0.45);
+  background: #e2e8f0 !important;
   border-radius: 9999px;
-  margin: 6px 0;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  margin: 4px 2px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: inset 1px 1px 3px rgba(160, 178, 204, 0.3);
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb {
-  background: #94a3b8;
+  background: #64748b !important;
   border-radius: 9999px;
-  border: 1.5px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 2px 2px 5px rgba(160, 178, 204, 0.35);
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2) !important;
+  min-height: 40px;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.chat-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #2563eb;
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.45);
-}
-
+.chat-scrollbar::-webkit-scrollbar-thumb:hover,
 .chat-scrollbar::-webkit-scrollbar-thumb:active {
-  background: #1d4ed8;
+  background: #2563eb !important;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.5) !important;
 }
 
 /* ============================================================== */

@@ -309,7 +309,7 @@ export function TeamManagementClient({
 
         {/* Tab 1: Team Agents Table */}
         {activeTab === "agents" ? (
-          <div className="overflow-x-auto w-full max-w-full">
+          <div className="overflow-x-auto chat-scrollbar w-full max-w-full">
             <table className="w-full min-w-[700px] text-left text-xs text-slate-700">
               <thead className="bg-[#f8fafc] border-b border-slate-200 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 <tr>
@@ -445,7 +445,7 @@ export function TeamManagementClient({
           </div>
         ) : (
           /* Tab 2: Live Audit Trail Table */
-          <div className="overflow-x-auto w-full max-w-full">
+          <div className="overflow-x-auto chat-scrollbar w-full max-w-full">
             <table className="w-full min-w-[700px] text-left text-xs text-slate-700">
               <thead className="bg-[#f8fafc] border-b border-slate-200 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 <tr>

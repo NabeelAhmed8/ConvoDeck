@@ -173,7 +173,7 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
       </div>
 
       {/* Pipeline Stages Grid */}
-      <div className="flex-1 overflow-x-auto pb-4 scroll-smooth touch-pan-x w-full max-w-full">
+      <div className="flex-1 overflow-x-auto chat-scrollbar pb-4 scroll-smooth touch-pan-x w-full max-w-full">
         <div className="flex gap-4 min-w-[1300px] min-h-[calc(100vh-230px)] pb-2">
           {COLUMNS.map((column) => {
             const columnLeads = filteredLeads.filter(
