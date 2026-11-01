@@ -182,7 +182,7 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
                   >
                     {lead.name}
                   </h3>
-                  <span className="text-[10px] text-slate-500 shrink-0">
+                  <span suppressHydrationWarning className="text-[10px] text-slate-500 shrink-0">
                     {lead.lastMessageAt
                       ? new Date(lead.lastMessageAt).toLocaleTimeString([], {
                           hour: "2-digit",

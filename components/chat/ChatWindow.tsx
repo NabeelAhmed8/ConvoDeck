@@ -47,7 +47,7 @@ export function ChatWindow() {
   const startScroll = useRef(0);
 
   const [scrollInfo, setScrollInfo] = useState({
-    hasScroll: false,
+    hasScroll: true,
     top: 0,
     thumbHeight: 48,
   });
@@ -405,7 +405,7 @@ export function ChatWindow() {
                       <p className="whitespace-pre-wrap">{msg.text}</p>
 
                       <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-slate-500">
-                        <span>
+                        <span suppressHydrationWarning>
                           {new Date(msg.createdAt || Date.now()).toLocaleTimeString(
                             [],
                             { hour: "2-digit", minute: "2-digit" }
@@ -432,7 +432,7 @@ export function ChatWindow() {
           </div>
 
           {/* Guaranteed Visual Neumorphic & Royal Blue Scrollbar (Visible on Mobile & Desktop) */}
-          {scrollInfo.hasScroll && (
+          {messages.length > 0 && scrollInfo.hasScroll && (
             <div
               className="absolute right-1 top-2 bottom-2 w-3 sm:w-3.5 z-20 flex flex-col justify-start items-center py-0.5 select-none"
             >
