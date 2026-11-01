@@ -89,11 +89,18 @@ export async function POST(req: NextRequest) {
               messageText = `[${msg.type || "media"} message]`;
             }
 
-            // Find or Auto-Create Real Lead
+            // Find or Auto-Create Real Lead (Check workspace first, then fallback to global phone match)
             let lead = await Lead.findOne({
               phone: fromPhone,
               workspaceId: targetWorkspaceId,
             });
+
+            if (!lead) {
+              lead = await Lead.findOne({ phone: fromPhone });
+              if (lead) {
+                targetWorkspaceId = lead.workspaceId;
+              }
+            }
 
             if (!lead) {
               lead = await Lead.create({
