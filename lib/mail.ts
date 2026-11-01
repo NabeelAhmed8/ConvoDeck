@@ -38,27 +38,35 @@ async function getMailTransporter(): Promise<{
       secure: port === 465,
       auth: { user, pass },
       tls: {
-        rejectUnauthorized: process.env.NODE_ENV === "production",
+        rejectUnauthorized: false,
       },
     });
 
     return { transporter, fromAddress: from, isMock: false };
   }
 
-  // Fallback for development/testing when SMTP is not yet configured in .env.local
-  // Logs verification code clearly to terminal/console so testing never gets blocked
-  const testAccount = await nodemailer.createTestAccount();
-  const transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false,
-    auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
-    },
-  });
+  // Fallback for development/testing when SMTP is not yet configured
+  try {
+    const testAccount = await nodemailer.createTestAccount();
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
 
-  return { transporter, fromAddress: from, isMock: true };
+    return { transporter, fromAddress: from, isMock: true };
+  } catch {
+    // Graceful fallback transporter if Ethereal is unreachable on cloud serverless
+    const transporter = nodemailer.createTransport({
+      streamTransport: true,
+      newline: "windows",
+    });
+    return { transporter, fromAddress: from, isMock: true };
+  }
 }
 
 export async function sendVerificationEmail({

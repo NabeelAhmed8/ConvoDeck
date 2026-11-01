@@ -24,7 +24,7 @@ if (!global.mongooseCache) {
 export async function dbConnect(): Promise<typeof mongoose> {
   if (!MONGODB_URI) {
     throw new Error(
-      "Please define the MONGODB_URI environment variable inside .env.local"
+      "Please define the MONGODB_URI environment variable inside Vercel Environment Variables"
     );
   }
 
@@ -33,13 +33,27 @@ export async function dbConnect(): Promise<typeof mongoose> {
   }
 
   if (!cached.promise) {
-    const opts = {
+    const opts: mongoose.ConnectOptions = {
       bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 8000,
+      socketTimeoutMS: 45000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
-      return mongooseInstance;
-    });
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then((mongooseInstance) => {
+        return mongooseInstance;
+      })
+      .catch((err) => {
+        cached.promise = null;
+        if (err.message && err.message.includes("bad auth")) {
+          throw new Error(
+            "MongoDB Authentication Failed: Username ya Password ghalat hai. MongoDB Atlas mein 'Database Access' tab mein ja kar database user ka password check karein."
+          );
+        }
+        throw err;
+      });
   }
 
   try {
