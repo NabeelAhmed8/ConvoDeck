@@ -174,12 +174,17 @@ export async function sendMessage({
       details: `Sent message to ${lead.name} (+${lead.phone}): "${text.slice(0, 70)}${text.length > 70 ? "..." : ""}"`,
     });
 
-    // Update lead's last message snippet
-    await Lead.findByIdAndUpdate(leadId, {
-      lastMessage: text,
-      lastMessageAt: new Date(),
-      unreadCount: 0,
-    });
+    // Update lead's last message snippet & timestamp for real-time delta sync
+    await Lead.findByIdAndUpdate(
+      leadId,
+      {
+        lastMessage: text,
+        lastMessageAt: new Date(),
+        unreadCount: 0,
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
 
     revalidatePath("/chat");
     revalidatePath("/pipeline");

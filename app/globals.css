@@ -269,91 +269,128 @@ body {
 }
 
 /* ============================================================== */
-/* Authentic Chatbox-Style Tactile Neumorphic Scrollbars across website */
+/* Authentic Tactile Neumorphic Scrollbars across Entire Website  */
 /* ============================================================== */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #ebf1f8;
+
+/* Firefox-only fallback (Chromium ignores -moz-appearance, so ::-webkit-scrollbar remains 100% active) */
+@supports (-moz-appearance: none) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #edf2f8;
+  }
 }
 
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-main::-webkit-scrollbar,
-aside::-webkit-scrollbar,
-div::-webkit-scrollbar,
+/* 1. Global Dimensions for Vertical & Horizontal Scrollbars */
+::-webkit-scrollbar,
 *::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
 }
 
-/* 1. Recessed Debossed Track Groove (Identical to Chatbox Track) */
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track,
-main::-webkit-scrollbar-track,
-aside::-webkit-scrollbar-track,
-div::-webkit-scrollbar-track,
+/* 2. Recessed Debossed Track Groove (Tactile Inset Well) */
+::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track {
-  background: #ebf1f8 !important;
+  background: #edf2f8 !important;
   border-radius: 9999px !important;
-  margin: 3px 2px !important;
-  border: 1px solid rgba(203, 213, 225, 0.55) !important;
-  box-shadow: inset 1.5px 1.5px 3px #c9d6e7, inset -1.5px -1.5px 3px #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: inset 2px 2px 5px #c8d5e5, inset -2px -2px 5px #ffffff !important;
 }
 
-/* 2. Extruded Tactile Thumb with Pure White Border (Identical to Chatbox Thumb) */
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb,
-main::-webkit-scrollbar-thumb,
-aside::-webkit-scrollbar-thumb,
-div::-webkit-scrollbar-thumb,
+/* 3. Extruded Tactile Thumb (Neumorphic 3D Raised Pill) */
+::-webkit-scrollbar-thumb,
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #ffffff 0%, #f3f7fb 40%, #d8e3f0 100%) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4f9 45%, #d5e1ef 100%) !important;
   border-radius: 9999px !important;
-  border: 1.5px solid #ffffff !important;
-  box-shadow: 2px 2px 5px rgba(160, 178, 204, 0.55), -1px -1px 3px #ffffff !important;
-  min-height: 40px !important;
-  min-width: 40px !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: inset 1.5px 1.5px 2px #ffffff, inset -1.5px -1.5px 2px #a8bcd2, 1px 2px 5px rgba(160, 178, 204, 0.45) !important;
+  min-height: 44px !important;
+  min-width: 44px !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover,
-main::-webkit-scrollbar-thumb:hover,
-aside::-webkit-scrollbar-thumb:hover,
-div::-webkit-scrollbar-thumb:hover,
+/* Horizontal Scrollbar Thumb Gradient */
+::-webkit-scrollbar-thumb:horizontal,
+*::-webkit-scrollbar-thumb:horizontal {
+  background: linear-gradient(90deg, #ffffff 0%, #f0f4f9 45%, #d5e1ef 100%) !important;
+}
+
+/* Hover State - Raised & Highlighted */
+::-webkit-scrollbar-thumb:hover,
 *::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #eef4fc 40%, #c8d8ec 100%) !important;
-  box-shadow: 2px 3px 7px rgba(150, 170, 200, 0.65), -1px -1px 4px #ffffff !important;
+  background: linear-gradient(135deg, #ffffff 0%, #e8f0fa 45%, #c5d6ea 100%) !important;
+  box-shadow: inset 1.5px 1.5px 2px #ffffff, inset -1.5px -1.5px 2px #8fa8c4, 1px 3px 6px rgba(140, 165, 195, 0.6) !important;
 }
 
-html::-webkit-scrollbar-thumb:active,
-body::-webkit-scrollbar-thumb:active,
-main::-webkit-scrollbar-thumb:active,
-aside::-webkit-scrollbar-thumb:active,
-div::-webkit-scrollbar-thumb:active,
+::-webkit-scrollbar-thumb:horizontal:hover,
+*::-webkit-scrollbar-thumb:horizontal:hover {
+  background: linear-gradient(90deg, #ffffff 0%, #e8f0fa 45%, #c5d6ea 100%) !important;
+}
+
+/* Active / Pressed State - Debossed Tactile Feel */
+::-webkit-scrollbar-thumb:active,
 *::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(180deg, #d8e3f0 0%, #edf3fb 100%) !important;
-  box-shadow: inset 1px 1px 3px #c2d1e4, inset -1px -1px 3px #ffffff !important;
+  background: linear-gradient(135deg, #c5d6ea 0%, #dbe6f4 50%, #ffffff 100%) !important;
+  box-shadow: inset 2px 2px 4px #a8bcd2, inset -2px -2px 4px #ffffff !important;
 }
 
-html::-webkit-scrollbar-corner,
-body::-webkit-scrollbar-corner,
-main::-webkit-scrollbar-corner,
+::-webkit-scrollbar-thumb:horizontal:active,
+*::-webkit-scrollbar-thumb:horizontal:active {
+  background: linear-gradient(90deg, #c5d6ea 0%, #dbe6f4 50%, #ffffff 100%) !important;
+}
+
+/* Corner Intersection */
+::-webkit-scrollbar-corner,
 *::-webkit-scrollbar-corner {
-  background: transparent;
+  background: transparent !important;
 }
 
-/* Specific to Chat Message Stream: Hide native scrollbar to show ONLY the dedicated interactive DOM rail */
-.chat-messages-stream {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+/* Explicit Utility Classes: Chat Message Stream, Sidebars, Modals & Rails */
+.chat-scrollbar,
+.chat-messages-stream,
+.neu-scrollbar {
   -webkit-overflow-scrolling: touch;
 }
 
-.chat-messages-stream::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+.chat-scrollbar::-webkit-scrollbar,
+.chat-messages-stream::-webkit-scrollbar,
+.neu-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track,
+.chat-messages-stream::-webkit-scrollbar-track,
+.neu-scrollbar::-webkit-scrollbar-track {
+  background: #edf2f8 !important;
+  border-radius: 9999px !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: inset 2px 2px 5px #c8d5e5, inset -2px -2px 5px #ffffff !important;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb,
+.chat-messages-stream::-webkit-scrollbar-thumb,
+.neu-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #ffffff 0%, #f0f4f9 45%, #d5e1ef 100%) !important;
+  border-radius: 9999px !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: inset 1.5px 1.5px 2px #ffffff, inset -1.5px -1.5px 2px #a8bcd2, 1px 2px 5px rgba(160, 178, 204, 0.45) !important;
+  min-height: 44px !important;
+  min-width: 44px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover,
+.chat-messages-stream::-webkit-scrollbar-thumb:hover,
+.neu-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #e8f0fa 45%, #c5d6ea 100%) !important;
+  box-shadow: inset 1.5px 1.5px 2px #ffffff, inset -1.5px -1.5px 2px #8fa8c4, 1px 3px 6px rgba(140, 165, 195, 0.6) !important;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:active,
+.chat-messages-stream::-webkit-scrollbar-thumb:active,
+.neu-scrollbar::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #c5d6ea 0%, #dbe6f4 50%, #ffffff 100%) !important;
+  box-shadow: inset 2px 2px 4px #a8bcd2, inset -2px -2px 4px #ffffff !important;
 }
 
 /* ============================================================== */

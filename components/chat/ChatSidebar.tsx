@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Search, MessageCircle } from "lucide-react";
 import { ILead } from "@/types";
 import { useChatStore } from "@/store/useChatStore";
 import { StageBadge } from "@/components/ui/Badge";
 import { markChatAsRead } from "@/actions/chatActions";
+import { getChatBroadcastChannel } from "@/lib/syncUtils";
 
 interface ChatSidebarProps {
   initialLeads: ILead[];
@@ -15,6 +16,9 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
   const {
     activeLead,
     setActiveLead,
+    leads,
+    setLeads,
+    mergeUpdatedLeads,
     searchQuery,
     setSearchQuery,
     filter,
@@ -22,7 +26,85 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
     updateLeadInStore,
   } = useChatStore();
 
-  const filteredLeads = initialLeads.filter((lead) => {
+  const lastSyncRef = useRef<string>(new Date().toISOString());
+
+  // Initialize leads from server-rendered props
+  useEffect(() => {
+    if (leads.length === 0 && initialLeads && initialLeads.length > 0) {
+      setLeads(initialLeads);
+    }
+  }, [initialLeads, leads.length, setLeads]);
+
+  // Listen to cross-tab BroadcastChannel for 0ms tab sync
+  useEffect(() => {
+    const channel = getChatBroadcastChannel();
+    if (!channel) return;
+
+    const handleBroadcast = (e: MessageEvent) => {
+      const data = e.data;
+      if (data?.type === "MESSAGE_SENT" && data.leadId) {
+        updateLeadInStore({
+          _id: data.leadId,
+          lastMessage: data.message?.text || "",
+          lastMessageAt: data.message?.createdAt || new Date(),
+        });
+      } else if (data?.type === "LEADS_SYNC" && data.leads) {
+        mergeUpdatedLeads(data.leads);
+      }
+    };
+
+    channel.addEventListener("message", handleBroadcast);
+    return () => {
+      channel.removeEventListener("message", handleBroadcast);
+      channel.close();
+    };
+  }, [updateLeadInStore, mergeUpdatedLeads]);
+
+  // Periodic workspace leads sync to detect inbound WhatsApp messages and status changes
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let isCancelled = false;
+
+    const syncLeads = async () => {
+      if (document.hidden) {
+        timeoutId = setTimeout(syncLeads, 4000);
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          `/api/chat/sync?lastSync=${encodeURIComponent(lastSyncRef.current)}`,
+          { cache: "no-store" }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data.serverTime) {
+            lastSyncRef.current = data.serverTime;
+          }
+          if (data.leads && data.leads.length > 0) {
+            mergeUpdatedLeads(data.leads);
+          }
+        }
+      } catch {
+        // Silently retry on next tick
+      }
+
+      if (!isCancelled) {
+        timeoutId = setTimeout(syncLeads, 2000);
+      }
+    };
+
+    timeoutId = setTimeout(syncLeads, 2000);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, [mergeUpdatedLeads]);
+
+  const displayLeads = leads.length > 0 ? leads : initialLeads;
+
+  const filteredLeads = displayLeads.filter((lead) => {
     const matchesSearch =
       lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       lead.phone.includes(searchQuery) ||
@@ -123,7 +205,7 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
       <div
         id="chat-list"
         role="tabpanel"
-        className="flex-1 min-h-0 overflow-y-scroll divide-y divide-slate-200/50 overscroll-contain"
+        className="flex-1 min-h-0 overflow-y-auto chat-scrollbar divide-y divide-slate-200/50 overscroll-contain"
       >
         {filteredLeads.map((lead) => {
           const isSelected = activeLead?._id === lead._id;

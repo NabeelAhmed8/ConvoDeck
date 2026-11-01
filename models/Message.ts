@@ -71,6 +71,11 @@ const MessageSchema = new Schema<IMessageDocument>(
   }
 );
 
+// High-speed compound indexes for instant zero-delay delta sync & polling
+MessageSchema.index({ leadId: 1, createdAt: 1 });
+MessageSchema.index({ leadId: 1, updatedAt: 1 });
+MessageSchema.index({ workspaceId: 1, createdAt: -1 });
+
 export const Message: Model<IMessageDocument> =
   mongoose.models.Message ||
   mongoose.model<IMessageDocument>("Message", MessageSchema);

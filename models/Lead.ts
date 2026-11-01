@@ -75,6 +75,8 @@ const LeadSchema = new Schema<ILeadDocument>(
 
 // Compound index for workspace and phone lookups
 LeadSchema.index({ workspaceId: 1, phone: 1 });
+LeadSchema.index({ workspaceId: 1, updatedAt: -1 });
+LeadSchema.index({ workspaceId: 1, lastMessageAt: -1 });
 
 export const Lead: Model<ILeadDocument> =
   mongoose.models.Lead || mongoose.model<ILeadDocument>("Lead", LeadSchema);

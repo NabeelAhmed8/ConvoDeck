@@ -20,6 +20,7 @@ import { updateLeadStage, updateLead } from "@/actions/leadActions";
 import { StageBadge } from "@/components/ui/Badge";
 import { IMessage, LeadStage } from "@/types";
 import { toast } from "@/store/useToastStore";
+import { playIncomingMessageSound, getChatBroadcastChannel } from "@/lib/syncUtils";
 
 export function ChatWindow() {
   const {
@@ -28,6 +29,10 @@ export function ChatWindow() {
     messages,
     setMessages,
     addMessage,
+    appendMessages,
+    updateMessageStatuses,
+    replaceOptimisticMessage,
+    mergeUpdatedLeads,
     updateLeadInStore,
     isLoadingMessages,
     setIsLoadingMessages,
@@ -41,111 +46,9 @@ export function ChatWindow() {
   const [apiWarning, setApiWarning] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
-  const startY = useRef(0);
-  const startScroll = useRef(0);
 
-  const [scrollInfo, setScrollInfo] = useState({
-    hasScroll: true,
-    top: 0,
-    thumbHeight: 48,
-  });
-
-  const updateScroll = () => {
-    const el = messagesContainerRef.current;
-    if (!el) return;
-    const { scrollTop, scrollHeight, clientHeight } = el;
-    if (scrollHeight > clientHeight + 4) {
-      // 16px is total vertical padding (top-2 + bottom-2 = 8px + 8px)
-      const trackHeight = clientHeight - 16;
-      const rawThumbHeight = (clientHeight / scrollHeight) * trackHeight;
-      const thumbHeight = Math.max(Math.min(rawThumbHeight, trackHeight - 12), 36);
-      const maxScrollTop = scrollHeight - clientHeight;
-      const maxThumbTravel = trackHeight - thumbHeight;
-      const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * maxThumbTravel : 0;
-      setScrollInfo({
-        hasScroll: true,
-        top: Math.max(0, Math.min(thumbTop, maxThumbTravel)),
-        thumbHeight,
-      });
-    } else {
-      setScrollInfo({ hasScroll: false, top: 0, thumbHeight: 40 });
-    }
-  };
-
-  const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const track = trackRef.current;
-    const el = messagesContainerRef.current;
-    if (!track || !el) return;
-    const rect = track.getBoundingClientRect();
-    const clickY = e.clientY - rect.top;
-    const availableTrack = track.clientHeight - scrollInfo.thumbHeight;
-    if (availableTrack <= 0) return;
-    const targetTop = clickY - scrollInfo.thumbHeight / 2;
-    const percentage = Math.max(0, Math.min(1, targetTop / availableTrack));
-    el.scrollTop = percentage * (el.scrollHeight - el.clientHeight);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    isDragging.current = true;
-    startY.current = e.touches[0].clientY;
-    if (messagesContainerRef.current) {
-      startScroll.current = messagesContainerRef.current.scrollTop;
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!isDragging.current || !messagesContainerRef.current || !trackRef.current) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const currentY = e.touches[0].clientY;
-    const deltaY = currentY - startY.current;
-    const track = trackRef.current;
-    const el = messagesContainerRef.current;
-    const availableTrack = track.clientHeight - scrollInfo.thumbHeight;
-    const maxScroll = el.scrollHeight - el.clientHeight;
-    if (availableTrack > 0 && maxScroll > 0) {
-      el.scrollTop = startScroll.current + (deltaY / availableTrack) * maxScroll;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    isDragging.current = false;
-  };
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    isDragging.current = true;
-    startY.current = e.clientY;
-    if (messagesContainerRef.current) {
-      startScroll.current = messagesContainerRef.current.scrollTop;
-    }
-
-    const handleMouseMove = (moveEvent: MouseEvent) => {
-      if (!isDragging.current || !messagesContainerRef.current || !trackRef.current) return;
-      moveEvent.preventDefault();
-      const deltaY = moveEvent.clientY - startY.current;
-      const track = trackRef.current;
-      const el = messagesContainerRef.current;
-      const availableTrack = track.clientHeight - scrollInfo.thumbHeight;
-      const maxScroll = el.scrollHeight - el.clientHeight;
-      if (availableTrack > 0 && maxScroll > 0) {
-        el.scrollTop = startScroll.current + (deltaY / availableTrack) * maxScroll;
-      }
-    };
-
-    const handleMouseUp = () => {
-      isDragging.current = false;
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-  };
+  const lastMessageTimestampRef = useRef<string>("");
+  const lastLeadSyncRef = useRef<string>(new Date().toISOString());
 
   // Load chat history when activeLead changes
   useEffect(() => {
@@ -158,35 +61,147 @@ export function ChatWindow() {
       const data = await getMessages(activeLead._id!);
       setMessages(data);
       setIsLoadingMessages(false);
-      setTimeout(updateScroll, 100);
+
+      if (data && data.length > 0) {
+        const latest = data[data.length - 1];
+        lastMessageTimestampRef.current = new Date(latest.createdAt).toISOString();
+      } else {
+        lastMessageTimestampRef.current = new Date().toISOString();
+      }
+      lastLeadSyncRef.current = new Date().toISOString();
     };
 
     loadHistory();
   }, [activeLead?._id, setMessages, setIsLoadingMessages]);
 
-  // Auto-scroll to bottom of chat and recalculate scrollbar
+  // Real-Time Delta Sync (Zero-Delay Polling across Mobile and Laptop)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    const timer = setTimeout(updateScroll, 100);
-    return () => clearTimeout(timer);
-  }, [messages]);
+    if (!activeLead?._id) return;
 
-  // Observe container resizes (e.g. keyboard show/hide, window resize)
-  useEffect(() => {
-    const el = messagesContainerRef.current;
-    if (!el) return;
+    let timeoutId: NodeJS.Timeout;
+    let isCancelled = false;
 
-    updateScroll();
+    const pollSync = async () => {
+      const isVisible = typeof document !== "undefined" && !document.hidden;
 
-    const observer = new ResizeObserver(() => {
-      updateScroll();
-    });
-    observer.observe(el);
+      try {
+        const afterTime = lastMessageTimestampRef.current;
+        const lastSync = lastLeadSyncRef.current;
+
+        const res = await fetch(
+          `/api/chat/sync?leadId=${encodeURIComponent(
+            activeLead._id!
+          )}&after=${encodeURIComponent(afterTime)}&lastSync=${encodeURIComponent(
+            lastSync
+          )}`,
+          { cache: "no-store" }
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+
+          if (data.serverTime) {
+            lastLeadSyncRef.current = data.serverTime;
+          }
+
+          // 1. Ingest new messages from mobile/laptop or WhatsApp
+          if (data.messages && data.messages.length > 0) {
+            const incoming: IMessage[] = data.messages;
+
+            // Play incoming notification chime for incoming customer message
+            const hasCustomerMessage = incoming.some(
+              (m) => m.sender === "customer"
+            );
+            if (hasCustomerMessage) {
+              playIncomingMessageSound();
+            }
+
+            appendMessages(incoming);
+
+            const newest = incoming[incoming.length - 1];
+            if (newest?.createdAt) {
+              lastMessageTimestampRef.current = new Date(
+                newest.createdAt
+              ).toISOString();
+            }
+          }
+
+          // 2. Ingest status changes (e.g. sent -> delivered -> read)
+          if (data.statusUpdates && data.statusUpdates.length > 0) {
+            updateMessageStatuses(data.statusUpdates);
+          }
+
+          // 3. Ingest updated leads
+          if (data.leads && data.leads.length > 0) {
+            mergeUpdatedLeads(data.leads);
+          }
+        }
+      } catch {
+        // Silently retry next cycle
+      }
+
+      if (!isCancelled) {
+        // 1000ms when focused, 3500ms when backgrounded
+        const nextDelay = isVisible ? 1000 : 3500;
+        timeoutId = setTimeout(pollSync, nextDelay);
+      }
+    };
+
+    const handleVisibilityOrFocus = () => {
+      if (!document.hidden) {
+        clearTimeout(timeoutId);
+        pollSync();
+      }
+    };
+
+    window.addEventListener("focus", handleVisibilityOrFocus);
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+
+    // Initial poll after 800ms
+    timeoutId = setTimeout(pollSync, 800);
 
     return () => {
-      observer.disconnect();
+      isCancelled = true;
+      clearTimeout(timeoutId);
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
     };
-  }, [messages]);
+  }, [
+    activeLead?._id,
+    appendMessages,
+    updateMessageStatuses,
+    mergeUpdatedLeads,
+  ]);
+
+  // Instant 0ms Cross-Tab / Cross-Window Broadcast
+  useEffect(() => {
+    const channel = getChatBroadcastChannel();
+    if (!channel) return;
+
+    const handleBroadcast = (e: MessageEvent) => {
+      const data = e.data;
+      if (!data) return;
+
+      if (
+        data.type === "MESSAGE_SENT" &&
+        data.leadId === activeLead?._id &&
+        data.message
+      ) {
+        appendMessages([data.message]);
+      }
+    };
+
+    channel.addEventListener("message", handleBroadcast);
+    return () => {
+      channel.removeEventListener("message", handleBroadcast);
+      channel.close();
+    };
+  }, [activeLead?._id, appendMessages]);
+
+  // Auto-scroll to bottom of chat when new message arrives
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages.length]);
 
   // Handle Real Message Send (Team Agent -> Customer WhatsApp)
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -194,12 +209,14 @@ export function ChatWindow() {
     if (!inputText.trim() || !activeLead?._id || isSending) return;
 
     const currentText = inputText.trim();
+    const tempId = `temp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     setInputText("");
     setIsSending(true);
     setApiWarning(null);
 
-    // Optimistic UI addition
-    const tempMsg: IMessage = {
+    // Optimistic UI addition (0 delay display on local device)
+    const tempMsg: IMessage & { tempId?: string } = {
+      _id: tempId,
       leadId: activeLead._id,
       workspaceId: activeLead.workspaceId,
       sender: "agent",
@@ -211,6 +228,23 @@ export function ChatWindow() {
     };
     addMessage(tempMsg);
 
+    // Broadcast immediately across all open tabs/windows
+    const channel = getChatBroadcastChannel();
+    if (channel) {
+      channel.postMessage({
+        type: "MESSAGE_SENT",
+        leadId: activeLead._id,
+        message: tempMsg,
+      });
+    }
+
+    // Update lead preview in local store immediately
+    updateLeadInStore({
+      _id: activeLead._id,
+      lastMessage: currentText,
+      lastMessageAt: new Date(),
+    });
+
     // Server Action with Real WhatsApp Cloud API
     const res = await sendMessage({
       leadId: activeLead._id,
@@ -218,11 +252,19 @@ export function ChatWindow() {
     });
 
     if (res.success && res.message) {
-      updateLeadInStore({
-        _id: activeLead._id,
-        lastMessage: currentText,
-        lastMessageAt: new Date(),
-      });
+      replaceOptimisticMessage(tempId, res.message);
+      lastMessageTimestampRef.current = new Date(
+        res.message.createdAt
+      ).toISOString();
+
+      if (channel) {
+        channel.postMessage({
+          type: "MESSAGE_SENT",
+          leadId: activeLead._id,
+          message: res.message,
+        });
+      }
+
       if (res.apiWarning) {
         setApiWarning(res.apiWarning);
       }
@@ -360,15 +402,14 @@ export function ChatWindow() {
           </div>
         )}
 
-        {/* Messages Stream Container with Guaranteed Interactive Scrollbar Rail */}
+        {/* Messages Stream Container with Native Tactile Neumorphic Scrollbar */}
         <div className="flex-1 min-h-0 relative flex flex-col">
           <div
             ref={messagesContainerRef}
-            onScroll={updateScroll}
             role="log"
             aria-live="polite"
             aria-label="Chat messages history"
-            className="flex-1 min-h-0 overflow-y-scroll chat-messages-stream p-3 pr-5 sm:p-4 sm:pr-6 space-y-3 overscroll-contain"
+            className="flex-1 min-h-0 overflow-y-auto chat-messages-stream chat-scrollbar p-3 sm:p-4 space-y-3 overscroll-contain"
           >
             {isLoadingMessages ? (
               <div className="flex justify-center py-8 text-xs text-slate-500">
@@ -430,37 +471,6 @@ export function ChatWindow() {
             )}
             <div ref={messagesEndRef} />
           </div>
-
-          {/* True Neumorphic Interactive Scrollbar (Tactile Extruded Thumb & Debossed Well) */}
-          {messages.length > 0 && scrollInfo.hasScroll && (
-            <div
-              className="absolute right-1.5 top-2.5 bottom-2.5 w-3 sm:w-3.5 z-20 flex flex-col justify-start items-center py-0.5 select-none"
-            >
-              {/* Tactile Inset / Debossed Track Groove */}
-              <div
-                ref={trackRef}
-                onClick={handleTrackClick}
-                title="Click or drag to scroll chat"
-                className="w-2 sm:w-2.5 h-full rounded-full bg-[#ebf1f8] shadow-[inset_2px_2px_4px_#c9d6e7,inset_-2px_-2px_4px_#ffffff] border border-slate-300/50 relative cursor-pointer"
-              >
-                {/* Extruded Neumorphic Tactile Knob Thumb */}
-                <div
-                  onMouseDown={handleMouseDown}
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                  className="w-full rounded-full bg-gradient-to-b from-[#ffffff] via-[#f3f7fb] to-[#d8e3f0] shadow-[2px_3px_6px_rgba(160,178,204,0.55),-2px_-2px_5px_#ffffff] border border-white hover:shadow-[3px_4px_9px_rgba(150,170,200,0.65),-2px_-2px_6px_#ffffff] active:shadow-[inset_1px_1px_3px_#c2d1e4,inset_-1px_-1px_3px_#ffffff] cursor-grab active:cursor-grabbing transition-transform duration-75 ease-out touch-none flex items-center justify-center group"
-                  style={{
-                    height: `${scrollInfo.thumbHeight}px`,
-                    transform: `translateY(${scrollInfo.top}px)`,
-                  }}
-                >
-                  {/* Subtle Tactile Ridge / Grip Line */}
-                  <span className="w-0.5 sm:w-1 h-3.5 rounded-full bg-slate-400/50 shadow-[inset_1px_1px_1px_rgba(0,0,0,0.15)] group-hover:bg-blue-600/70 group-active:bg-blue-600 transition-colors pointer-events-none" />
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Message Input Box */}
