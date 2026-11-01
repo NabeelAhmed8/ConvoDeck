@@ -105,7 +105,7 @@ export function PublicLeadForm() {
               placeholder="e.g. Asad Ali"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full pl-8 pr-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              className="w-full pl-8 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
             />
           </div>
         </div>
@@ -126,7 +126,7 @@ export function PublicLeadForm() {
               placeholder="e.g. +92 300 1234567"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full pl-8 pr-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              className="w-full pl-8 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
             />
           </div>
         </div>
@@ -146,7 +146,7 @@ export function PublicLeadForm() {
             placeholder="asad@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-8 pr-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+            className="w-full pl-8 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
           />
         </div>
       </div>
@@ -164,7 +164,7 @@ export function PublicLeadForm() {
           placeholder="We are looking for a multi-agent WhatsApp inbox for our 5 sales representatives..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full p-3 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+          className="w-full p-3 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
         />
       </div>
 

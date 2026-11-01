@@ -7,11 +7,31 @@
   --foreground: #0f172a;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
+  touch-action: manipulation;
+}
+
+/* Prevent mobile browser (iOS Safari / Android Chrome) auto-zoom on input focus */
+@media screen and (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* ============================================================== */

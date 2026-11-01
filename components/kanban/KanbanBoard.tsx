@@ -80,7 +80,7 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-4">
+    <div className="flex flex-col h-full space-y-4 w-full max-w-full overflow-hidden">
       {/* Board Header & Controls */}
       <div className="neu-card p-3 sm:p-5 rounded-3xl text-slate-900 bg-white space-y-3 sm:space-y-3.5 shadow-sm">
         {/* Top Row: Title, Subtitle & Action Controls (Search & Add Lead) */}
@@ -117,7 +117,7 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
                 placeholder="Search leads..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2 text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
+                className="w-full pl-8 sm:pl-9 pr-3 sm:pr-4 py-2 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
               />
             </div>
 
@@ -173,7 +173,7 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
       </div>
 
       {/* Pipeline Stages Grid */}
-      <div className="flex-1 overflow-x-auto pb-4 scroll-smooth touch-pan-x">
+      <div className="flex-1 overflow-x-auto pb-4 scroll-smooth touch-pan-x w-full max-w-full">
         <div className="flex gap-4 min-w-[1300px] min-h-[calc(100vh-230px)] pb-2">
           {COLUMNS.map((column) => {
             const columnLeads = filteredLeads.filter(

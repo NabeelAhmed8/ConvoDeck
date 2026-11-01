@@ -33,10 +33,10 @@ export default async function DashboardLayout({
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-0 lg:h-full overflow-hidden relative z-10">
+      <div className="flex-1 flex flex-col min-w-0 min-h-0 w-full max-w-full lg:h-full overflow-hidden relative z-10">
         <main
           aria-label="Main Content"
-          className="flex-1 overflow-y-auto p-2 sm:p-4 lg:p-5 min-h-0 flex flex-col"
+          className="flex-1 overflow-y-auto overflow-x-hidden p-2 sm:p-4 lg:p-5 min-h-0 w-full max-w-full flex flex-col"
         >
           {children}
         </main>

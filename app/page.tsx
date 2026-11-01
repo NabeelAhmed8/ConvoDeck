@@ -12,12 +12,12 @@ import { PricingSection } from "@/components/pricing/PricingSection";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
       {/* Responsive Navigation Header */}
       <LandingNavbar />
 
       {/* Hero Section */}
-      <section className="relative pt-26 sm:pt-36 pb-14 sm:pb-20 px-3 sm:px-6 overflow-hidden">
+      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-14 sm:pb-20 px-3 sm:px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full neu-pressed text-blue-700 text-[11px] sm:text-xs font-semibold mb-6 border border-blue-200 bg-white max-w-full">
             <Sparkles className="w-3.5 h-3.5 shrink-0 text-blue-600" />

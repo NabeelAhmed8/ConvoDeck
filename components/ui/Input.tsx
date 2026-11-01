@@ -35,7 +35,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-describedby={errorId}
           aria-label={props["aria-label"] || (typeof label === "string" ? label : undefined)}
           className={cn(
-            "w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none transition-colors",
+            "w-full px-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none transition-colors",
             error && "border-rose-500/50 focus:ring-rose-500/50",
             className
           )}

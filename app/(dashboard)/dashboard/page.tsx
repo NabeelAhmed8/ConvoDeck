@@ -49,7 +49,7 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto text-slate-800">
+    <div className="space-y-6 max-w-7xl mx-auto text-slate-800 w-full max-w-full overflow-hidden">
       {/* Top Banner */}
       <div className="relative overflow-hidden rounded-3xl neu-card p-4 sm:p-6 md:p-8">
         <div className="relative z-10 max-w-2xl">

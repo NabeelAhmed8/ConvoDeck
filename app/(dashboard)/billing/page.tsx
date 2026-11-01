@@ -30,7 +30,7 @@ export default async function BillingPage() {
   const paymentMethod = workspace?.paymentMethod || "None on file";
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8 w-full max-w-full overflow-hidden">
       {/* Page Title */}
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight">

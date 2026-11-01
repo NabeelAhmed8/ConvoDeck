@@ -10,10 +10,10 @@ export const metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
       {/* Top Floating Neumorphic Bar */}
-      <nav className="fixed top-3 sm:top-5 inset-x-3 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
-        <div className="neu-card rounded-2xl sm:rounded-full px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between border border-white/90 shadow-[8px_8px_24px_rgba(160,178,204,0.3),-8px_-8px_24px_#ffffff] bg-white/95 backdrop-blur-md">
+      <nav className="fixed top-2.5 sm:top-5 inset-x-2.5 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
+        <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/90 shadow-[8px_8px_24px_rgba(160,178,204,0.3),-8px_-8px_24px_#ffffff] bg-white/95 backdrop-blur-md">
           <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl neu-convex flex items-center justify-center font-black text-slate-900 text-lg sm:text-xl shadow-sm shrink-0 group-hover:scale-105 transition-transform">
               C
@@ -46,7 +46,7 @@ export default function PricingPage() {
       </nav>
 
       {/* Main Content */}
-      <main className="pt-28 sm:pt-32 pb-10 sm:pb-16 px-4 sm:px-6">
+      <main className="pt-28 sm:pt-36 pb-10 sm:pb-16 px-3 sm:px-6 w-full max-w-full overflow-x-hidden">
         <PricingSection />
       </main>
 

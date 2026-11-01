@@ -185,7 +185,7 @@ export function TeamManagementClient({
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 w-full max-w-full overflow-hidden">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -302,14 +302,14 @@ export function TeamManagementClient({
               placeholder={activeTab === "agents" ? "Search agents by name or email..." : "Search audit events..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 sm:pl-9 pr-3 py-2 text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none"
+              className="w-full pl-8 sm:pl-9 pr-3 py-2 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Tab 1: Team Agents Table */}
         {activeTab === "agents" ? (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto w-full max-w-full">
             <table className="w-full min-w-[700px] text-left text-xs text-slate-700">
               <thead className="bg-[#f8fafc] border-b border-slate-200 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 <tr>
@@ -445,7 +445,7 @@ export function TeamManagementClient({
           </div>
         ) : (
           /* Tab 2: Live Audit Trail Table */
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto w-full max-w-full">
             <table className="w-full min-w-[700px] text-left text-xs text-slate-700">
               <thead className="bg-[#f8fafc] border-b border-slate-200 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 <tr>
