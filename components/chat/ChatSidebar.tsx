@@ -117,6 +117,13 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
   });
 
   const handleSelectLead = async (lead: ILead) => {
+    // If clicking the currently active conversation, toggle it closed
+    if (activeLead?._id === lead._id) {
+      setActiveLead(null);
+      return;
+    }
+
+    // Otherwise, select and open the conversation
     setActiveLead(lead);
     if (lead.unreadCount && lead.unreadCount > 0) {
       updateLeadInStore({ _id: lead._id!, unreadCount: 0 });

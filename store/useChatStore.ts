@@ -36,9 +36,27 @@ export const useChatStore = create<ChatState>((set) => ({
   filter: "all",
 
   setActiveLead: (lead) =>
-    set({
-      activeLead: lead,
-      messages: [], // Reset messages until loaded for new lead
+    set((state) => {
+      // If closing / deselecting, reset activeLead and clear messages
+      if (!lead) {
+        return {
+          activeLead: null,
+          messages: [],
+        };
+      }
+
+      // If switching to a different lead, clear messages so new history can load cleanly
+      if (state.activeLead?._id !== lead._id) {
+        return {
+          activeLead: lead,
+          messages: [],
+        };
+      }
+
+      // If selecting the already active lead, preserve messages and refresh lead details
+      return {
+        activeLead: lead,
+      };
     }),
 
   setLeads: (leads) => set({ leads }),

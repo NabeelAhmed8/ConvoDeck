@@ -56,22 +56,36 @@ export function ChatWindow() {
     setNotes(activeLead.notes || "");
     setApiWarning(null);
 
+    let isMounted = true;
+
     const loadHistory = async () => {
       setIsLoadingMessages(true);
-      const data = await getMessages(activeLead._id!);
-      setMessages(data);
-      setIsLoadingMessages(false);
+      try {
+        const data = await getMessages(activeLead._id!);
+        if (!isMounted) return;
+        setMessages(data);
 
-      if (data && data.length > 0) {
-        const latest = data[data.length - 1];
-        lastMessageTimestampRef.current = new Date(latest.createdAt).toISOString();
-      } else {
-        lastMessageTimestampRef.current = new Date().toISOString();
+        if (data && data.length > 0) {
+          const latest = data[data.length - 1];
+          lastMessageTimestampRef.current = new Date(latest.createdAt).toISOString();
+        } else {
+          lastMessageTimestampRef.current = new Date().toISOString();
+        }
+      } catch (err) {
+        console.error("Failed to load chat history:", err);
+      } finally {
+        if (isMounted) {
+          setIsLoadingMessages(false);
+        }
       }
       lastLeadSyncRef.current = new Date().toISOString();
     };
 
     loadHistory();
+
+    return () => {
+      isMounted = false;
+    };
   }, [activeLead?._id, setMessages, setIsLoadingMessages]);
 
   // Real-Time Delta Sync (Zero-Delay Polling across Mobile and Laptop)
@@ -379,6 +393,17 @@ export function ChatWindow() {
               ) : (
                 <PanelRightOpen className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
               )}
+            </button>
+
+            {/* Close Conversation */}
+            <button
+              type="button"
+              onClick={() => setActiveLead(null)}
+              aria-label="Close conversation"
+              title="Close conversation"
+              className="p-1.5 sm:p-2 text-slate-500 hover:text-slate-900 neu-btn rounded-full cursor-pointer shrink-0"
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
             </button>
           </div>
         </div>
