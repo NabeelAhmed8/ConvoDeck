@@ -269,34 +269,77 @@ body {
 }
 
 /* ============================================================== */
-/* Simple, Clean, Theme-aligned Scrollbars across the entire site */
+/* Authentic Chatbox-Style Tactile Neumorphic Scrollbars across website */
 /* ============================================================== */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #cbd5e1 #ebf1f8;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+main::-webkit-scrollbar,
+aside::-webkit-scrollbar,
+div::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* 1. Recessed Debossed Track Groove (Identical to Chatbox Track) */
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+main::-webkit-scrollbar-track,
+aside::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: #ebf1f8 !important;
+  border-radius: 9999px !important;
+  margin: 3px 2px !important;
+  border: 1px solid rgba(203, 213, 225, 0.55) !important;
+  box-shadow: inset 1.5px 1.5px 3px #c9d6e7, inset -1.5px -1.5px 3px #ffffff !important;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-  box-shadow: inset 1px 1px 2px rgba(148, 163, 184, 0.4);
-  transition: all 0.2s ease;
+/* 2. Extruded Tactile Thumb with Pure White Border (Identical to Chatbox Thumb) */
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+main::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ffffff 0%, #f3f7fb 40%, #d8e3f0 100%) !important;
+  border-radius: 9999px !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 2px 2px 5px rgba(160, 178, 204, 0.55), -1px -1px 3px #ffffff !important;
+  min-height: 40px !important;
+  min-width: 40px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+main::-webkit-scrollbar-thumb:hover,
+aside::-webkit-scrollbar-thumb:hover,
+div::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fc 40%, #c8d8ec 100%) !important;
+  box-shadow: 2px 3px 7px rgba(150, 170, 200, 0.65), -1px -1px 4px #ffffff !important;
 }
 
-::-webkit-scrollbar-corner {
+html::-webkit-scrollbar-thumb:active,
+body::-webkit-scrollbar-thumb:active,
+main::-webkit-scrollbar-thumb:active,
+aside::-webkit-scrollbar-thumb:active,
+div::-webkit-scrollbar-thumb:active,
+*::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #d8e3f0 0%, #edf3fb 100%) !important;
+  box-shadow: inset 1px 1px 3px #c2d1e4, inset -1px -1px 3px #ffffff !important;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+main::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
   background: transparent;
 }
 
