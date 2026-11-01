@@ -276,13 +276,23 @@ body {
   scrollbar-color: #d1dce9 #ebf1f8;
 }
 
-::-webkit-scrollbar {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+main::-webkit-scrollbar,
+aside::-webkit-scrollbar,
+div::-webkit-scrollbar,
+*::-webkit-scrollbar {
   width: 9px;
   height: 9px;
 }
 
 /* Debossed / Inset Well Track */
-::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+main::-webkit-scrollbar-track,
+aside::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
   background: #ebf1f8 !important;
   border-radius: 9999px;
   margin: 3px 2px;
@@ -291,7 +301,12 @@ body {
 }
 
 /* Extruded 3D Tactile Neumorphic Thumb with Center Ridge */
-::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+main::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
   background: 
     linear-gradient(90deg, transparent 40%, rgba(148, 163, 184, 0.45) 46%, rgba(148, 163, 184, 0.45) 54%, transparent 60%),
     linear-gradient(180deg, #ffffff 0%, #f3f7fb 40%, #d8e3f0 100%) !important;
