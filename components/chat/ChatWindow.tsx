@@ -40,6 +40,33 @@ export function ChatWindow() {
   const [notes, setNotes] = useState("");
   const [apiWarning, setApiWarning] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  const [scrollInfo, setScrollInfo] = useState({
+    hasScroll: false,
+    top: 0,
+    thumbHeight: 40,
+  });
+
+  const updateScroll = () => {
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    if (scrollHeight > clientHeight + 5) {
+      const rawThumbHeight = (clientHeight / scrollHeight) * clientHeight;
+      const thumbHeight = Math.max(rawThumbHeight, 36);
+      const maxScrollTop = scrollHeight - clientHeight;
+      const trackHeight = clientHeight - thumbHeight - 16;
+      const thumbTop = maxScrollTop > 0 ? (scrollTop / maxScrollTop) * trackHeight + 8 : 8;
+      setScrollInfo({
+        hasScroll: true,
+        top: thumbTop,
+        thumbHeight,
+      });
+    } else {
+      setScrollInfo({ hasScroll: false, top: 0, thumbHeight: 40 });
+    }
+  };
 
   // Load chat history when activeLead changes
   useEffect(() => {
@@ -52,14 +79,17 @@ export function ChatWindow() {
       const data = await getMessages(activeLead._id!);
       setMessages(data);
       setIsLoadingMessages(false);
+      setTimeout(updateScroll, 150);
     };
 
     loadHistory();
   }, [activeLead?._id, setMessages, setIsLoadingMessages]);
 
-  // Auto-scroll to bottom of chat
+  // Auto-scroll to bottom of chat and recalculate scrollbar
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const timer = setTimeout(updateScroll, 120);
+    return () => clearTimeout(timer);
   }, [messages]);
 
   // Handle Real Message Send (Team Agent -> Customer WhatsApp)
@@ -236,10 +266,12 @@ export function ChatWindow() {
 
         {/* Messages Stream */}
         <div
+          ref={messagesContainerRef}
+          onScroll={updateScroll}
           role="log"
           aria-live="polite"
           aria-label="Chat messages history"
-          className="flex-1 min-h-0 overflow-y-scroll chat-scrollbar p-3 sm:p-4 space-y-3 overscroll-contain"
+          className="flex-1 min-h-0 overflow-y-scroll chat-scrollbar p-3 sm:p-4 space-y-3 overscroll-contain relative"
         >
           {isLoadingMessages ? (
             <div className="flex justify-center py-8 text-xs text-slate-500">
@@ -301,6 +333,26 @@ export function ChatWindow() {
           )}
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Guaranteed Visual Neumorphic & Royal Blue Scrollbar (Always visible on mobile & desktop) */}
+        {scrollInfo.hasScroll && (
+          <div
+            aria-hidden="true"
+            className="absolute right-1.5 top-[58px] bottom-[72px] w-2 pointer-events-none z-20 flex flex-col justify-start"
+          >
+            {/* Soft Neumorphic Track Groove */}
+            <div className="w-1.5 h-full mx-auto rounded-full bg-slate-200/90 shadow-[inset_1px_1px_2px_rgba(160,178,204,0.4)] relative">
+              {/* Royal Blue Themed Thumb */}
+              <div
+                className="w-full rounded-full bg-blue-600 shadow-[0_2px_6px_rgba(37,99,235,0.5)] border border-white transition-transform duration-75 ease-out"
+                style={{
+                  height: `${scrollInfo.thumbHeight}px`,
+                  transform: `translateY(${scrollInfo.top}px)`,
+                }}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Message Input Box */}
         <div className="p-2.5 sm:p-3 bg-white border-t border-slate-200/70 shadow-xs shrink-0">

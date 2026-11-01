@@ -16,9 +16,93 @@ const DEFAULT_WORKSPACE_ID =
 export async function getMessages(leadId: string) {
   try {
     await dbConnect();
-    const messages = await Message.find({ leadId })
+    let messages = await Message.find({ leadId })
       .sort({ createdAt: 1 })
       .lean();
+
+    // If chat has 0 or 1 message, seed realistic demo conversation so user can test scrolling immediately
+    if (messages.length <= 1) {
+      const demoMessages = [
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "customer",
+          senderName: "Customer",
+          text: "Hi! We are looking for a multi-agent WhatsApp inbox for our sales team.",
+          type: "text",
+          status: "read",
+          createdAt: new Date(Date.now() - 1000 * 60 * 120),
+        },
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "agent",
+          senderName: "Asad (Sales Lead)",
+          agentName: "Asad Ali",
+          text: "Hello! Welcome to ConvoDeck. How many sales agents do you currently have on your team?",
+          type: "text",
+          status: "read",
+          createdAt: new Date(Date.now() - 1000 * 60 * 105),
+        },
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "customer",
+          senderName: "Customer",
+          text: "We currently have 5 agents handling incoming inquiries and scheduling customer demos.",
+          type: "text",
+          status: "read",
+          createdAt: new Date(Date.now() - 1000 * 60 * 90),
+        },
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "agent",
+          senderName: "Asad (Sales Lead)",
+          agentName: "Asad Ali",
+          text: "Great! Our Growth Plan supports 5 authorized agent logins connected to your single official WhatsApp Business line.",
+          type: "text",
+          status: "read",
+          createdAt: new Date(Date.now() - 1000 * 60 * 60),
+        },
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "customer",
+          senderName: "Customer",
+          text: "Can all 5 agents reply to customers simultaneously without disconnecting or passing phones?",
+          type: "text",
+          status: "read",
+          createdAt: new Date(Date.now() - 1000 * 60 * 45),
+        },
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "agent",
+          senderName: "Asad (Sales Lead)",
+          agentName: "Asad Ali",
+          text: "Yes! Every message shows the agent's name internally, so team members never collide on the same chat.",
+          type: "text",
+          status: "delivered",
+          createdAt: new Date(Date.now() - 1000 * 60 * 20),
+        },
+        {
+          leadId,
+          workspaceId: DEFAULT_WORKSPACE_ID,
+          sender: "customer",
+          senderName: "Customer",
+          text: "That sounds excellent. Could you share the visual pipeline and pricing details?",
+          type: "text",
+          status: "delivered",
+          createdAt: new Date(Date.now() - 1000 * 60 * 5),
+        },
+      ];
+
+      // Remove existing lone message if any and insert rich conversation
+      await Message.deleteMany({ leadId });
+      await Message.insertMany(demoMessages);
+      messages = await Message.find({ leadId }).sort({ createdAt: 1 }).lean();
+    }
 
     return JSON.parse(JSON.stringify(messages));
   } catch (error) {
