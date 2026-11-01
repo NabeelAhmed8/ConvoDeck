@@ -205,11 +205,85 @@ export async function sendMessage({
 export async function markChatAsRead(leadId: string) {
   try {
     await dbConnect();
-    await Lead.findByIdAndUpdate(leadId, { unreadCount: 0 });
+    await Lead.findByIdAndUpdate(leadId, { unreadCount: 0, updatedAt: new Date() });
     revalidatePath("/chat");
     return { success: true };
   } catch (error) {
     console.error("Error marking chat read:", error);
+    return { success: false };
+  }
+}
+
+// 4. Mark Lead Chat as Unread
+export async function markChatAsUnread(leadId: string) {
+  try {
+    await dbConnect();
+    await Lead.findByIdAndUpdate(leadId, { unreadCount: 1, updatedAt: new Date() });
+    revalidatePath("/chat");
+    return { success: true };
+  } catch (error) {
+    console.error("Error marking chat unread:", error);
+    return { success: false };
+  }
+}
+
+// 5. Toggle Mute / Unmute for Chat Notifications
+export async function toggleMuteChat(leadId: string, isMuted: boolean) {
+  try {
+    await dbConnect();
+    await Lead.findByIdAndUpdate(leadId, { isMuted, updatedAt: new Date() });
+    revalidatePath("/chat");
+    return { success: true };
+  } catch (error) {
+    console.error("Error toggling mute:", error);
+    return { success: false };
+  }
+}
+
+// 6. Toggle Block / Unblock Contact
+export async function toggleBlockContact(leadId: string, isBlocked: boolean) {
+  try {
+    await dbConnect();
+    await Lead.findByIdAndUpdate(leadId, { isBlocked, updatedAt: new Date() });
+    revalidatePath("/chat");
+    return { success: true };
+  } catch (error) {
+    console.error("Error toggling block:", error);
+    return { success: false };
+  }
+}
+
+// 7. Clear All Messages for Lead (Preserves Contact Profile)
+export async function clearChatMessages(leadId: string) {
+  try {
+    await dbConnect();
+    await Message.deleteMany({ leadId });
+    await Lead.findByIdAndUpdate(leadId, {
+      lastMessage: "",
+      unreadCount: 0,
+      updatedAt: new Date(),
+    });
+    revalidatePath("/chat");
+    return { success: true };
+  } catch (error) {
+    console.error("Error clearing chat messages:", error);
+    return { success: false };
+  }
+}
+
+// 8. Delete Entire Chat and Contact
+export async function deleteChat(leadId: string) {
+  try {
+    await dbConnect();
+    await Message.deleteMany({ leadId });
+    await Lead.findByIdAndDelete(leadId);
+    revalidatePath("/chat");
+    revalidatePath("/pipeline");
+    revalidatePath("/kanban");
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting chat:", error);
     return { success: false };
   }
 }

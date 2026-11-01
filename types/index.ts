@@ -66,6 +66,8 @@ export interface ILead {
   lastMessage?: string;
   lastMessageAt?: string | Date;
   unreadCount?: number;
+  isMuted?: boolean;
+  isBlocked?: boolean;
   notes?: string;
   createdAt?: string | Date;
   updatedAt?: string | Date;

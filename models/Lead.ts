@@ -63,6 +63,14 @@ const LeadSchema = new Schema<ILeadDocument>(
       type: Number,
       default: 0,
     },
+    isMuted: {
+      type: Boolean,
+      default: false,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
     notes: {
       type: String,
       default: "",

@@ -13,9 +13,10 @@ import {
   Settings,
   ArrowLeft,
   X,
+  Ban,
 } from "lucide-react";
 import { useChatStore } from "@/store/useChatStore";
-import { getMessages, sendMessage } from "@/actions/chatActions";
+import { getMessages, sendMessage, toggleBlockContact } from "@/actions/chatActions";
 import { updateLeadStage, updateLead } from "@/actions/leadActions";
 import { StageBadge } from "@/components/ui/Badge";
 import { IMessage, LeadStage } from "@/types";
@@ -122,11 +123,11 @@ export function ChatWindow() {
           if (data.messages && data.messages.length > 0) {
             const incoming: IMessage[] = data.messages;
 
-            // Play incoming notification chime for incoming customer message
+            // Play incoming notification chime for incoming customer message (if not muted)
             const hasCustomerMessage = incoming.some(
               (m) => m.sender === "customer"
             );
-            if (hasCustomerMessage) {
+            if (hasCustomerMessage && !activeLead.isMuted) {
               playIncomingMessageSound();
             }
 
@@ -305,6 +306,14 @@ export function ChatWindow() {
     await updateLead(activeLead._id, { notes });
   };
 
+  // Unblock contact directly from chat banner
+  const handleUnblockContact = async () => {
+    if (!activeLead?._id) return;
+    updateLeadInStore({ _id: activeLead._id, isBlocked: false });
+    toast.success("Contact Unblocked", `${activeLead.name} has been unblocked`);
+    await toggleBlockContact(activeLead._id, false);
+  };
+
   if (!activeLead) {
     return (
       <div className="hidden md:flex flex-1 min-w-0 min-h-0 flex-col items-center justify-center p-6 text-center text-slate-600 bg-[#f0f4fa]">
@@ -408,6 +417,26 @@ export function ChatWindow() {
           </div>
         </div>
 
+        {/* Blocked Contact Warning Alert */}
+        {activeLead.isBlocked && (
+          <div
+            role="alert"
+            className="bg-rose-50 border-b border-rose-200 px-3 py-2 text-xs text-rose-900 flex items-center justify-between shrink-0"
+          >
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Ban className="w-4 h-4 text-rose-600 shrink-0" aria-hidden="true" />
+              <span className="truncate">This contact is blocked. You cannot send messages until unblocked.</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleUnblockContact}
+              className="font-bold underline text-rose-700 hover:text-rose-900 flex items-center gap-1 shrink-0 ml-2 text-[11px] cursor-pointer"
+            >
+              Unblock
+            </button>
+          </div>
+        )}
+
         {/* Friendly Setup Alert if WhatsApp credentials are not yet entered */}
         {apiWarning && (
           <div
@@ -509,15 +538,20 @@ export function ChatWindow() {
               name="messageText"
               type="text"
               autoComplete="off"
+              disabled={activeLead.isBlocked || isSending}
               aria-label={`Send WhatsApp message to ${activeLead.name}`}
-              placeholder={`Send message to +${activeLead.phone}...`}
+              placeholder={
+                activeLead.isBlocked
+                  ? "Contact is blocked. Click Unblock above to send messages..."
+                  : `Send message to +${activeLead.phone}...`
+              }
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 min-w-0 px-3.5 sm:px-4 py-2 sm:py-2.5 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
+              className="flex-1 min-w-0 px-3.5 sm:px-4 py-2 sm:py-2.5 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             />
             <button
               type="submit"
-              disabled={!inputText.trim() || isSending}
+              disabled={!inputText.trim() || isSending || activeLead.isBlocked}
               aria-label="Send message"
               className="px-3.5 sm:px-5 py-2 sm:py-2.5 neu-btn-primary disabled:opacity-50 text-white rounded-full text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
             >

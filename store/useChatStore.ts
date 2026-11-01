@@ -20,6 +20,7 @@ interface ChatState {
   replaceOptimisticMessage: (tempId: string, confirmedMessage: IMessage) => void;
   mergeUpdatedLeads: (updatedLeads: ILead[]) => void;
   updateLeadInStore: (updatedLead: Partial<ILead> & { _id: string }) => void;
+  removeLeadFromStore: (leadId: string) => void;
   setSearchQuery: (query: string) => void;
   setFilter: (filter: "all" | "unread") => void;
   setIsLoadingMessages: (loading: boolean) => void;
@@ -191,6 +192,13 @@ export const useChatStore = create<ChatState>((set) => ({
             : state.activeLead,
       };
     }),
+
+  removeLeadFromStore: (leadId) =>
+    set((state) => ({
+      leads: state.leads.filter((l) => l._id !== leadId),
+      activeLead: state.activeLead?._id === leadId ? null : state.activeLead,
+      messages: state.activeLead?._id === leadId ? [] : state.messages,
+    })),
 
   setSearchQuery: (searchQuery) => set({ searchQuery }),
 
