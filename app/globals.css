@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f3f6fa;
+  --foreground: #0f172a;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ============================================================== */
+/* White & Royal Blue Neumorphism (Soft UI) System Utilities      */
+/* Pristine pure white cards, soft blue-slate shadows, debossed   */
+/* wells, and vibrant Royal Blue (#3674fe / #2563eb) accents.    */
+/* ============================================================== */
+@layer utilities {
+  /* Dribbble Burak Ünal Neumorphic Side Menu System */
+  .neu-dribbble-rail {
+    background: #f0f3f8;
+    box-shadow: 10px 10px 24px rgba(166, 180, 200, 0.45), -10px -10px 24px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+  }
+
+  .neu-dribbble-active {
+    background: #edf2f7;
+    box-shadow: inset 3px 3px 6px #cbd6e2, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.45);
+  }
+
+  .neu-dribbble-divider {
+    height: 1px;
+    background: #d4dde8;
+    box-shadow: 0 1px 0 #ffffff;
+    width: 65%;
+    margin: 0.5rem auto;
+  }
+
+  .neu-dribbble-divider-full {
+    height: 1px;
+    background: #d4dde8;
+    box-shadow: 0 1px 0 #ffffff;
+    width: 90%;
+    margin: 0.5rem auto;
+  }
+
+  /* Extruded / Raised Surfaces (Pure White Brilliance) */
+  .neu-convex {
+    background: linear-gradient(145deg, #ffffff, #f7f9fd);
+    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.32), -6px -6px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 1.5rem;
+  }
+
+  .neu-flat {
+    background: #ffffff;
+    box-shadow: 5px 5px 15px rgba(160, 178, 204, 0.28), -5px -5px 15px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 1.5rem;
+  }
+
+  .neu-card {
+    background: #ffffff;
+    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.3), -6px -6px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 1.75rem;
+  }
+
+  .neu-card-hover {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .neu-card-hover:hover {
+    box-shadow: 9px 9px 24px rgba(150, 170, 200, 0.38), -8px -8px 20px #ffffff;
+    transform: translateY(-2px);
+  }
+
+  /* Debossed / Inset Wells (Inputs, Active Tabs, Dropzones) */
+  .neu-pressed {
+    background: #f0f4f9;
+    box-shadow: inset 4px 4px 8px #d5e0ee, inset -4px -4px 8px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.5);
+    border-radius: 1.25rem;
+  }
+
+  .neu-pressed-accent {
+    background: #eaf1fe;
+    box-shadow: inset 3px 3px 7px rgba(37, 99, 235, 0.22), inset -4px -4px 8px #ffffff, inset 0 0 10px rgba(54, 116, 254, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    color: #1d4ed8;
+    border-radius: 1.25rem;
+  }
+
+  .neu-pressed-emerald {
+    background: #eaf1fe;
+    box-shadow: inset 3px 3px 7px rgba(37, 99, 235, 0.22), inset -4px -4px 8px #ffffff, inset 0 0 10px rgba(54, 116, 254, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    color: #1d4ed8;
+    border-radius: 1.25rem;
+  }
+
+  /* Neumorphic Segmented Tab Controls */
+  .neu-tab-container {
+    background: #edf2f8;
+    box-shadow: inset 3px 3px 6px #d1dced, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 9999px;
+  }
+
+  .neu-tab {
+    background: #ffffff;
+    box-shadow: 3px 3px 7px rgba(160, 178, 204, 0.25), -3px -3px 7px #ffffff;
+    color: #475569;
+    transition: all 0.2s ease;
+    border-radius: 9999px;
+  }
+  .neu-tab:hover {
+    color: #0f172a;
+    box-shadow: 4px 4px 10px rgba(150, 170, 200, 0.35), -4px -4px 10px #ffffff;
+  }
+
+  .neu-tab-active {
+    background: #eaf1fe;
+    box-shadow: inset 3px 3px 6px #c4d7f8, inset -3px -3px 6px #ffffff;
+    color: #1d4ed8;
+    font-weight: 700;
+    border-radius: 9999px;
+  }
+
+  /* Sidebar */
+  .neu-sidebar {
+    background: #ffffff;
+    box-shadow: 6px 0 20px rgba(160, 178, 204, 0.25);
+    border-right: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: 1.75rem;
+  }
+
+  /* Tactile Neumorphic Buttons */
+  .neu-btn {
+    background: #ffffff;
+    box-shadow: 4px 4px 12px rgba(160, 178, 204, 0.28), -4px -4px 12px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: #0f172a;
+    transition: all 0.2s ease;
+    border-radius: 9999px;
+  }
+  .neu-btn:hover {
+    box-shadow: 6px 6px 16px rgba(150, 170, 200, 0.35), -5px -5px 14px #ffffff;
+    transform: translateY(-1px);
+    color: #000000;
+  }
+  .neu-btn:active {
+    box-shadow: inset 3px 3px 6px #d5e0ee, inset -3px -3px 6px #ffffff;
+    transform: translateY(0);
+  }
+
+  /* Signature Royal Blue Primary Button */
+  .neu-btn-primary {
+    background: linear-gradient(135deg, #3674fe, #1e5ade);
+    box-shadow: 5px 5px 16px rgba(37, 99, 235, 0.38), -3px -3px 10px #ffffff;
+    color: #ffffff !important;
+    font-weight: 700;
+    border: none;
+    transition: all 0.2s ease;
+    border-radius: 9999px;
+  }
+  .neu-btn-primary:hover {
+    background: linear-gradient(135deg, #2b6bf5, #164ec9);
+    box-shadow: 6px 6px 18px rgba(37, 99, 235, 0.48), -4px -4px 12px #ffffff;
+    transform: translateY(-1px);
+  }
+  .neu-btn-primary:active {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+  }
+
+  /* Signature Blue & White Action Button (Also aliases emerald to royal blue for unified theme) */
+  .neu-btn-emerald {
+    background: linear-gradient(135deg, #3674fe, #1e5ade);
+    box-shadow: 5px 5px 16px rgba(37, 99, 235, 0.38), -3px -3px 10px #ffffff;
+    color: #ffffff !important;
+    font-weight: 700;
+    border: none;
+    transition: all 0.2s ease;
+    border-radius: 9999px;
+  }
+  .neu-btn-emerald:hover {
+    background: linear-gradient(135deg, #2b6bf5, #164ec9);
+    box-shadow: 6px 6px 18px rgba(37, 99, 235, 0.48), -4px -4px 12px #ffffff;
+    transform: translateY(-1px);
+  }
+  .neu-btn-emerald:active {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+  }
+
+  /* Inputs */
+  .neu-input {
+    background: #ffffff;
+    box-shadow: inset 3px 3px 6px rgba(160, 178, 204, 0.25), inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.6);
+    color: #0f172a;
+    border-radius: 1.25rem;
+  }
+  .neu-input:focus {
+    box-shadow: inset 2px 2px 5px rgba(160, 178, 204, 0.2), inset -2px -2px 5px #ffffff, 0 0 0 3px rgba(37, 99, 235, 0.18);
+    border-color: #2563eb;
+    outline: none;
+  }
+
+  /* Aliases for compatibility */
+  .glass-panel {
+    background: #ffffff;
+    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.3), -6px -6px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+  }
+  .glass-card {
+    background: #ffffff;
+    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.3), -6px -6px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+  }
+  .glass-sidebar {
+    background: #ffffff;
+    box-shadow: 6px 0 20px rgba(160, 178, 204, 0.25);
+    border-right: 1px solid rgba(226, 232, 240, 0.85);
+  }
+  .glass-tab {
+    background: #ffffff;
+    box-shadow: 3px 3px 7px rgba(160, 178, 204, 0.25), -3px -3px 7px #ffffff;
+    color: #475569;
+  }
+  .glass-tab-active {
+    background: #eaf1fe;
+    box-shadow: inset 3px 3px 6px #c4d7f8, inset -3px -3px 6px #ffffff;
+    color: #1d4ed8;
+    font-weight: 700;
+  }
+  .glass-input {
+    background: #ffffff;
+    box-shadow: inset 3px 3px 6px rgba(160, 178, 204, 0.25), inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.6);
+    color: #0f172a;
+  }
+}
+
+/* Custom light scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f6fa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  box-shadow: inset 1px 1px 2px #94a3b8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ============================================================== */
+/* Global Solid Black Icons across website matching Dribbble spec  */
+/* ============================================================== */
+svg.lucide {
+  color: #0f172a !important;
+}
+
+/* Maintain crisp white icons inside primary buttons and text-white elements */
+.neu-btn-primary svg.lucide,
+.neu-btn-emerald svg.lucide,
+button.neu-btn-primary svg.lucide,
+.text-white svg.lucide,
+[class*="neu-btn-primary"] svg.lucide {
+  color: #ffffff !important;
+}
