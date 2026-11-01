@@ -368,7 +368,7 @@ export function ChatWindow() {
             role="log"
             aria-live="polite"
             aria-label="Chat messages history"
-            className="flex-1 min-h-0 overflow-y-scroll chat-scrollbar p-3 pr-5 sm:p-4 sm:pr-6 space-y-3 overscroll-contain"
+            className="flex-1 min-h-0 overflow-y-scroll chat-messages-stream p-3 pr-5 sm:p-4 sm:pr-6 space-y-3 overscroll-contain"
           >
             {isLoadingMessages ? (
               <div className="flex justify-center py-8 text-xs text-slate-500">
