@@ -44,7 +44,7 @@ export default async function AgentDashboardPage() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 w-full max-w-full overflow-hidden">
+    <div className="max-w-7xl mx-auto space-y-6 w-full min-w-0">
       {/* Agent Welcome Hero Banner */}
       <div className="relative overflow-hidden rounded-3xl neu-card p-4 sm:p-6 md:p-8 text-slate-900 bg-white">
         <div className="relative z-10 max-w-2xl">

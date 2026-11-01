@@ -103,7 +103,7 @@ export default function SettingsPage() {
   const webhookUrl = `${origin || "https://your-domain.com"}/api/webhook/whatsapp`;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 w-full max-w-full overflow-hidden">
+    <div className="max-w-4xl mx-auto space-y-6 w-full min-w-0">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight">

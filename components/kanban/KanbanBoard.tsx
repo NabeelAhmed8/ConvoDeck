@@ -80,7 +80,7 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-4 w-full max-w-full overflow-hidden">
+    <div className="flex flex-col w-full min-w-0 space-y-4 lg:h-full">
       {/* Board Header & Controls */}
       <div className="neu-card p-3 sm:p-5 rounded-3xl text-slate-900 bg-white space-y-3 sm:space-y-3.5 shadow-sm">
         {/* Top Row: Title, Subtitle & Action Controls (Search & Add Lead) */}
