@@ -398,9 +398,9 @@ export function ChatWindow() {
   return (
     <div className="flex-1 min-w-0 min-h-0 flex overflow-hidden bg-[#f0f4fa]">
       {/* Main Conversation Window */}
-      <div className="flex-1 min-w-0 min-h-0 flex flex-col relative overflow-hidden">
+      <div className="flex-1 min-w-0 min-h-0 flex flex-col relative overflow-hidden overscroll-none">
         {/* Chat Top Bar - Permanently Pinned at Top of Chatbox */}
-        <div className="p-2 sm:p-2.5 bg-white border-b border-slate-200/70 flex items-center justify-between z-20 text-slate-900 rounded-none shadow-xs shrink-0">
+        <div className="p-2 sm:p-2.5 bg-white border-b border-slate-200/70 flex items-center justify-between z-30 text-slate-900 rounded-none shadow-xs shrink-0 sticky top-0">
           <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
             <button
               type="button"
