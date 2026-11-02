@@ -13,6 +13,9 @@ html {
   max-width: 100vw;
   background-color: #f3f6fa;
   -webkit-text-size-adjust: 100%;
+}
+
+html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
 }
 
