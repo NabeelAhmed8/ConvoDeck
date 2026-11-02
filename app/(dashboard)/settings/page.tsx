@@ -10,7 +10,6 @@ import {
   Save,
   MessageSquare,
   ShieldCheck,
-  AlertCircle,
 } from "lucide-react";
 import { getWorkspaceSettings, updateWorkspaceSettings } from "@/actions/workspaceActions";
 import { getCurrentUser } from "@/actions/authActions";
@@ -175,8 +174,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Connected Line Banner if active, else 0-Meter Setup Callout */}
-        {phoneNumber ? (
+        {/* Connected Line Banner if active */}
+        {phoneNumber && (
           <ConnectedLineCard
             phoneNumber={phoneNumber}
             onDisconnected={() => {
@@ -186,25 +185,6 @@ export default function SettingsPage() {
               setAccessToken("");
             }}
           />
-        ) : (
-          <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/70 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                <AlertCircle className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-amber-900">
-                  No WhatsApp Business Line Connected (0-Meter / Clean State)
-                </p>
-                <p className="text-[11px] text-amber-700">
-                  Neeche apne official Meta Cloud API credentials darj karein aur Save karein.
-                </p>
-              </div>
-            </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/60 text-amber-800 shrink-0">
-              Fresh Setup
-            </span>
-          </div>
         )}
 
         {/* Meta API Connection Form */}
