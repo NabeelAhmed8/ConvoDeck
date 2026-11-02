@@ -189,6 +189,12 @@ export default async function AgentDashboardPage() {
                 </div>
               </div>
             ))}
+
+            {leads.length === 0 && (
+              <div className="py-8 text-center text-xs text-slate-500">
+                No customer inquiries assigned yet. Incoming WhatsApp messages will appear here.
+              </div>
+            )}
           </div>
         </div>
 

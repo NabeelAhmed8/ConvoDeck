@@ -63,10 +63,8 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
 
   // Initialize leads from server-rendered props
   useEffect(() => {
-    if (leads.length === 0 && initialLeads && initialLeads.length > 0) {
-      setLeads(initialLeads);
-    }
-  }, [initialLeads, leads.length, setLeads]);
+    setLeads(initialLeads || []);
+  }, [initialLeads, setLeads]);
 
   // Listen to cross-tab BroadcastChannel for 0ms tab sync
   useEffect(() => {

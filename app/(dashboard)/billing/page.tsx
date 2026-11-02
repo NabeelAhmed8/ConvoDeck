@@ -135,34 +135,44 @@ export default async function BillingPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 text-slate-700">
-              <tr>
-                <td className="py-3 font-mono font-medium text-slate-900">INV-2026-001</td>
-                <td className="py-3">
-                  {workspace?.lastPaymentDate
-                    ? new Date(workspace.lastPaymentDate).toLocaleDateString([], {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    : "Trial Activation"}
-                </td>
-                <td className="py-3 font-semibold text-slate-900 capitalize">
-                  {currentPlan} License
-                </td>
-                <td className="py-3 font-bold text-slate-900 font-mono">
-                  {workspace?.amountPaid && workspace.amountPaid > 0
-                    ? `${workspace.planCurrency || "$"}${workspace.amountPaid.toLocaleString()}`
-                    : "$0.00 (Trial)"}
-                </td>
-                <td className="py-3">
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-bold">
-                    Completed
-                  </span>
-                </td>
-                <td className="py-3 text-right">
-                  <DownloadInvoiceButton invoiceId="INV-2026-90412" />
-                </td>
-              </tr>
+              {workspace?.amountPaid && workspace.amountPaid > 0 ? (
+                <tr>
+                  <td className="py-3 font-mono font-medium text-slate-900">
+                    INV-2026-{workspace._id ? workspace._id.toString().slice(-5).toUpperCase() : "001"}
+                  </td>
+                  <td className="py-3">
+                    {workspace.lastPaymentDate
+                      ? new Date(workspace.lastPaymentDate).toLocaleDateString([], {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "Paid"}
+                  </td>
+                  <td className="py-3 font-semibold text-slate-900 capitalize">
+                    {currentPlan} License
+                  </td>
+                  <td className="py-3 font-bold text-slate-900 font-mono">
+                    {workspace.planCurrency || "$"}{workspace.amountPaid.toLocaleString()}
+                  </td>
+                  <td className="py-3">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-bold">
+                      Completed
+                    </span>
+                  </td>
+                  <td className="py-3 text-right">
+                    <DownloadInvoiceButton
+                      invoiceId={`INV-${workspace._id ? workspace._id.toString().slice(-6).toUpperCase() : "PAID"}`}
+                    />
+                  </td>
+                </tr>
+              ) : (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-xs text-slate-400">
+                    No billing invoices yet. Invoices will be generated upon subscription payment.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

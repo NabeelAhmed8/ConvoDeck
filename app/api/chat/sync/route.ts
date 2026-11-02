@@ -61,8 +61,8 @@ export async function GET(req: NextRequest) {
         const leadFilter: Record<string, unknown> = {
           updatedAt: { $gt: lastSyncDate },
         };
-        // If an explicit non-default workspace is active, scope to it
-        if (workspaceId && !workspaceId.includes("mongodb+srv") && workspaceId !== DEFAULT_WORKSPACE_ID) {
+        // Scope to active authorized workspace
+        if (workspaceId && !workspaceId.includes("mongodb+srv")) {
           leadFilter.workspaceId = workspaceId;
         }
 

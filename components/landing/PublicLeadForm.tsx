@@ -102,7 +102,7 @@ export function PublicLeadForm() {
               required
               aria-required="true"
               autoComplete="name"
-              placeholder="e.g. Asad Ali"
+              placeholder="e.g. Alex Smith"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full pl-8 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
@@ -123,7 +123,7 @@ export function PublicLeadForm() {
               required
               aria-required="true"
               autoComplete="tel"
-              placeholder="e.g. +92 300 1234567"
+              placeholder="e.g. +1 555 123 4567"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full pl-8 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"

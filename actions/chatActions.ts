@@ -70,7 +70,7 @@ export async function sendMessage({
       agentEmail: session?.email || "",
       text,
       type: "text",
-      status: waResponse.success ? "sent" : "delivered",
+      status: waResponse.success ? "sent" : "failed",
       whatsappMessageId: waResponse.messageId || "",
     });
 
