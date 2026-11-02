@@ -217,8 +217,15 @@ export async function loginUser(formData: {
     // Find user including password field
     const user = await User.findOne({ email: cleanEmail }).select("+password");
 
-    if (!user || !user.password) {
-      return { success: false, error: "Invalid email or password" };
+    if (!user) {
+      return {
+        success: false,
+        error: "No account found with this email on this deployment. Please Sign Up first or verify your email.",
+      };
+    }
+
+    if (!user.password) {
+      return { success: false, error: "Invalid password configuration for this user." };
     }
 
     // RBAC & Offboarding check
@@ -232,7 +239,7 @@ export async function loginUser(formData: {
     // Verify hashed password
     const isMatch = verifyPassword(password, user.password);
     if (!isMatch) {
-      return { success: false, error: "Invalid email or password" };
+      return { success: false, error: "Incorrect password. Please try again." };
     }
 
     // Credentials are correct! Generate 6-digit login verification code

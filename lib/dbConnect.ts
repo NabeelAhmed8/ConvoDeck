@@ -22,13 +22,16 @@ if (!global.mongooseCache) {
 }
 
 export async function dbConnect(): Promise<typeof mongoose> {
-  if (!MONGODB_URI) {
+  const uri = process.env.MONGODB_URI;
+
+  if (!uri) {
     throw new Error(
       "Please define the MONGODB_URI environment variable inside Vercel Environment Variables"
     );
   }
 
-  if (cached.conn) {
+  // Check if connection is alive and ready
+  if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
   }
 
@@ -41,7 +44,7 @@ export async function dbConnect(): Promise<typeof mongoose> {
     };
 
     cached.promise = mongoose
-      .connect(MONGODB_URI, opts)
+      .connect(uri, opts)
       .then((mongooseInstance) => {
         return mongooseInstance;
       })
