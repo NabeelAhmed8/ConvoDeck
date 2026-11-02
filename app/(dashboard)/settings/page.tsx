@@ -11,6 +11,8 @@ import {
   AlertCircle,
   Sparkles,
   Phone,
+  Laptop,
+  RefreshCw,
 } from "lucide-react";
 import { getWorkspaceSettings, updateWorkspaceSettings } from "@/actions/workspaceActions";
 import { getCurrentUser } from "@/actions/authActions";
@@ -30,6 +32,51 @@ export default function SettingsPage() {
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [isDesktopApp, setIsDesktopApp] = useState(false);
+  const [desktopVersion, setDesktopVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.electronAPI?.isDesktop) {
+      setIsDesktopApp(true);
+      if (window.electronAPI.getAppVersion) {
+        window.electronAPI.getAppVersion().then((ver) => setDesktopVersion(ver));
+      }
+    }
+  }, []);
+
+  const handleCheckForUpdates = async () => {
+    setCheckingUpdate(true);
+    try {
+      if (typeof window !== "undefined" && window.electronAPI?.checkForUpdates) {
+        const res = await window.electronAPI.checkForUpdates();
+        if (res?.updateAvailable) {
+          toast.info(
+            "Update Available",
+            `A new version (v${res.latestVersion}) is ready to download.`
+          );
+        } else if (res?.success) {
+          toast.success(
+            "Up to Date",
+            `ConvoDeck Desktop v${res.currentVersion || "0.2.0"} is up to date.`
+          );
+        } else if (res?.error) {
+          toast.error("Check Failed", res.error);
+        }
+      } else {
+        const res = await fetch("/api/version");
+        const data = await res.json();
+        toast.success(
+          "Latest Cloud Version",
+          `ConvoDeck is running version v${data.latestVersion || "0.2.0"}.`
+        );
+      }
+    } catch {
+      toast.error("Update Check Failed", "Unable to reach update server.");
+    } finally {
+      setCheckingUpdate(false);
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -342,6 +389,53 @@ export default function SettingsPage() {
           </Button>
         </div>
       </form>
+
+      {/* Application Version & Update Control */}
+      <div className="neu-card rounded-3xl p-6 sm:p-8 mt-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600">
+              <Laptop className="w-5 h-5" aria-hidden="true" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-base font-semibold text-slate-900">
+                  {isDesktopApp ? "ConvoDeck Desktop Client" : "ConvoDeck SaaS Platform"}
+                </h3>
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  v{desktopVersion || "0.2.0"}
+                </span>
+                {isDesktopApp && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200/60">
+                    Windows x64
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                {isDesktopApp
+                  ? "Automatic startup version check is active. You can also trigger an instant API check anytime."
+                  : "Cloud platform version control and updates. Check for the latest release updates."}
+              </p>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            onClick={handleCheckForUpdates}
+            disabled={checkingUpdate}
+            variant="outline"
+            className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-all shrink-0 cursor-pointer"
+          >
+            <RefreshCw
+              className={`w-3.5 h-3.5 text-slate-600 ${
+                checkingUpdate ? "animate-spin" : ""
+              }`}
+              aria-hidden="true"
+            />
+            {checkingUpdate ? "Checking Server..." : "Check for Updates"}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
