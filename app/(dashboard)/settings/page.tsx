@@ -9,14 +9,15 @@ import {
   Building2,
   Save,
   MessageSquare,
+  ShieldCheck,
 } from "lucide-react";
 import { getWorkspaceSettings, updateWorkspaceSettings } from "@/actions/workspaceActions";
 import { getCurrentUser } from "@/actions/authActions";
 import { toast } from "@/store/useToastStore";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
-import { EmbeddedSignupButton } from "@/components/settings/EmbeddedSignupButton";
 import { ConnectedLineCard } from "@/components/settings/ConnectedLineCard";
-import { ManualConfigAccordion } from "@/components/settings/ManualConfigAccordion";
+import { MetaApiConnectionForm } from "@/components/settings/MetaApiConnectionForm";
+import { WebhookCard } from "@/components/settings/WebhookCard";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -109,10 +110,10 @@ export default function SettingsPage() {
       {/* Page Title */}
       <div>
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Settings &amp; WhatsApp Integration
+          Settings &amp; Meta WhatsApp Cloud API
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-          Manage your company profile, connect your official WhatsApp business line, and configure system preferences.
+          Official Meta WhatsApp Cloud API integration for multi-agent messaging and live webhook synchronization.
         </p>
       </div>
 
@@ -151,7 +152,7 @@ export default function SettingsPage() {
         </form>
       </div>
 
-      {/* 2. WhatsApp Integration Card (Embedded 1-Click Signup + Connected Line Card) */}
+      {/* 2. Official Meta WhatsApp Cloud API Card */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5">
         <div className="flex items-center justify-between gap-3 border-b border-slate-200/80 pb-3">
           <div className="flex items-center gap-3">
@@ -159,13 +160,22 @@ export default function SettingsPage() {
               <MessageSquare className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="font-bold text-sm text-slate-900">WhatsApp Business Connection</h2>
-              <p className="text-xs text-slate-500">Connect your WhatsApp number with 1-click to start receiving &amp; sending chats.</p>
+              <div className="flex items-center gap-2">
+                <h2 className="font-bold text-sm text-slate-900">Official Meta WhatsApp Cloud API</h2>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  100% Official &amp; Ban-Proof
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Official enterprise connection via Meta Graph API v21.0. Zero ban risk for your business line.
+              </p>
             </div>
           </div>
         </div>
 
-        {phoneNumber ? (
+        {/* Connected Line Banner if active */}
+        {phoneNumber && (
           <ConnectedLineCard
             phoneNumber={phoneNumber}
             onDisconnected={() => {
@@ -175,29 +185,14 @@ export default function SettingsPage() {
               setAccessToken("");
             }}
           />
-        ) : (
-          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-50/60 to-teal-50/40 border border-emerald-200/80 space-y-3">
-            <div>
-              <h3 className="font-bold text-sm text-slate-900">Fast 1-Click WhatsApp Connection</h3>
-              <p className="text-xs text-slate-600 mt-0.5">
-                No complex Meta developer consoles needed. Link your WhatsApp business number directly to ConvoDeck.
-              </p>
-            </div>
-            <EmbeddedSignupButton
-              onSuccess={(phone) => {
-                setPhoneNumber(phone);
-              }}
-            />
-          </div>
         )}
 
-        {/* Manual / Advanced Developer Accordion */}
-        <ManualConfigAccordion
-          name={name}
-          phoneNumber={phoneNumber}
-          phoneNumberId={phoneNumberId}
-          wabaId={wabaId}
-          accessToken={accessToken}
+        {/* Meta API Connection Form */}
+        <MetaApiConnectionForm
+          initialPhone={phoneNumber}
+          initialPhoneId={phoneNumberId}
+          initialWabaId={wabaId}
+          initialToken={accessToken}
           webhookToken={webhookToken}
           onSaved={(data) => {
             setPhoneNumber(data.phoneNumber);
@@ -206,6 +201,9 @@ export default function SettingsPage() {
             setAccessToken(data.accessToken);
           }}
         />
+
+        {/* Webhook Configuration Card */}
+        <WebhookCard webhookToken={webhookToken} />
       </div>
 
       {/* 3. Platform & Desktop Version Control */}
