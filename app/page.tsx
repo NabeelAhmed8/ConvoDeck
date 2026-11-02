@@ -12,7 +12,7 @@ import { PricingSection } from "@/components/pricing/PricingSection";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-clip bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
       {/* Responsive Navigation Header */}
       <LandingNavbar />
 
