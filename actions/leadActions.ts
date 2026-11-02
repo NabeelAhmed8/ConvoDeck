@@ -69,20 +69,7 @@ export async function getLeads(workspaceId?: string) {
   }
 }
 
-// 2. Fetch Single Real Lead by ID
-export async function getLeadById(leadId: string) {
-  try {
-    await dbConnect();
-    const lead = await Lead.findById(leadId).lean();
-    if (!lead) return null;
-    return JSON.parse(JSON.stringify(lead));
-  } catch (error) {
-    console.error("Error fetching lead by id:", error);
-    return null;
-  }
-}
-
-// 3. Create Real Lead
+// 2. Create Real Lead
 export async function createLead(leadData: Partial<ILead>) {
   try {
     await dbConnect();
