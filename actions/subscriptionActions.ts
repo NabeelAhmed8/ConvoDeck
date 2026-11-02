@@ -9,9 +9,9 @@ import {
   BillingFrequency,
   CurrencyCode,
 } from "@/types";
-
-const DEFAULT_WORKSPACE_ID =
-  process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
+import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
+import { createStripeSession } from "@/lib/stripe";
+import { PRICING_TABLE, PaidPlanKey } from "@/constants/pricing";
 
 export interface CheckoutSubmissionData {
   plan: SubscriptionPlan;
@@ -20,8 +20,9 @@ export interface CheckoutSubmissionData {
   amount: number;
   companyName: string;
   billingEmail: string;
-  paymentMethod: "card" | "bank" | "wallet";
+  paymentMethod: "stripe" | "card";
   cardLast4?: string;
+  stripeSessionId?: string;
 }
 
 export async function processSubscriptionCheckout(data: CheckoutSubmissionData) {
@@ -50,10 +51,7 @@ export async function processSubscriptionCheckout(data: CheckoutSubmissionData) 
           amountPaid: data.amount,
           planExpiresAt: expiresAt,
           lastPaymentDate: new Date(),
-          paymentMethod:
-            data.paymentMethod === "card"
-              ? `Credit Card (ending in ${data.cardLast4 || "4242"})`
-              : "Bank Wire Transfer",
+          paymentMethod: `Stripe / Card (ending in ${data.cardLast4 || "4242"})`,
         },
       },
       { new: true, upsert: true }
@@ -74,4 +72,33 @@ export async function processSubscriptionCheckout(data: CheckoutSubmissionData) 
     console.error("Subscription Error:", error);
     return { success: false, error: msg };
   }
+}
+
+// 2. Create Hosted or Direct Stripe Checkout Session
+export async function createStripePaymentSession(params: {
+  planKey: PaidPlanKey;
+  billingFrequency: BillingFrequency;
+  currency: CurrencyCode;
+  companyName: string;
+  billingEmail: string;
+}) {
+  const plan = PRICING_TABLE[params.planKey];
+  const unitPrice = plan.prices[params.currency][params.billingFrequency];
+  const totalPrice =
+    params.billingFrequency === "yearly" ? unitPrice * 12 : unitPrice;
+
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "https://convodeck-one.vercel.app";
+
+  return await createStripeSession({
+    planName: plan.name,
+    planKey: params.planKey,
+    amount: totalPrice,
+    currency: params.currency,
+    billingFrequency: params.billingFrequency,
+    customerEmail: params.billingEmail,
+    companyName: params.companyName,
+    successUrl: `${appUrl}/checkout/success?plan=${params.planKey}&amount=${totalPrice}&currency=${params.currency}`,
+    cancelUrl: `${appUrl}/checkout?plan=${params.planKey}`,
+  });
 }

@@ -3,21 +3,16 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { CheckCircle2, ArrowRight, ShieldCheck, Download, Layers, MessageSquare } from "lucide-react";
-
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  USD: "$",
-  PKR: "₨ ",
-  AED: "AED ",
-  EUR: "€",
-};
+import { CheckCircle2, Layers, MessageSquare } from "lucide-react";
+import { CURRENCY_SYMBOLS } from "@/constants/pricing";
+import { CurrencyCode } from "@/types";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const invoiceId = searchParams.get("invoiceId") || "INV-2026-891024";
   const plan = searchParams.get("plan") || "Growth";
   const amount = searchParams.get("amount") || "69";
-  const currency = searchParams.get("currency") || "USD";
+  const currency = (searchParams.get("currency") as CurrencyCode) || "USD";
   const symbol = CURRENCY_SYMBOLS[currency] || "$";
 
   return (
