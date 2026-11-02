@@ -269,7 +269,7 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
         }`}
       >
         {/* Top Header */}
-        <div className="p-3.5 sm:p-4 border-b border-slate-200/70 bg-white">
+        <div className="p-3.5 sm:p-4 border-b border-slate-200/70 bg-white shrink-0 sticky top-0 z-20">
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2 min-w-0">
               <div className="w-8 h-8 rounded-xl neu-pressed text-blue-600 flex items-center justify-center font-bold bg-[#f1f5f9] shrink-0">

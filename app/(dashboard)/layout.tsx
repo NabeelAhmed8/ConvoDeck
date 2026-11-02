@@ -1,6 +1,7 @@
 import React from "react";
 import { getCurrentUser } from "@/actions/authActions";
 import { DashboardNavWrapper } from "@/components/dashboard/DashboardNavWrapper";
+import { DashboardMainContent } from "@/components/dashboard/DashboardMainContent";
 
 export const dynamic = "force-dynamic";
 
@@ -34,12 +35,9 @@ export default async function DashboardLayout({
 
       {/* Main Content Area: Fixed padding-top on mobile (< lg) offsets the fixed header exactly */}
       <div className="flex-1 flex flex-col min-w-0 min-h-0 w-full max-w-full h-full pt-[64px] sm:pt-[72px] lg:pt-0 overflow-hidden relative z-10">
-        <main
-          aria-label="Main Content"
-          className="flex-1 p-2 sm:p-3 lg:p-5 w-full max-w-full flex flex-col overflow-y-auto min-w-0 min-h-0 overscroll-contain"
-        >
+        <DashboardMainContent>
           {children}
-        </main>
+        </DashboardMainContent>
       </div>
     </div>
   );
