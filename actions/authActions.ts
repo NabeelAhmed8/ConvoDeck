@@ -437,9 +437,25 @@ export async function resendVerificationCode(params: {
   }
 }
 
-// 6. User Logout
+// 6. User Logout (Session End & JWT Token Invalidation)
 export async function logoutUser() {
+  try {
+    const session = await getSession();
+    if (session?.userId) {
+      await dbConnect();
+      // Increment tokenVersion on the user document to invalidate any existing JWT tokens
+      await User.findByIdAndUpdate(session.userId, {
+        $inc: { tokenVersion: 1 },
+      });
+    }
+  } catch (err) {
+    console.error("Error revoking session on logout:", err);
+  }
+
+  // Clear HTTP-only JWT session cookie
   await clearSessionCookie();
+
+  // Redirect to login page
   redirect("/login");
 }
 

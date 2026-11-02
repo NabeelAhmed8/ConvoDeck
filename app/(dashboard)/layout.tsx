@@ -1,4 +1,5 @@
 import React from "react";
+import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/actions/authActions";
 import { DashboardNavWrapper } from "@/components/dashboard/DashboardNavWrapper";
 import { DashboardMainContent } from "@/components/dashboard/DashboardMainContent";
@@ -11,11 +12,17 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const authData = await getCurrentUser();
-  const userName = authData?.user?.name || "Sales Agent";
-  const userEmail = authData?.user?.email || "agent@convodeck.com";
-  const workspaceName = authData?.workspace?.name || "My Workspace";
-  const whatsappNumber = authData?.workspace?.whatsappPhoneNumber || "+92 300 1234567";
-  const userRole = authData?.user?.role || "admin";
+
+  // Strict session enforcement: If user is not logged in or has logged out, redirect to /login
+  if (!authData || !authData.user) {
+    redirect("/login");
+  }
+
+  const userName = authData.user.name || "Agent";
+  const userEmail = authData.user.email || "";
+  const workspaceName = authData.workspace?.name || "My Workspace";
+  const whatsappNumber = authData.workspace?.whatsappPhoneNumber || "";
+  const userRole = authData.user.role || "agent";
 
   return (
     <div className="fixed inset-0 h-[100dvh] max-h-[100dvh] bg-[#f3f6fa] text-slate-900 flex flex-col lg:flex-row overflow-hidden selection:bg-blue-600/20 selection:text-slate-900 w-full max-w-full">
