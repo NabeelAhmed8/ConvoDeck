@@ -157,10 +157,10 @@ export function DashboardNavWrapper({
   return (
     <>
       {/* ============================================================== */}
-      {/* 1. Mobile & Tablet Top Bar (Fixed at top on < lg screens)       */}
+      {/* 1. Mobile & Tablet Top Bar (Permanently Fixed Top on < lg)     */}
       {/* ============================================================== */}
-      <header className="lg:hidden shrink-0 z-30 px-2 sm:px-3 pt-2 pb-1 w-full bg-[#f3f6fa]/95 backdrop-blur-md">
-        <div className="neu-card rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between border border-white/90 shadow-[6px_6px_18px_rgba(160,178,204,0.25),-6px_-6px_18px_#ffffff] bg-white/95">
+      <header className="lg:hidden fixed top-0 inset-x-0 z-40 h-[64px] sm:h-[72px] px-2 sm:px-3 flex items-center justify-center w-full bg-[#f3f6fa]/95 backdrop-blur-md">
+        <div className="w-full h-11 sm:h-12 neu-card rounded-2xl px-3 sm:px-4 flex items-center justify-between border border-white/90 shadow-[6px_6px_18px_rgba(160,178,204,0.25),-6px_-6px_18px_#ffffff] bg-white/95">
           {/* Hamburger + Brand */}
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <button
