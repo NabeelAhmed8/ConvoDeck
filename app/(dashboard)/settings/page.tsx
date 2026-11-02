@@ -24,7 +24,7 @@ import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 export default function SettingsPage() {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("+92 300 1234567");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberId, setPhoneNumberId] = useState("");
   const [wabaId, setWabaId] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -94,10 +94,10 @@ export default function SettingsPage() {
       const data = await getWorkspaceSettings();
       if (data) {
         setName(data.name || "");
-        setPhoneNumber(data.whatsappPhoneNumber || "+92 300 1234567");
-        setPhoneNumberId(data.whatsappPhoneNumberId || "108492019482910");
-        setWabaId(data.whatsappBusinessAccountId || "293847561029384");
-        setAccessToken(data.whatsappAccessToken || "EAAGm0PX4ZC_dummy_verified_token_convodeck");
+        setPhoneNumber(data.whatsappPhoneNumber || "");
+        setPhoneNumberId(data.whatsappPhoneNumberId || "");
+        setWabaId(data.whatsappBusinessAccountId || "");
+        setAccessToken(data.whatsappAccessToken || "");
         setWebhookToken(data.webhookVerifyToken || "convodeck_secure_token");
       }
     }
@@ -288,7 +288,7 @@ export default function SettingsPage() {
           <div className="border-b border-slate-200/80 pb-3 mb-4">
             <h2 className="font-bold text-sm text-slate-900">WhatsApp Business API Setup</h2>
             <p className="text-xs text-slate-500">
-              Pre-configured with your active business line. You can customize these with your official Meta developer keys anytime.
+              Configure your official Meta WhatsApp Cloud API credentials to enable real-time messaging across your agent workstation.
             </p>
           </div>
 
@@ -302,7 +302,7 @@ export default function SettingsPage() {
                 name="phoneNumber"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="+92 300 1234567"
+                placeholder="+1 555 123 4567"
                 autoComplete="tel"
                 className="w-full px-3.5 py-2.5 text-sm neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none transition-colors"
               />
@@ -317,7 +317,7 @@ export default function SettingsPage() {
                 name="phoneNumberId"
                 value={phoneNumberId}
                 onChange={(e) => setPhoneNumberId(e.target.value)}
-                placeholder="108492019482910"
+                placeholder="e.g. 108492019482910"
                 autoComplete="off"
                 className="w-full px-3.5 py-2.5 text-sm neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none transition-colors"
               />
@@ -334,7 +334,7 @@ export default function SettingsPage() {
                 name="wabaAccountId"
                 value={wabaId}
                 onChange={(e) => setWabaId(e.target.value)}
-                placeholder="293847561029384"
+                placeholder="e.g. 293847561029384"
                 autoComplete="off"
                 className="w-full px-3.5 py-2.5 text-sm neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none transition-colors"
               />
@@ -377,8 +377,17 @@ export default function SettingsPage() {
         {/* Submit */}
         <div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <span className="text-xs text-slate-500 flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
-            Line is verified and active across all agent seats
+            {phoneNumber ? (
+              <>
+                <ShieldCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+                Line is active across all agent seats
+              </>
+            ) : (
+              <>
+                <AlertCircle className="w-4 h-4 text-amber-500" aria-hidden="true" />
+                WhatsApp line not connected. Fill details and save.
+              </>
+            )}
           </span>
           <Button
             type="submit"

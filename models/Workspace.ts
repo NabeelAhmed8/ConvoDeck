@@ -18,19 +18,19 @@ const WorkspaceSchema = new Schema<IWorkspaceDocument>(
     },
     whatsappPhoneNumber: {
       type: String,
-      default: "+92 300 1234567",
+      default: "",
     },
     whatsappPhoneNumberId: {
       type: String,
-      default: "108492019482910",
+      default: "",
     },
     whatsappBusinessAccountId: {
       type: String,
-      default: "293847561029384",
+      default: "",
     },
     whatsappAccessToken: {
       type: String,
-      default: "EAAGm0PX4ZC_dummy_verified_token_convodeck",
+      default: "",
     },
     webhookVerifyToken: {
       type: String,

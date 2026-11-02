@@ -139,22 +139,32 @@ export function MobileDrawer({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
-                  className="w-2.5 h-2.5 rounded-full bg-[#25D366] animate-pulse"
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    whatsappNumber ? "bg-[#25D366] animate-pulse" : "bg-amber-400"
+                  }`}
                   aria-hidden="true"
                 />
                 <span className="text-xs font-bold text-slate-900">
                   WhatsApp Business
                 </span>
               </div>
-              <span className="text-[10px] bg-slate-900/10 text-slate-900 font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-slate-300/60">
-                <CheckCircle2 className="w-2.5 h-2.5 text-slate-900" />
-                Live
+              <span
+                className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border ${
+                  whatsappNumber
+                    ? "bg-slate-900/10 text-slate-900 border-slate-300/60"
+                    : "bg-amber-50 text-amber-700 border-amber-200/60"
+                }`}
+              >
+                <CheckCircle2 className="w-2.5 h-2.5" />
+                {whatsappNumber ? "Live" : "Setup"}
               </span>
             </div>
             <p className="text-xs font-mono font-bold text-slate-900 truncate">
-              {whatsappNumber}
+              {whatsappNumber || "Not connected"}
             </p>
-            <p className="text-[10px] text-slate-500">Shared multi-agent line active.</p>
+            <p className="text-[10px] text-slate-500">
+              {whatsappNumber ? "Shared multi-agent line active." : "Click to connect line in Settings."}
+            </p>
           </Link>
         </div>
 

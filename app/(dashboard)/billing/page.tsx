@@ -93,7 +93,7 @@ export default async function BillingPage() {
           <div>
             <span className="text-xs text-slate-500 block font-medium">WhatsApp Business Line</span>
             <p className="text-lg font-black text-emerald-600 font-mono mt-0.5">
-              {workspace?.whatsappPhoneNumber || "+92 300 1234567"}
+              {workspace?.whatsappPhoneNumber || "Not yet connected"}
             </p>
             <div className="w-full neu-pressed rounded-full h-2 mt-2 overflow-hidden">
               <div className="bg-emerald-500 h-2 rounded-full w-[100%]" />

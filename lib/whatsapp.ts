@@ -13,7 +13,6 @@ interface WhatsAppResponse {
 
 /**
  * Sends a real WhatsApp message via Meta Cloud API v21.0
- * If pre-configured with the workspace dummy business line (+92 300 1234567), it delivers smoothly.
  */
 export async function sendWhatsAppMessage({
   to,
@@ -22,9 +21,9 @@ export async function sendWhatsAppMessage({
   accessToken,
 }: SendWhatsAppMessageParams): Promise<WhatsAppResponse> {
   const finalPhoneId =
-    phoneNumberId || process.env.WHATSAPP_PHONE_NUMBER_ID || "108492019482910";
+    phoneNumberId || process.env.WHATSAPP_PHONE_NUMBER_ID || "";
   const finalToken =
-    accessToken || process.env.WHATSAPP_ACCESS_TOKEN || "EAAGm0PX4ZC_dummy_verified_token_convodeck";
+    accessToken || process.env.WHATSAPP_ACCESS_TOKEN || "";
 
   // Clean phone number (strip non-digits)
   const cleanTo = to.replace(/\D/g, "");
@@ -33,18 +32,12 @@ export async function sendWhatsAppMessage({
     return { success: false, error: "Recipient phone number is invalid." };
   }
 
-  // Handle Workspace Pre-Configured WhatsApp Business Line (+92 300 1234567)
-  if (
-    finalPhoneId === "108492019482910" ||
-    finalToken.includes("dummy") ||
-    !process.env.WHATSAPP_PHONE_NUMBER_ID
-  ) {
-    console.log(
-      `[WhatsApp Business Line: +92 300 1234567] Sent to +${cleanTo}: "${text}"`
-    );
+  // Check if WhatsApp credentials are configured
+  if (!finalPhoneId || !finalToken) {
     return {
-      success: true,
-      messageId: `wamid.HBgL${Date.now()}${Math.random().toString(36).substring(7)}`,
+      success: false,
+      error:
+        "WhatsApp API credentials are not configured. Please enter your Phone Number ID and Access Token in Settings.",
     };
   }
 

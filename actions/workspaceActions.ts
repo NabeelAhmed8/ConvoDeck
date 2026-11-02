@@ -25,22 +25,11 @@ export async function getWorkspaceSettings() {
         _id: workspaceId,
         name: "My Company Workspace",
         ownerEmail: session?.email || "admin@convodeck.com",
-        whatsappPhoneNumber: "+92 300 1234567",
-        whatsappPhoneNumberId: "108492019482910",
-        whatsappBusinessAccountId: "293847561029384",
-        whatsappAccessToken: "EAAGm0PX4ZC_dummy_verified_token_convodeck",
+        whatsappPhoneNumber: "",
+        whatsappPhoneNumberId: "",
+        whatsappBusinessAccountId: "",
+        whatsappAccessToken: "",
         webhookVerifyToken: "convodeck_secure_token",
-      });
-      workspace = await Workspace.findById(workspaceId).lean();
-    } else if (!workspace.whatsappPhoneNumber) {
-      // Ensure dummy line is set
-      await Workspace.findByIdAndUpdate(workspaceId, {
-        $set: {
-          whatsappPhoneNumber: "+92 300 1234567",
-          whatsappPhoneNumberId: workspace.whatsappPhoneNumberId || "108492019482910",
-          whatsappBusinessAccountId: workspace.whatsappBusinessAccountId || "293847561029384",
-          whatsappAccessToken: workspace.whatsappAccessToken || "EAAGm0PX4ZC_dummy_verified_token_convodeck",
-        },
       });
       workspace = await Workspace.findById(workspaceId).lean();
     }
@@ -76,7 +65,7 @@ export async function updateWorkspaceSettings(formData: {
       {
         $set: {
           name: formData.name.trim(),
-          whatsappPhoneNumber: formData.whatsappPhoneNumber?.trim() || "+92 300 1234567",
+          whatsappPhoneNumber: formData.whatsappPhoneNumber?.trim() || "",
           whatsappPhoneNumberId: formData.whatsappPhoneNumberId.trim(),
           whatsappBusinessAccountId: formData.whatsappBusinessAccountId.trim(),
           whatsappAccessToken: formData.whatsappAccessToken.trim(),
