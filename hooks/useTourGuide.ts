@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { TOUR_STEPS, ITourStep } from "@/constants/tourSteps";
 
 const TOUR_STORAGE_KEY = "convodeck_tour_completed";
@@ -18,7 +18,7 @@ export function useTourGuide() {
   const isLastStep = currentStepIndex === TOUR_STEPS.length - 1;
   const totalSteps = TOUR_STEPS.length;
 
-  const updateTargetRect = useCallback(() => {
+  const measureTarget = useCallback(() => {
     if (!isOpen) {
       setTargetRect(null);
       return;
@@ -30,11 +30,6 @@ export function useTourGuide() {
     }
     const el = document.getElementById(step.targetId);
     if (el) {
-      // Gently bring the element into view if partly offscreen
-      try {
-        el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-      } catch {}
-
       const rect = el.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
         setTargetRect(rect);
@@ -44,17 +39,54 @@ export function useTourGuide() {
     setTargetRect(null);
   }, [isOpen, currentStepIndex]);
 
-  // Update target rect on step change, resize or scroll
+  // Smooth 60fps tracking loop when step changes or scrolling happens
   useEffect(() => {
-    updateTargetRect();
-    const handleResize = () => updateTargetRect();
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleResize, true);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleResize, true);
+    if (!isOpen) {
+      setTargetRect(null);
+      return;
+    }
+
+    const step = TOUR_STEPS[currentStepIndex];
+    const el = step?.targetId ? document.getElementById(step.targetId) : null;
+
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const isOutOfView =
+        rect.top < 20 ||
+        rect.bottom > window.innerHeight - 20 ||
+        rect.left < 0 ||
+        rect.right > window.innerWidth;
+
+      if (isOutOfView) {
+        try {
+          el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+        } catch {}
+      }
+    }
+
+    let animId: number;
+    const startTime = performance.now();
+    const duration = 450;
+
+    const trackFrame = () => {
+      measureTarget();
+      if (performance.now() - startTime < duration) {
+        animId = requestAnimationFrame(trackFrame);
+      }
     };
-  }, [updateTargetRect]);
+
+    animId = requestAnimationFrame(trackFrame);
+
+    const handleResizeOrScroll = () => measureTarget();
+    window.addEventListener("resize", handleResizeOrScroll);
+    window.addEventListener("scroll", handleResizeOrScroll, true);
+
+    return () => {
+      if (animId) cancelAnimationFrame(animId);
+      window.removeEventListener("resize", handleResizeOrScroll);
+      window.removeEventListener("scroll", handleResizeOrScroll, true);
+    };
+  }, [isOpen, currentStepIndex, measureTarget]);
 
   const markTourCompleted = useCallback(() => {
     try {
@@ -118,7 +150,7 @@ export function useTourGuide() {
     } catch {}
   }, []);
 
-  // Event listeners for tour & directory triggers
+  // Listen for trigger events
   useEffect(() => {
     const handleStartTour = () => startTour();
     const handleOpenDirectory = () => openDirectory();

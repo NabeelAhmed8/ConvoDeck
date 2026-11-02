@@ -20,6 +20,7 @@ import {
   Check,
 } from "lucide-react";
 import { ITourStep, TourIconName } from "@/constants/tourSteps";
+import { computeTourCardPosition } from "@/utils/tourPositioning";
 
 const ICONS: Record<TourIconName, React.ComponentType<{ className?: string }>> = {
   Sparkles,
@@ -65,50 +66,56 @@ export function TourCard({
 }: TourCardProps) {
   const IconComponent = ICONS[step.iconName] || Sparkles;
 
-  // Compute card positioning based on target element bounding box
-  const cardStyle = useMemo<React.CSSProperties>(() => {
-    if (!targetRect || typeof window === "undefined" || window.innerWidth < 1024) {
-      return {
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        maxWidth: "430px",
-        width: "calc(100vw - 32px)",
-      };
-    }
-
-    const cardWidth = 380;
-    const cardHeight = 280;
-    const spacing = 18;
-
-    let left = targetRect.right + spacing;
-    let top = targetRect.top;
-
-    if (left + cardWidth > window.innerWidth - 20) {
-      left = Math.max(20, targetRect.left - cardWidth - spacing);
-    }
-    if (top + cardHeight > window.innerHeight - 20) {
-      top = Math.max(20, window.innerHeight - cardHeight - 20);
-    }
-
-    return {
-      position: "fixed",
-      top: `${top}px`,
-      left: `${left}px`,
-      maxWidth: `${cardWidth}px`,
-      width: "100%",
-    };
-  }, [targetRect]);
+  const { top, left, placement, arrowOffset } = useMemo(() => {
+    return computeTourCardPosition(
+      targetRect,
+      380,
+      270,
+      step.preferredPosition || "right"
+    );
+  }, [targetRect, step.preferredPosition]);
 
   return (
     <div
-      style={cardStyle}
       role="dialog"
       aria-modal="true"
       aria-labelledby="tour-step-title"
-      className="z-50 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_20px_50px_rgba(15,23,42,0.35)] border border-slate-200/80 text-slate-900 transition-all duration-300 animate-in fade-in zoom-in-95 pointer-events-auto"
+      style={{
+        position: "fixed",
+        top: `${top}px`,
+        left: `${left}px`,
+        width: "min(380px, calc(100vw - 32px))",
+        transition:
+          "top 350ms cubic-bezier(0.16, 1, 0.3, 1), left 350ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease",
+      }}
+      className="z-50 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_20px_50px_rgba(15,23,42,0.35)] border border-slate-200/80 text-slate-900 pointer-events-auto select-none"
     >
+      {/* Directional pointing arrow */}
+      {placement === "right" && (
+        <div
+          className="absolute -left-2 w-4 h-4 bg-white transform rotate-45 border-l border-b border-slate-200/80 -z-10"
+          style={{ top: `${arrowOffset - 8}px` }}
+        />
+      )}
+      {placement === "left" && (
+        <div
+          className="absolute -right-2 w-4 h-4 bg-white transform rotate-45 border-r border-t border-slate-200/80 -z-10"
+          style={{ top: `${arrowOffset - 8}px` }}
+        />
+      )}
+      {placement === "bottom" && (
+        <div
+          className="absolute -top-2 w-4 h-4 bg-white transform rotate-45 border-l border-t border-slate-200/80 -z-10"
+          style={{ left: `${arrowOffset - 8}px` }}
+        />
+      )}
+      {placement === "top" && (
+        <div
+          className="absolute -bottom-2 w-4 h-4 bg-white transform rotate-45 border-r border-b border-slate-200/80 -z-10"
+          style={{ left: `${arrowOffset - 8}px` }}
+        />
+      )}
+
       {/* Header: Badge & Controls */}
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-1.5 flex-wrap">

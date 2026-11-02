@@ -8,34 +8,77 @@ interface TourBackdropProps {
 }
 
 export function TourBackdrop({ targetRect, onClose }: TourBackdropProps) {
+  const pad = 6;
+  const rx = 16;
+
+  const cutoutX = targetRect ? Math.max(0, targetRect.left - pad) : -200;
+  const cutoutY = targetRect ? Math.max(0, targetRect.top - pad) : -200;
+  const cutoutW = targetRect ? targetRect.width + pad * 2 : 0;
+  const cutoutH = targetRect ? targetRect.height + pad * 2 : 0;
+
   return (
     <div
-      className="fixed inset-0 z-50 transition-opacity duration-300 pointer-events-auto"
+      className="fixed inset-0 z-50 pointer-events-auto overflow-hidden"
       aria-hidden="true"
     >
-      {/* Semi-transparent dark overlay with soft backdrop blur */}
+      {/* Clickable backdrop overlay to dismiss */}
       <div
-        className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] cursor-pointer"
         onClick={onClose}
+        className="absolute inset-0 cursor-pointer"
+        aria-label="Close tour overlay"
       />
 
-      {/* Spotlight cutout highlight around target element if present */}
+      {/* GPU-accelerated SVG Cutout Mask */}
+      <svg
+        className="fixed inset-0 w-full h-full pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <mask id="tour-spotlight-mask">
+            {/* White background reveals the darkened overlay */}
+            <rect width="100%" height="100%" fill="white" />
+            {/* Black rounded rectangle cuts out the spotlight hole */}
+            <rect
+              x={cutoutX}
+              y={cutoutY}
+              width={cutoutW}
+              height={cutoutH}
+              rx={rx}
+              ry={rx}
+              fill="black"
+              className="transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            />
+          </mask>
+        </defs>
+
+        {/* Semi-transparent dark overlay through the cutout mask */}
+        <rect
+          width="100%"
+          height="100%"
+          fill="rgba(15, 23, 42, 0.65)"
+          mask="url(#tour-spotlight-mask)"
+        />
+      </svg>
+
+      {/* Glowing neon spotlight ring smoothly tracking target button */}
       {targetRect && (
         <div
-          className="absolute pointer-events-none rounded-2xl transition-all duration-300 ease-out"
+          className="fixed pointer-events-none transition-all duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] z-10"
           style={{
-            top: `${Math.max(0, targetRect.top - 6)}px`,
-            left: `${Math.max(0, targetRect.left - 6)}px`,
-            width: `${targetRect.width + 12}px`,
-            height: `${targetRect.height + 12}px`,
+            top: `${cutoutY}px`,
+            left: `${cutoutX}px`,
+            width: `${cutoutW}px`,
+            height: `${cutoutH}px`,
+            borderRadius: `${rx}px`,
+            border: "2.5px solid rgba(96, 165, 250, 0.95)",
             boxShadow:
-              "0 0 0 9999px rgba(15, 23, 42, 0.65), 0 0 20px 4px rgba(59, 130, 246, 0.5)",
-            border: "2px solid rgba(96, 165, 250, 0.9)",
+              "0 0 25px rgba(59, 130, 246, 0.65), inset 0 0 12px rgba(59, 130, 246, 0.2)",
           }}
         >
-          <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500" />
+          {/* Animated beacon badge */}
+          <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-80" />
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-blue-500 shadow-sm" />
           </span>
         </div>
       )}
