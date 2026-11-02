@@ -18,45 +18,11 @@ async function getActiveWorkspaceId(providedWorkspaceId?: string): Promise<strin
   return DEFAULT_WORKSPACE_ID;
 }
 
-// Ensure at least 1 active prospect exists in workspace so testing the chat & kanban is instant
-async function ensureDefaultProspect(workspaceId: string) {
-  const count = await Lead.countDocuments({ workspaceId });
-  if (count === 0) {
-    const defaultLead = await Lead.create({
-      name: "Zubair Ahmed",
-      phone: "923219876543",
-      email: "zubair.demo@company.com",
-      company: "Zubair Tech Solutions",
-      stage: "NEW",
-      dealValue: 1200,
-      workspaceId,
-      tags: ["Inbound Lead"],
-      lastMessage: "Hi! Can you provide the multi-agent WhatsApp setup details?",
-      lastMessageAt: new Date(Date.now() - 1000 * 60 * 15),
-      unreadCount: 1,
-      notes: "Looking for 5-agent WhatsApp CRM setup for their sales team.",
-    });
-
-    await Message.create({
-      leadId: defaultLead._id,
-      workspaceId,
-      sender: "customer",
-      senderName: "Zubair Ahmed",
-      text: "Hi! Can you provide the multi-agent WhatsApp setup details?",
-      type: "text",
-      status: "delivered",
-      createdAt: new Date(Date.now() - 1000 * 60 * 15),
-    });
-  }
-}
-
 // 1. Fetch Leads from Database for Workspace
 export async function getLeads(workspaceId?: string) {
   try {
     await dbConnect();
     const targetWorkspaceId = await getActiveWorkspaceId(workspaceId);
-
-    await ensureDefaultProspect(targetWorkspaceId);
 
     const leads = await Lead.find({ workspaceId: targetWorkspaceId })
       .sort({ updatedAt: -1 })

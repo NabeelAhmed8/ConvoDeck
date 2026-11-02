@@ -9,23 +9,14 @@ import { AuditLog } from "@/models/AuditLog";
 import { sendWhatsAppMessage } from "@/lib/whatsapp";
 import { getSession } from "@/lib/auth";
 import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
-import { getDemoSeedMessages } from "@/constants/chatSeedData";
 
 // 1. Fetch Real Chat History for a Lead
 export async function getMessages(leadId: string) {
   try {
     await dbConnect();
-    let messages = await Message.find({ leadId })
+    const messages = await Message.find({ leadId })
       .sort({ createdAt: 1 })
       .lean();
-
-    // If chat has 3 or fewer messages, seed realistic demo conversation so user can test scrolling immediately
-    if (messages.length <= 3) {
-      const demoMessages = getDemoSeedMessages(leadId, DEFAULT_WORKSPACE_ID);
-      await Message.deleteMany({ leadId });
-      await Message.insertMany(demoMessages);
-      messages = await Message.find({ leadId }).sort({ createdAt: 1 }).lean();
-    }
 
     return JSON.parse(JSON.stringify(messages));
   } catch (error) {
