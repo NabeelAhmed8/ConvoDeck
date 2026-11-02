@@ -18,86 +18,12 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { processSubscriptionCheckout } from "@/actions/subscriptionActions";
 import { SubscriptionPlan, BillingFrequency, CurrencyCode } from "@/types";
-
-type PaidPlanKey = "starter" | "growth" | "enterprise";
-
-interface PlanDetails {
-  name: string;
-  badge: string;
-  agents: string;
-  prices: Record<CurrencyCode, Record<BillingFrequency, number>>;
-  features: string[];
-}
-
-const PRICING_TABLE: Record<PaidPlanKey, PlanDetails> = {
-  starter: {
-    name: "Starter",
-    badge: "Solo Business",
-    agents: "2 Team Agents",
-    prices: {
-      USD: { monthly: 29, yearly: 24 },
-      PKR: { monthly: 8500, yearly: 6800 },
-      AED: { monthly: 109, yearly: 89 },
-      EUR: { monthly: 27, yearly: 22 },
-    },
-    features: [
-      "2 Authorized Sales Agent Logins",
-      "1 Official WhatsApp Business Line",
-      "Visual Sales Pipeline & Funnel",
-      "Shared Multi-Agent Team Inbox",
-      "1,000 Active Contacts",
-    ],
-  },
-  growth: {
-    name: "Growth",
-    badge: "Most Popular",
-    agents: "5 Team Agents",
-    prices: {
-      USD: { monthly: 69, yearly: 55 },
-      PKR: { monthly: 19500, yearly: 15500 },
-      AED: { monthly: 255, yearly: 205 },
-      EUR: { monthly: 64, yearly: 51 },
-    },
-    features: [
-      "5 Authorized Sales Agent Logins",
-      "1 Official WhatsApp Business Line",
-      "Unlimited Active Contacts & Chat History",
-      "Instant Automated Inbound Lead Responses",
-      "Custom Pipeline Stages & Deal Tracking",
-      "Priority 24/7 WhatsApp Specialist Support",
-    ],
-  },
-  enterprise: {
-    name: "Enterprise",
-    badge: "Scale & Custom",
-    agents: "15+ Team Agents",
-    prices: {
-      USD: { monthly: 149, yearly: 119 },
-      PKR: { monthly: 42000, yearly: 33500 },
-      AED: { monthly: 550, yearly: 440 },
-      EUR: { monthly: 139, yearly: 111 },
-    },
-    features: [
-      "15+ Authorized Sales Agent Logins",
-      "Multiple WhatsApp Business Phone Lines",
-      "Custom REST API & Webhook Access",
-      "Dedicated Onboarding & Account Manager",
-      "Team Performance & Audit Trail Analytics",
-      "99.9% Uptime SLA Guarantee",
-    ],
-  },
-};
-
-const CURRENCY_SYMBOLS: Record<CurrencyCode, string> = {
-  USD: "$",
-  PKR: "₨ ",
-  AED: "AED ",
-  EUR: "€",
-};
-
-const isPaidPlan = (p: string | null): p is PaidPlanKey => {
-  return p === "starter" || p === "growth" || p === "enterprise";
-};
+import {
+  PRICING_TABLE,
+  CURRENCY_SYMBOLS,
+  PaidPlanKey,
+  isPaidPlan,
+} from "@/constants/pricing";
 
 function CheckoutContent() {
   const router = useRouter();

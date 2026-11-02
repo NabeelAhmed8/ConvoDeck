@@ -4,79 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Check, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 import { SubscriptionPlan, BillingFrequency, CurrencyCode } from "@/types";
+import { PRICING_TABLE, CURRENCY_SYMBOLS } from "@/constants/pricing";
 
 export function PricingSection({ className }: { className?: string }) {
   const [currency, setCurrency] = useState<CurrencyCode>("USD");
   const [billingCycle, setBillingCycle] = useState<BillingFrequency>("monthly");
 
-  const pricingData = {
-    starter: {
-      name: "Starter",
-      description: "For small businesses & boutique sales teams starting out with WhatsApp.",
-      prices: {
-        USD: { monthly: 29, yearly: 24 },
-        PKR: { monthly: 8500, yearly: 6800 },
-        AED: { monthly: 109, yearly: 89 },
-        EUR: { monthly: 27, yearly: 22 },
-      },
-      features: [
-        "2 Authorized Sales Agent Logins",
-        "1 Official WhatsApp Business Line",
-        "Visual Drag-and-Drop Sales Pipeline",
-        "Unified Multi-Agent WhatsApp Inbox",
-        "Website Lead Capture Webhook",
-        "1,000 Active Contacts",
-        "Standard Email & Chat Support",
-      ],
-    },
-    growth: {
-      name: "Growth",
-      popular: true,
-      description: "For high-velocity agencies and scaling sales teams handling high chat volume.",
-      prices: {
-        USD: { monthly: 69, yearly: 55 },
-        PKR: { monthly: 19500, yearly: 15500 },
-        AED: { monthly: 255, yearly: 205 },
-        EUR: { monthly: 64, yearly: 51 },
-      },
-      features: [
-        "5 Authorized Sales Agent Logins",
-        "1 Official WhatsApp Business Line",
-        "Unlimited Active Contacts & Chat History",
-        "Instant Automated Inbound Lead Responses",
-        "Custom Pipeline Funnel Stages & Deal Values",
-        "Internal Customer Notes & Stage Assignment",
-        "Real-Time Delivery & Read Receipts",
-        "Priority 24/7 WhatsApp Specialist Support",
-      ],
-    },
-    enterprise: {
-      name: "Enterprise",
-      description: "For large sales departments needing custom integrations and dedicated support.",
-      prices: {
-        USD: { monthly: 149, yearly: 119 },
-        PKR: { monthly: 42000, yearly: 33500 },
-        AED: { monthly: 550, yearly: 440 },
-        EUR: { monthly: 139, yearly: 111 },
-      },
-      features: [
-        "15+ Team Agent Logins",
-        "Multiple WhatsApp Business Phone Numbers",
-        "Custom Webhook Events & REST API Access",
-        "Dedicated Account & Onboarding Manager",
-        "Advanced Agent Performance Reporting",
-        "Custom Training for Sales Representatives",
-        "99.9% High Availability SLA Guarantee",
-      ],
-    },
-  };
-
-  const currencySymbols: Record<CurrencyCode, string> = {
-    USD: "$",
-    PKR: "₨ ",
-    AED: "AED ",
-    EUR: "€",
-  };
+  const pricingData = PRICING_TABLE;
+  const currencySymbols = CURRENCY_SYMBOLS;
 
   const getCheckoutUrl = (planKey: SubscriptionPlan) => {
     return `/checkout?plan=${planKey}&billing=${billingCycle}&currency=${currency}`;

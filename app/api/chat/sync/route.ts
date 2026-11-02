@@ -3,9 +3,7 @@ import { dbConnect } from "@/lib/dbConnect";
 import { Message } from "@/models/Message";
 import { Lead } from "@/models/Lead";
 import { getSession } from "@/lib/auth";
-
-const DEFAULT_WORKSPACE_ID =
-  process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
+import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

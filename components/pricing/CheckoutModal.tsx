@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { X, ShieldCheck, CheckCircle2, CreditCard, Building } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { CURRENCY_SYMBOLS } from "@/constants/pricing";
 
 export interface PlanDetails {
   id: string;
@@ -28,12 +29,7 @@ export function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
 
   if (!isOpen || !plan) return null;
 
-  const currencySymbols = {
-    USD: "$",
-    PKR: "₨ ",
-    AED: "AED ",
-    EUR: "€",
-  };
+  const currencySymbols = CURRENCY_SYMBOLS;
 
   const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();

@@ -8,9 +8,7 @@ import { AuditLog } from "@/models/AuditLog";
 import { ILead, LeadStage } from "@/types";
 import { getSession } from "@/lib/auth";
 import { sendWhatsAppMessage } from "@/lib/whatsapp";
-
-const DEFAULT_WORKSPACE_ID =
-  process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
+import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
 
 // Helper to determine current active workspace
 async function getActiveWorkspaceId(providedWorkspaceId?: string): Promise<string> {

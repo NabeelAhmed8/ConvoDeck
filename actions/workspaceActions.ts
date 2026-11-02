@@ -4,9 +4,7 @@ import { revalidatePath } from "next/cache";
 import { dbConnect } from "@/lib/dbConnect";
 import { Workspace } from "@/models/Workspace";
 import { getSession } from "@/lib/auth";
-
-const DEFAULT_WORKSPACE_ID =
-  process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
+import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
 
 export async function getWorkspaceSettings() {
   try {

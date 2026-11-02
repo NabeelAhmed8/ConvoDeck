@@ -8,9 +8,8 @@ import { Workspace } from "@/models/Workspace";
 import { AuditLog } from "@/models/AuditLog";
 import { sendWhatsAppMessage } from "@/lib/whatsapp";
 import { getSession } from "@/lib/auth";
-
-const DEFAULT_WORKSPACE_ID =
-  process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
+import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
+import { getDemoSeedMessages } from "@/constants/chatSeedData";
 
 // 1. Fetch Real Chat History for a Lead
 export async function getMessages(leadId: string) {
@@ -22,83 +21,7 @@ export async function getMessages(leadId: string) {
 
     // If chat has 3 or fewer messages, seed realistic demo conversation so user can test scrolling immediately
     if (messages.length <= 3) {
-      const demoMessages = [
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "customer",
-          senderName: "Customer",
-          text: "Hi! We are looking for a multi-agent WhatsApp inbox for our sales team.",
-          type: "text",
-          status: "read",
-          createdAt: new Date(Date.now() - 1000 * 60 * 120),
-        },
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "agent",
-          senderName: "Asad (Sales Lead)",
-          agentName: "Asad Ali",
-          text: "Hello! Welcome to ConvoDeck. How many sales agents do you currently have on your team?",
-          type: "text",
-          status: "read",
-          createdAt: new Date(Date.now() - 1000 * 60 * 105),
-        },
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "customer",
-          senderName: "Customer",
-          text: "We currently have 5 agents handling incoming inquiries and scheduling customer demos.",
-          type: "text",
-          status: "read",
-          createdAt: new Date(Date.now() - 1000 * 60 * 90),
-        },
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "agent",
-          senderName: "Asad (Sales Lead)",
-          agentName: "Asad Ali",
-          text: "Great! Our Growth Plan supports 5 authorized agent logins connected to your single official WhatsApp Business line.",
-          type: "text",
-          status: "read",
-          createdAt: new Date(Date.now() - 1000 * 60 * 60),
-        },
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "customer",
-          senderName: "Customer",
-          text: "Can all 5 agents reply to customers simultaneously without disconnecting or passing phones?",
-          type: "text",
-          status: "read",
-          createdAt: new Date(Date.now() - 1000 * 60 * 45),
-        },
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "agent",
-          senderName: "Asad (Sales Lead)",
-          agentName: "Asad Ali",
-          text: "Yes! Every message shows the agent's name internally, so team members never collide on the same chat.",
-          type: "text",
-          status: "delivered",
-          createdAt: new Date(Date.now() - 1000 * 60 * 20),
-        },
-        {
-          leadId,
-          workspaceId: DEFAULT_WORKSPACE_ID,
-          sender: "customer",
-          senderName: "Customer",
-          text: "That sounds excellent. Could you share the visual pipeline and pricing details?",
-          type: "text",
-          status: "delivered",
-          createdAt: new Date(Date.now() - 1000 * 60 * 5),
-        },
-      ];
-
-      // Remove existing lone message if any and insert rich conversation
+      const demoMessages = getDemoSeedMessages(leadId, DEFAULT_WORKSPACE_ID);
       await Message.deleteMany({ leadId });
       await Message.insertMany(demoMessages);
       messages = await Message.find({ leadId }).sort({ createdAt: 1 }).lean();
@@ -267,7 +190,8 @@ export async function clearChatMessages(leadId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error clearing chat messages:", error);
-    return { success: false };
+    const msg = error instanceof Error ? error.message : "Failed to clear chat messages";
+    return { success: false, error: msg };
   }
 }
 
@@ -284,6 +208,7 @@ export async function deleteChat(leadId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error deleting chat:", error);
-    return { success: false };
+    const msg = error instanceof Error ? error.message : "Failed to delete chat";
+    return { success: false, error: msg };
   }
 }
