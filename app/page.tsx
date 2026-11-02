@@ -12,7 +12,7 @@ import { PricingSection } from "@/components/pricing/PricingSection";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-clip bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-dvh w-full max-w-full overflow-x-clip bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white flex flex-col justify-between">
       {/* Responsive Navigation Header */}
       <LandingNavbar />
 
@@ -170,7 +170,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 border-t border-slate-200 text-slate-500 text-xs bg-white">
+      <footer className="py-10 sm:py-12 px-4 sm:px-6 border-t border-slate-200 text-slate-500 text-xs bg-white pb-[max(2.5rem,calc(1.5rem+env(safe-area-inset-bottom)))]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
             <div className="w-7 h-7 rounded-xl neu-convex text-slate-900 font-black flex items-center justify-center text-xs shrink-0 shadow-xs">
@@ -183,12 +183,6 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link href="/dashboard" className="hover:text-slate-900 transition-colors">
               Dashboard
-            </Link>
-            <Link href="/pipeline" className="hover:text-slate-900 transition-colors">
-              Pipeline
-            </Link>
-            <Link href="/chat" className="hover:text-slate-900 transition-colors">
-              WhatsApp Inbox
             </Link>
             <a href="#pricing" className="hover:text-slate-900 transition-colors">
               Pricing

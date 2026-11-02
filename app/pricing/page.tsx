@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-clip bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-dvh w-full max-w-full overflow-x-clip bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white flex flex-col justify-between">
       {/* Top Floating Neumorphic Bar */}
       <nav className="fixed top-2.5 sm:top-5 inset-x-2.5 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
         <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/90 shadow-[8px_8px_24px_rgba(160,178,204,0.3),-8px_-8px_24px_#ffffff] bg-white/95 backdrop-blur-md">
@@ -51,7 +51,7 @@ export default function PricingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-10 px-6 border-t border-slate-200 text-slate-500 text-xs text-center bg-white">
+      <footer className="py-10 px-6 border-t border-slate-200 text-slate-500 text-xs text-center bg-white pb-[max(2.5rem,calc(1.5rem+env(safe-area-inset-bottom)))]">
         <p>© 2026 ConvoDeck. Official WhatsApp Business Cloud Solutions.</p>
       </footer>
     </div>
