@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Compass, HelpCircle } from "lucide-react";
-import { START_TOUR_EVENT } from "@/hooks/useTourGuide";
+import { Compass, BookOpen } from "lucide-react";
+import { START_TOUR_EVENT, OPEN_DIRECTORY_EVENT } from "@/hooks/useTourGuide";
 
 interface TourLauncherButtonProps {
   variant?: "sidebar" | "settings" | "pill";
@@ -19,16 +19,32 @@ export function TourLauncherButton({
     }
   };
 
+  const triggerDirectory = () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(OPEN_DIRECTORY_EVENT));
+    }
+  };
+
   if (variant === "settings") {
     return (
-      <button
-        type="button"
-        onClick={triggerTour}
-        className="px-4 py-2 text-xs font-semibold rounded-2xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/60 transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
-      >
-        <Compass className="w-4 h-4 text-blue-600" aria-hidden="true" />
-        Restart Tour Guide
-      </button>
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          type="button"
+          onClick={triggerTour}
+          className="px-4 py-2 text-xs font-semibold rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
+        >
+          <Compass className="w-4 h-4 text-white" aria-hidden="true" />
+          Start Button Tour
+        </button>
+        <button
+          type="button"
+          onClick={triggerDirectory}
+          className="px-4 py-2 text-xs font-semibold rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/60 transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
+        >
+          <BookOpen className="w-4 h-4 text-slate-600" aria-hidden="true" />
+          All Buttons Guide
+        </button>
+      </div>
     );
   }
 
@@ -36,9 +52,10 @@ export function TourLauncherButton({
     return (
       <button
         type="button"
+        id="tour-btn-launcher"
         onClick={triggerTour}
-        title="Interactive Tour Guide"
-        aria-label="Interactive Tour Guide"
+        title="Website Buttons Guide"
+        aria-label="Website Buttons Guide"
         className="group relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full neu-btn text-slate-700 hover:text-blue-600 transition-colors cursor-pointer"
       >
         <Compass className="w-5 h-5 transition-transform group-hover:rotate-45" aria-hidden="true" />
@@ -47,19 +64,31 @@ export function TourLauncherButton({
   }
 
   return (
-    <button
-      type="button"
-      onClick={triggerTour}
-      aria-label="Start Interactive Product Tour"
-      className="w-full flex items-center justify-between px-3.5 py-2 rounded-2xl text-xs font-medium text-slate-700 hover:text-blue-600 hover:bg-white/60 neu-flat transition-colors cursor-pointer group"
-    >
-      <div className="flex items-center gap-2.5">
-        <Compass className="w-4 h-4 text-blue-600 transition-transform group-hover:rotate-45" aria-hidden="true" />
-        <span>Product Tour Guide</span>
-      </div>
-      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200/50 font-bold">
-        Help
-      </span>
-    </button>
+    <div id="tour-btn-launcher" className="w-full flex items-center gap-1.5">
+      <button
+        type="button"
+        onClick={triggerTour}
+        aria-label="Start Website Buttons Tour"
+        className="flex-1 flex items-center justify-between px-3.5 py-2 rounded-2xl text-xs font-medium text-slate-700 hover:text-blue-600 hover:bg-white/60 neu-flat transition-colors cursor-pointer group"
+      >
+        <div className="flex items-center gap-2.5">
+          <Compass className="w-4 h-4 text-blue-600 transition-transform group-hover:rotate-45" aria-hidden="true" />
+          <span>Buttons Tour</span>
+        </div>
+        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200/50 font-bold">
+          Guide
+        </span>
+      </button>
+
+      <button
+        type="button"
+        onClick={triggerDirectory}
+        title="Open Full Buttons Directory"
+        aria-label="Open Full Buttons Directory"
+        className="w-8 h-8 rounded-xl flex items-center justify-center neu-btn text-slate-500 hover:text-slate-900 transition-colors cursor-pointer shrink-0"
+      >
+        <BookOpen className="w-3.5 h-3.5" />
+      </button>
+    </div>
   );
 }

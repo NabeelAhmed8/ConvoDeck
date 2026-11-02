@@ -146,6 +146,8 @@ export function DashboardClientNav({
                     ? "tour-nav-pipeline"
                     : item.href === "/team"
                     ? "tour-nav-team"
+                    : item.href === "/billing"
+                    ? "tour-nav-billing"
                     : item.href === "/settings"
                     ? "tour-nav-settings"
                     : item.href === "/dashboard"

@@ -65,6 +65,7 @@ export default async function DashboardPage() {
           </p>
           <div className="mt-5 flex flex-col min-[420px]:flex-row items-stretch min-[420px]:items-center gap-2.5 sm:gap-3">
             <Link
+              id="tour-btn-dashboard-chat"
               href="/chat"
               className="px-5 py-2.5 neu-btn-primary rounded-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md text-white"
             >
@@ -72,6 +73,7 @@ export default async function DashboardPage() {
               Open WhatsApp Inbox
             </Link>
             <Link
+              id="tour-btn-dashboard-pipeline"
               href="/pipeline"
               className="px-5 py-2.5 neu-btn text-slate-800 rounded-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer bg-white"
             >

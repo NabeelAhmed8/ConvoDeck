@@ -61,6 +61,7 @@ export function DesktopSidebar({
           </Link>
           <button
             type="button"
+            id="tour-btn-collapse"
             onClick={onToggleCollapse}
             aria-label="Expand sidebar (Arrow Right)"
             title="Expand sidebar (Arrow Right key)"
@@ -97,6 +98,7 @@ export function DesktopSidebar({
 
             <button
               type="button"
+              id="tour-btn-collapse"
               onClick={onToggleCollapse}
               aria-label="Collapse sidebar (Arrow Left)"
               title="Collapse sidebar (Arrow Left key)"
@@ -182,6 +184,7 @@ export function DesktopSidebar({
           <>
             <div className="neu-dribbble-divider-full my-2" aria-hidden="true" />
             <Link
+              id="tour-btn-whatsapp-status"
               href={isAgent ? "/agent/dashboard" : "/settings"}
               className="block p-3 neu-pressed rounded-2xl space-y-1 transition-all border border-slate-300/40 group hover:border-slate-400/60"
             >
@@ -235,6 +238,7 @@ export function DesktopSidebar({
             <form action={logoutUser}>
               <button
                 type="submit"
+                id="tour-btn-logout"
                 aria-label="Sign out of your account"
                 title="Sign Out"
                 className="w-10 h-10 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer"
@@ -261,6 +265,7 @@ export function DesktopSidebar({
             <form action={logoutUser}>
               <button
                 type="submit"
+                id="tour-btn-logout"
                 aria-label="Sign out of your account"
                 title="Sign Out"
                 className="w-9 h-9 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer shrink-0"

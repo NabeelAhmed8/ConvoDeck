@@ -5,9 +5,11 @@ import { TOUR_STEPS, ITourStep } from "@/constants/tourSteps";
 
 const TOUR_STORAGE_KEY = "convodeck_tour_completed";
 export const START_TOUR_EVENT = "convodeck:start-tour";
+export const OPEN_DIRECTORY_EVENT = "convodeck:open-buttons-directory";
 
 export function useTourGuide() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDirectoryOpen, setIsDirectoryOpen] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
@@ -28,8 +30,12 @@ export function useTourGuide() {
     }
     const el = document.getElementById(step.targetId);
     if (el) {
+      // Gently bring the element into view if partly offscreen
+      try {
+        el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+      } catch {}
+
       const rect = el.getBoundingClientRect();
-      // Ensure element is visible in the viewport
       if (rect.width > 0 && rect.height > 0) {
         setTargetRect(rect);
         return;
@@ -58,6 +64,7 @@ export function useTourGuide() {
 
   const startTour = useCallback(() => {
     setCurrentStepIndex(0);
+    setIsDirectoryOpen(false);
     setIsOpen(true);
   }, []);
 
@@ -89,7 +96,16 @@ export function useTourGuide() {
     }
   }, []);
 
-  // Auto-launch for new users on initial dashboard mount
+  const openDirectory = useCallback(() => {
+    setIsOpen(false);
+    setIsDirectoryOpen(true);
+  }, []);
+
+  const closeDirectory = useCallback(() => {
+    setIsDirectoryOpen(false);
+  }, []);
+
+  // Auto-launch for new users on initial mount
   useEffect(() => {
     try {
       const hasCompleted = localStorage.getItem(TOUR_STORAGE_KEY);
@@ -102,14 +118,18 @@ export function useTourGuide() {
     } catch {}
   }, []);
 
-  // Listen for programmatic / user-initiated tour restarts
+  // Event listeners for tour & directory triggers
   useEffect(() => {
-    const handleStartTour = () => {
-      startTour();
-    };
+    const handleStartTour = () => startTour();
+    const handleOpenDirectory = () => openDirectory();
+
     window.addEventListener(START_TOUR_EVENT, handleStartTour);
-    return () => window.removeEventListener(START_TOUR_EVENT, handleStartTour);
-  }, [startTour]);
+    window.addEventListener(OPEN_DIRECTORY_EVENT, handleOpenDirectory);
+    return () => {
+      window.removeEventListener(START_TOUR_EVENT, handleStartTour);
+      window.removeEventListener(OPEN_DIRECTORY_EVENT, handleOpenDirectory);
+    };
+  }, [startTour, openDirectory]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -131,6 +151,7 @@ export function useTourGuide() {
 
   return {
     isOpen,
+    isDirectoryOpen,
     currentStep,
     currentStepIndex,
     totalSteps,
@@ -143,5 +164,7 @@ export function useTourGuide() {
     nextStep,
     prevStep,
     goToStep,
+    openDirectory,
+    closeDirectory,
   };
 }
