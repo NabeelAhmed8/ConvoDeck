@@ -81,10 +81,12 @@ export function EmbeddedSignupModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="embedded-whatsapp-phone" className="block text-xs font-semibold text-slate-700 mb-1">
               WhatsApp Business Phone Number <span className="text-rose-500">*</span>
             </label>
             <input
+              id="embedded-whatsapp-phone"
+              name="whatsappPhoneNumber"
               type="text"
               required
               value={phone}
@@ -98,10 +100,12 @@ export function EmbeddedSignupModal({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="embedded-phone-id" className="block text-xs font-semibold text-slate-700 mb-1">
               Meta Phone Number ID <span className="text-slate-400 font-normal">(Optional for direct API)</span>
             </label>
             <input
+              id="embedded-phone-id"
+              name="phoneNumberId"
               type="text"
               value={phoneNumberId}
               onChange={(e) => setPhoneNumberId(e.target.value)}
@@ -111,10 +115,12 @@ export function EmbeddedSignupModal({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="embedded-access-token" className="block text-xs font-semibold text-slate-700 mb-1">
               System User / Access Token <span className="text-slate-400 font-normal">(Optional)</span>
             </label>
             <input
+              id="embedded-access-token"
+              name="accessToken"
               type="password"
               value={accessToken}
               onChange={(e) => setAccessToken(e.target.value)}

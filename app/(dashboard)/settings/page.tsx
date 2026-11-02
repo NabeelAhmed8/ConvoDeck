@@ -131,8 +131,12 @@ export default function SettingsPage() {
 
         <form onSubmit={handleSaveName} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
           <div className="flex-1">
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Company / Workspace Name</label>
+            <label htmlFor="settings-company-name" className="block text-xs font-semibold text-slate-700 mb-1">
+              Company / Workspace Name
+            </label>
             <input
+              id="settings-company-name"
+              name="companyName"
               type="text"
               required
               value={name}

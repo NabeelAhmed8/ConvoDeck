@@ -154,10 +154,12 @@ export function MetaApiConnectionForm({
         {/* Inputs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="meta-whatsapp-phone" className="block text-xs font-semibold text-slate-700 mb-1">
               Connected WhatsApp Phone Number
             </label>
             <input
+              id="meta-whatsapp-phone"
+              name="whatsappPhoneNumber"
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -167,10 +169,12 @@ export function MetaApiConnectionForm({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="meta-phone-id" className="block text-xs font-semibold text-slate-700 mb-1">
               Meta Phone Number ID <span className="text-rose-500">*</span>
             </label>
             <input
+              id="meta-phone-id"
+              name="whatsappPhoneNumberId"
               type="text"
               required
               value={phoneId}
@@ -183,10 +187,12 @@ export function MetaApiConnectionForm({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="meta-waba-id" className="block text-xs font-semibold text-slate-700 mb-1">
               WhatsApp Business Account ID (WABA)
             </label>
             <input
+              id="meta-waba-id"
+              name="whatsappBusinessAccountId"
               type="text"
               value={wabaId}
               onChange={(e) => setWabaId(e.target.value)}
@@ -197,7 +203,7 @@ export function MetaApiConnectionForm({
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-xs font-semibold text-slate-700">
+              <label htmlFor="meta-access-token" className="text-xs font-semibold text-slate-700">
                 System User Access Token <span className="text-rose-500">*</span>
               </label>
               <button
@@ -209,6 +215,8 @@ export function MetaApiConnectionForm({
               </button>
             </div>
             <input
+              id="meta-access-token"
+              name="whatsappAccessToken"
               type="password"
               required
               value={token}

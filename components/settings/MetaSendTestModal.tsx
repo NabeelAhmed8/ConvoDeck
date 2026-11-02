@@ -82,10 +82,12 @@ export function MetaSendTestModal({
 
         <form onSubmit={handleSend} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="test-recipient-phone" className="block text-xs font-semibold text-slate-700 mb-1">
               Recipient Phone Number (with Country Code)
             </label>
             <input
+              id="test-recipient-phone"
+              name="recipientPhone"
               type="text"
               required
               value={recipient}
