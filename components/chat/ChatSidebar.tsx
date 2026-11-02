@@ -264,9 +264,9 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
   return (
     <>
       <div
-        className={`w-full md:w-72 lg:w-80 flex-col h-full min-h-0 neu-sidebar shrink-0 text-slate-800 ${
+        className={`w-full md:w-72 lg:w-80 flex-col min-h-0 neu-sidebar shrink-0 text-slate-800 ${
           activeLead ? "hidden md:flex" : "flex"
-        }`}
+        } flex-1 md:flex-initial`}
       >
         {/* Top Header */}
         <div className="p-3.5 sm:p-4 border-b border-slate-200/70 bg-white shrink-0 sticky top-0 z-20">
@@ -343,7 +343,7 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
         <div
           id="chat-list"
           role="tabpanel"
-          className="flex-1 min-h-0 overflow-y-auto chat-scrollbar divide-y divide-slate-200/50 overscroll-contain"
+          className="flex-1 min-h-0 overflow-y-auto chat-scrollbar divide-y divide-slate-200/50 overscroll-contain pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         >
           {filteredLeads.map((lead) => {
             const isSelected = activeLead?._id === lead._id;

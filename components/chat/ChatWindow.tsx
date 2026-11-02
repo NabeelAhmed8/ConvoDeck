@@ -308,6 +308,7 @@ export function ChatWindow() {
       createdAt: new Date(),
     };
     addMessage(tempMsg);
+    requestAnimationFrame(() => scrollToBottom("smooth"));
 
     // Broadcast immediately across all open tabs/windows
     const channel = getChatBroadcastChannel();
@@ -395,11 +396,11 @@ export function ChatWindow() {
   }
 
   return (
-    <div className="flex-1 min-w-0 min-h-0 flex h-full overflow-hidden bg-[#f0f4fa]">
+    <div className="flex-1 min-w-0 min-h-0 flex overflow-hidden bg-[#f0f4fa]">
       {/* Main Conversation Window */}
-      <div className="flex-1 min-w-0 min-h-0 flex flex-col h-full relative overflow-hidden">
+      <div className="flex-1 min-w-0 min-h-0 flex flex-col relative overflow-hidden">
         {/* Chat Top Bar - Permanently Pinned at Top of Chatbox */}
-        <div className="p-2.5 sm:p-3 bg-white border-b border-slate-200/70 flex items-center justify-between z-20 text-slate-900 rounded-none shadow-xs shrink-0 sticky top-0">
+        <div className="p-2 sm:p-2.5 bg-white border-b border-slate-200/70 flex items-center justify-between z-20 text-slate-900 rounded-none shadow-xs shrink-0">
           <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
             <button
               type="button"
@@ -523,79 +524,77 @@ export function ChatWindow() {
         )}
 
         {/* Messages Stream Container with Native Tactile Neumorphic Scrollbar */}
-        <div className="flex-1 min-h-0 relative flex flex-col">
-          <div
-            ref={messagesContainerRef}
-            role="log"
-            aria-live="polite"
-            aria-label="Chat messages history"
-            className="flex-1 min-h-0 overflow-y-auto chat-messages-stream chat-scrollbar p-3 sm:p-4 space-y-3 overscroll-contain"
-          >
-            {isLoadingMessages ? (
-              <div className="flex justify-center py-8 text-xs text-slate-500">
-                Loading chat history...
-              </div>
-            ) : messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-48 text-center text-xs text-slate-500">
-                <p>No messages in this chat yet.</p>
-                <p className="mt-1 text-[11px]">Type below to send a message to +{activeLead.phone} on WhatsApp.</p>
-              </div>
-            ) : (
-              messages.map((msg, idx) => {
-                const isAgent = msg.sender === "agent";
-                return (
+        <div
+          ref={messagesContainerRef}
+          role="log"
+          aria-live="polite"
+          aria-label="Chat messages history"
+          className="flex-1 min-h-0 overflow-y-auto chat-messages-stream chat-scrollbar p-2.5 sm:p-4 space-y-2.5 overscroll-contain"
+        >
+          {isLoadingMessages ? (
+            <div className="flex justify-center py-8 text-xs text-slate-500">
+              Loading chat history...
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-48 text-center text-xs text-slate-500">
+              <p>No messages in this chat yet.</p>
+              <p className="mt-1 text-[11px]">Type below to send a message to +{activeLead.phone} on WhatsApp.</p>
+            </div>
+          ) : (
+            messages.map((msg, idx) => {
+              const isAgent = msg.sender === "agent";
+              return (
+                <div
+                  key={msg._id || idx}
+                  className={`flex flex-col ${
+                    isAgent ? "items-end" : "items-start"
+                  }`}
+                >
                   <div
-                    key={msg._id || idx}
-                    className={`flex flex-col ${
-                      isAgent ? "items-end" : "items-start"
+                    className={`max-w-[85%] sm:max-w-[70%] md:max-w-[60%] rounded-2xl px-3.5 py-2 relative text-xs leading-relaxed ${
+                      isAgent
+                        ? "neu-card bg-[#eff6ff] text-slate-900 rounded-tr-none border-l-4 border-l-blue-600 shadow-sm"
+                        : "neu-card bg-white text-slate-900 rounded-tl-none shadow-sm"
                     }`}
                   >
-                    <div
-                      className={`max-w-[85%] sm:max-w-[70%] md:max-w-[60%] rounded-2xl px-4 py-2.5 relative text-xs leading-relaxed ${
-                        isAgent
-                          ? "neu-card bg-[#eff6ff] text-slate-900 rounded-tr-none border-l-4 border-l-blue-600 shadow-sm"
-                          : "neu-card bg-white text-slate-900 rounded-tl-none shadow-sm"
-                      }`}
-                    >
+                    {isAgent && (
+                      <span className="block text-[10px] font-bold text-blue-600 mb-0.5">
+                        {msg.agentName ? `✓ ${msg.agentName}` : msg.senderName || "Sales Agent"}
+                      </span>
+                    )}
+
+                    <p className="whitespace-pre-wrap">{msg.text}</p>
+
+                    <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-slate-500">
+                      <span suppressHydrationWarning>
+                        {new Date(msg.createdAt || Date.now()).toLocaleTimeString(
+                          [],
+                          { hour: "2-digit", minute: "2-digit" }
+                        )}
+                      </span>
                       {isAgent && (
-                        <span className="block text-[10px] font-bold text-blue-600 mb-0.5">
-                          {msg.agentName ? `✓ ${msg.agentName}` : msg.senderName || "Sales Agent"}
-                        </span>
-                      )}
-
-                      <p className="whitespace-pre-wrap">{msg.text}</p>
-
-                      <div className="flex items-center justify-end gap-1 mt-1 text-[10px] text-slate-500">
-                        <span suppressHydrationWarning>
-                          {new Date(msg.createdAt || Date.now()).toLocaleTimeString(
-                            [],
-                            { hour: "2-digit", minute: "2-digit" }
+                        <span>
+                          {msg.status === "read" ? (
+                            <CheckCheck className="w-3.5 h-3.5 text-blue-600" aria-label="Read" />
+                          ) : msg.status === "delivered" ? (
+                            <CheckCheck className="w-3.5 h-3.5 text-slate-500" aria-label="Delivered" />
+                          ) : (
+                            <Check className="w-3.5 h-3.5 text-slate-500" aria-label="Sent" />
                           )}
                         </span>
-                        {isAgent && (
-                          <span>
-                            {msg.status === "read" ? (
-                              <CheckCheck className="w-3.5 h-3.5 text-blue-600" aria-label="Read" />
-                            ) : msg.status === "delivered" ? (
-                              <CheckCheck className="w-3.5 h-3.5 text-slate-500" aria-label="Delivered" />
-                            ) : (
-                              <Check className="w-3.5 h-3.5 text-slate-500" aria-label="Sent" />
-                            )}
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </div>
-                );
-              })
-            )}
-            <div ref={messagesEndRef} />
-          </div>
+                </div>
+              );
+            })
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
-        {/* Message Input Box */}
-        <div className="p-2.5 sm:p-3 bg-white border-t border-slate-200/70 shadow-xs shrink-0 sticky bottom-0 z-10">
-          <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+        {/* Message Input Box - Solidly Anchored with Safe Area Padding */}
+        <div className="p-2 sm:p-2.5 bg-white border-t border-slate-200/70 shadow-xs shrink-0 z-10 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+          <form onSubmit={handleSendMessage} className="flex items-center gap-1.5 sm:gap-2">
             <label htmlFor="chat-message-input" className="sr-only">
               Type WhatsApp message
             </label>
@@ -613,13 +612,13 @@ export function ChatWindow() {
               }
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="flex-1 min-w-0 px-3.5 sm:px-4 py-2 sm:py-2.5 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex-1 min-w-0 px-3 sm:px-4 py-2 text-sm sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             />
             <button
               type="submit"
               disabled={!inputText.trim() || isSending || activeLead.isBlocked}
               aria-label="Send message"
-              className="px-3.5 sm:px-5 py-2 sm:py-2.5 neu-btn-primary disabled:opacity-50 text-white rounded-full text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
+              className="px-3 sm:px-4 py-2 neu-btn-primary disabled:opacity-50 text-white rounded-full text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0"
             >
               <Send className="w-3.5 h-3.5 text-white" aria-hidden="true" />
               <span className="hidden xs:inline">{isSending ? "Sending..." : "Send"}</span>

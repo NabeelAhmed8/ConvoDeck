@@ -15,7 +15,7 @@ export default async function ChatPage({ searchParams }: ChatPageProps) {
   const leads: ILead[] = await getLeads();
 
   return (
-    <div className="flex-1 h-full max-h-full w-full bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-[8px_8px_24px_rgba(160,178,204,0.2),-8px_-8px_24px_#ffffff] overflow-hidden flex flex-col md:flex-row min-h-0 z-20">
+    <div className="flex-1 min-h-0 w-full bg-white rounded-xl sm:rounded-2xl border border-slate-200/80 shadow-[8px_8px_24px_rgba(160,178,204,0.2),-8px_-8px_24px_#ffffff] overflow-hidden flex flex-col md:flex-row z-20">
       <ChatSidebar initialLeads={leads} />
       <ChatWindow />
     </div>

@@ -34,7 +34,7 @@ export default async function DashboardLayout({
       />
 
       {/* Main Content Area: Fixed padding-top on mobile (< lg) offsets the fixed header exactly */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-0 w-full max-w-full h-full pt-[64px] sm:pt-[72px] lg:pt-0 overflow-hidden relative z-10">
+      <div className="flex-1 flex flex-col min-w-0 min-h-0 w-full max-w-full pt-[56px] sm:pt-[64px] lg:pt-0 overflow-hidden relative z-10">
         <DashboardMainContent>
           {children}
         </DashboardMainContent>
