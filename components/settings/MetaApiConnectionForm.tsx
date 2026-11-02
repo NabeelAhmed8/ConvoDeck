@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Save,
   CheckCircle2,
@@ -41,6 +41,17 @@ export function MetaApiConnectionForm({
   const [phoneId, setPhoneId] = useState(initialPhoneId);
   const [wabaId, setWabaId] = useState(initialWabaId);
   const [token, setToken] = useState(initialToken);
+
+  // Sync internal state when parent loads or resets (e.g. 0-meter disconnect)
+  useEffect(() => {
+    setPhone(initialPhone || "");
+    setPhoneId(initialPhoneId || "");
+    setWabaId(initialWabaId || "");
+    setToken(initialToken || "");
+    if (!initialPhone) {
+      setVerifiedInfo(null);
+    }
+  }, [initialPhone, initialPhoneId, initialWabaId, initialToken]);
 
   const [verifying, setVerifying] = useState(false);
   const [saving, setSaving] = useState(false);
