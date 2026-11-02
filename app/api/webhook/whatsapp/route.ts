@@ -14,9 +14,24 @@ export async function GET(req: NextRequest) {
   const token = searchParams.get("hub.verify_token");
   const challenge = searchParams.get("hub.challenge");
 
-  if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("[Meta WhatsApp Webhook Verified Successfully]");
-    return new Response(challenge, { status: 200 });
+  if (mode === "subscribe" && token) {
+    // Check against global env verify token
+    if (token === VERIFY_TOKEN) {
+      console.log("[Meta WhatsApp Webhook Verified via Env Token]");
+      return new Response(challenge, { status: 200 });
+    }
+
+    // Check against per-workspace custom verify tokens stored in DB
+    try {
+      await dbConnect();
+      const workspace = await Workspace.findOne({ webhookVerifyToken: token });
+      if (workspace) {
+        console.log(`[Meta WhatsApp Webhook Verified for Workspace: ${workspace.name}]`);
+        return new Response(challenge, { status: 200 });
+      }
+    } catch (err) {
+      console.error("[Webhook Verification DB Error]:", err);
+    }
   }
 
   return new Response("Forbidden", { status: 403 });
