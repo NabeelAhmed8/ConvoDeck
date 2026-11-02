@@ -5,6 +5,7 @@ import { AddLeadModal } from "@/components/kanban/AddLeadModal";
 import { MobileTopNav } from "@/components/dashboard/MobileTopNav";
 import { MobileDrawer } from "@/components/dashboard/MobileDrawer";
 import { DesktopSidebar } from "@/components/dashboard/DesktopSidebar";
+import { TourGuide } from "@/components/tour/TourGuide";
 
 interface DashboardNavWrapperProps {
   userName: string;
@@ -138,6 +139,9 @@ export function DashboardNavWrapper({
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
       />
+
+      {/* Interactive Onboarding Tour Guide */}
+      <TourGuide />
     </>
   );
 }

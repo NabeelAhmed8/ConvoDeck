@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { X, ShieldCheck, CheckCircle2, LogOut } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
+import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { logoutUser } from "@/actions/authActions";
 
 interface MobileDrawerProps {
@@ -155,6 +156,14 @@ export function MobileDrawer({
             </p>
             <p className="text-[10px] text-slate-500">Shared multi-agent line active.</p>
           </Link>
+        </div>
+
+        {/* Interactive Tour Guide */}
+        <div className="px-3 sm:px-4 py-2 border-t border-slate-200/50">
+          <TourLauncherButton
+            variant="sidebar"
+            isCollapsed={false}
+          />
         </div>
 
         {/* User Profile & Logout */}

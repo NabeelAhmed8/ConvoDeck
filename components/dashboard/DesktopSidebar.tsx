@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
+import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { logoutUser } from "@/actions/authActions";
 
 interface DesktopSidebarProps {
@@ -73,6 +74,7 @@ export function DesktopSidebar({
         <div className="p-4 sm:p-5 border-b-0 flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">
             <Link
+              id="tour-brand-header"
               href={isAgent ? "/agent/dashboard" : "/dashboard"}
               aria-label="ConvoDeck Dashboard Home"
               className="flex items-center gap-3 min-w-0 group"
@@ -205,6 +207,11 @@ export function DesktopSidebar({
             </Link>
           </>
         )}
+      </div>
+
+      {/* Interactive Tour Guide Launcher */}
+      <div className={isCollapsed ? "px-2 mb-1 flex justify-center" : "px-3 sm:px-4 mb-1"}>
+        <TourLauncherButton isCollapsed={isCollapsed} />
       </div>
 
       {/* User Profile & Logout */}

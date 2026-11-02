@@ -139,12 +139,25 @@ export function DashboardClientNav({
               {group.items.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = item.icon;
+                const tourId =
+                  item.href === "/chat"
+                    ? "tour-nav-chat"
+                    : item.href === "/pipeline"
+                    ? "tour-nav-pipeline"
+                    : item.href === "/team"
+                    ? "tour-nav-team"
+                    : item.href === "/settings"
+                    ? "tour-nav-settings"
+                    : item.href === "/dashboard"
+                    ? "tour-nav-dashboard"
+                    : undefined;
 
                 if (isCollapsed) {
                   return (
                     <Link
                       key={item.name}
                       href={item.href}
+                      id={tourId}
                       onClick={() => {
                         if (onNavigate) onNavigate();
                       }}
@@ -175,6 +188,7 @@ export function DashboardClientNav({
                   <Link
                     key={item.name}
                     href={item.href}
+                    id={tourId}
                     onClick={() => {
                       if (onNavigate) onNavigate();
                     }}
@@ -223,6 +237,7 @@ export function DashboardClientNav({
         <div className={isCollapsed ? "pt-1 flex justify-center w-full" : "pt-1 px-1"}>
           <button
             type="button"
+            id="tour-nav-quick-add"
             onClick={() => {
               if (onOpenAddLead) {
                 onOpenAddLead();

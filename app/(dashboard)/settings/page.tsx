@@ -19,6 +19,7 @@ import { getCurrentUser } from "@/actions/authActions";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { toast } from "@/store/useToastStore";
+import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -434,6 +435,26 @@ export default function SettingsPage() {
             />
             {checkingUpdate ? "Checking Server..." : "Check for Updates"}
           </Button>
+        </div>
+      </div>
+
+      {/* Onboarding & Tour Guide */}
+      <div className="neu-card rounded-3xl p-6 sm:p-8 mt-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
+              <Sparkles className="w-5 h-5" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 className="text-base font-semibold text-slate-900">
+                Interactive Onboarding & Platform Tour
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Walk through ConvoDeck features including WhatsApp Inbox, Visual Pipelines, Team Management, and API settings.
+              </p>
+            </div>
+          </div>
+          <TourLauncherButton variant="settings" />
         </div>
       </div>
     </div>
