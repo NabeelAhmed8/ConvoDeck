@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { User, Mail, Phone, Save, Lock } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { User, Mail, Save, Lock } from "lucide-react";
 import { updateUserProfile } from "@/actions/profileActions";
 import { toast } from "@/store/useToastStore";
 import { ProfileAvatarUploader } from "@/components/profile/ProfileAvatarUploader";
+import { PhoneInputField } from "@/components/ui/PhoneInputField";
+import { parsePhoneNumber } from "@/lib/countries";
 
 interface ProfileIdentityCardProps {
   initialName: string;
@@ -12,7 +14,7 @@ interface ProfileIdentityCardProps {
   initialPhone?: string;
   initialAvatar?: string;
   role: string;
-  onProfileUpdated?: (newName: string, newAvatar?: string) => void;
+  onProfileUpdated?: (newName: string, newAvatar?: string, newPhone?: string) => void;
 }
 
 export function ProfileIdentityCard({
@@ -24,9 +26,18 @@ export function ProfileIdentityCard({
   onProfileUpdated,
 }: ProfileIdentityCardProps) {
   const [name, setName] = useState(initialName);
-  const [phone, setPhone] = useState(initialPhone);
+  const parsed = parsePhoneNumber(initialPhone);
+  const [dialCode, setDialCode] = useState(parsed.dialCode);
+  const [phoneNumber, setPhoneNumber] = useState(parsed.nationalNumber);
   const [avatar, setAvatar] = useState(initialAvatar);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Sync state if initialPhone changes
+  useEffect(() => {
+    const p = parsePhoneNumber(initialPhone);
+    setDialCode(p.dialCode);
+    setPhoneNumber(p.nationalNumber);
+  }, [initialPhone]);
 
   // Compute initials
   const initials = name
@@ -44,12 +55,16 @@ export function ProfileIdentityCard({
       return;
     }
 
+    const digitsOnly = phoneNumber.replace(/\D/g, "");
+    const formattedDigits = digitsOnly.replace(/^0+/, "");
+    const fullPhone = formattedDigits ? `${dialCode}${formattedDigits}` : "";
+
     setIsSaving(true);
     try {
-      const res = await updateUserProfile({ name, phone, avatar });
+      const res = await updateUserProfile({ name, phone: fullPhone, avatar });
       if (res.success) {
         toast.success("Profile Updated", "Your personal details have been saved.");
-        onProfileUpdated?.(name, avatar);
+        onProfileUpdated?.(name, avatar, fullPhone);
       } else {
         toast.error("Update Failed", res.error || "Could not update profile.");
       }
@@ -151,27 +166,18 @@ export function ProfileIdentityCard({
           </div>
         </div>
 
-        {/* Contact Phone */}
+        {/* Contact Phone with Country Code Dynamic Dropdown */}
         <div>
-          <label
-            htmlFor="profile-phone"
-            className="block text-xs font-semibold text-slate-700 mb-1"
-          >
-            Personal Contact / WhatsApp (Optional)
-          </label>
-          <div className="relative">
-            <input
-              id="profile-phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="e.g. +923001234567"
-              className="w-full pl-9 pr-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-none font-mono"
-            />
-            <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-          </div>
+          <PhoneInputField
+            id="profile-phone"
+            name="phone"
+            label="Personal Contact / WhatsApp (Optional)"
+            dialCode={dialCode}
+            phoneNumber={phoneNumber}
+            onDialCodeChange={setDialCode}
+            onPhoneNumberChange={setPhoneNumber}
+            placeholder="300 1234567"
+          />
           <p className="text-[11px] text-slate-400 mt-1">
             Used for urgent system alerts and account recovery.
           </p>

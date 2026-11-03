@@ -46,13 +46,18 @@ export default function ProfilePage() {
     loadData();
   }, []);
 
-  const handleProfileUpdated = (newName: string, newAvatar?: string) => {
+  const handleProfileUpdated = (
+    newName: string,
+    newAvatar?: string,
+    newPhone?: string
+  ) => {
     setProfileData((prev) =>
       prev
         ? {
             ...prev,
             name: newName,
             ...(newAvatar !== undefined ? { avatar: newAvatar } : {}),
+            ...(newPhone !== undefined ? { phone: newPhone } : {}),
           }
         : null
     );

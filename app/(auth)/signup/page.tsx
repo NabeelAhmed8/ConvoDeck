@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
+import { PhoneInputField } from "@/components/ui/PhoneInputField";
 import {
   signupUser,
   verifySignupCode,
@@ -28,6 +29,8 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
+  const [dialCode, setDialCode] = useState("+92");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
   // Step 2: Verification state
@@ -55,11 +58,24 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
 
+    // Validate phone number
+    const digitsOnly = phone.replace(/\D/g, "");
+    if (!digitsOnly || digitsOnly.length < 5) {
+      setError("Please enter a valid phone number with at least 5 digits");
+      setLoading(false);
+      return;
+    }
+
+    // Strip leading zeroes before appending country dial code (e.g., 0300 -> 300)
+    const formattedDigits = digitsOnly.replace(/^0+/, "");
+    const fullPhone = `${dialCode}${formattedDigits}`;
+
     const res = await signupUser({
       name,
       companyName,
       email,
       password,
+      phone: fullPhone,
     });
 
     if (res.success && res.requiresVerification) {
@@ -230,6 +246,18 @@ export default function SignupPage() {
                   />
                 </div>
               </div>
+
+              <PhoneInputField
+                id="signup-phone-number"
+                name="phone"
+                label="WhatsApp / Phone Number"
+                dialCode={dialCode}
+                phoneNumber={phone}
+                onDialCodeChange={setDialCode}
+                onPhoneNumberChange={setPhone}
+                placeholder="300 1234567"
+                required
+              />
 
               <div>
                 <label htmlFor="signup-account-password" className="block text-xs font-semibold text-slate-700 mb-1">

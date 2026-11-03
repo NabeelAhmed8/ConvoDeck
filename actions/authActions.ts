@@ -24,9 +24,10 @@ export async function signupUser(formData: {
   companyName: string;
   email: string;
   password: string;
+  phone?: string;
 }) {
   try {
-    const { name, companyName, email, password } = formData;
+    const { name, companyName, email, password, phone } = formData;
 
     if (!name || !email || !password || !companyName) {
       return { success: false, error: "All fields are required" };
@@ -70,6 +71,7 @@ export async function signupUser(formData: {
         name: name.trim(),
         companyName: companyName.trim(),
         passwordHash: hashedPassword,
+        phone: phone ? phone.trim() : "",
       }),
       attempts: 0,
       expiresAt,
@@ -155,7 +157,7 @@ export async function verifySignupCode(params: {
 
     // Code is valid! Parse payload and create Workspace & User
     const payload = JSON.parse(record.payload || "{}");
-    const { name, companyName, passwordHash } = payload;
+    const { name, companyName, passwordHash, phone } = payload;
 
     if (!name || !companyName || !passwordHash) {
       return { success: false, error: "Signup session expired. Please try again." };
@@ -172,6 +174,7 @@ export async function verifySignupCode(params: {
     const user = await User.create({
       name,
       email: cleanEmail,
+      phone: phone ? phone.trim() : "",
       password: passwordHash,
       role: "admin",
       workspaceId: workspace._id.toString(),

@@ -53,13 +53,18 @@ export default function AgentProfilePage() {
     loadAgentData();
   }, []);
 
-  const handleProfileUpdated = (newName: string, newAvatar?: string) => {
+  const handleProfileUpdated = (
+    newName: string,
+    newAvatar?: string,
+    newPhone?: string
+  ) => {
     setProfileData((prev) =>
       prev
         ? {
             ...prev,
             name: newName,
             ...(newAvatar !== undefined ? { avatar: newAvatar } : {}),
+            ...(newPhone !== undefined ? { phone: newPhone } : {}),
           }
         : null
     );
