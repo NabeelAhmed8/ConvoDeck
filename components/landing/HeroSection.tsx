@@ -21,7 +21,7 @@ export function HeroSection() {
             </div>
 
             {/* Typography matching reference image */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] text-slate-900">
+            <h1 className="text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] text-slate-900">
               Turn WhatsApp <br className="hidden sm:inline" />
               into your{" "}
               <span className="text-[#ff6422]">
@@ -29,15 +29,15 @@ export function HeroSection() {
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-base text-slate-600 max-w-xl leading-relaxed">
               Discover a CRM designed for real sales momentum. Centralize multi-agent chat, track deal stages visually, and eliminate lost revenue.
             </p>
 
             {/* CTA Button Group */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-3.5 pt-1 sm:pt-2">
               <Link
                 href="/signup"
-                className="neu-btn-primary px-6 sm:px-7 py-3 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2.5 transition-all shadow-md group cursor-pointer"
+                className="w-full min-[480px]:w-auto justify-center neu-btn-primary px-6 sm:px-7 py-3 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2.5 transition-all shadow-md group cursor-pointer"
               >
                 <span>Start Workspace</span>
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0 group-hover:translate-x-0.5 transition-transform">

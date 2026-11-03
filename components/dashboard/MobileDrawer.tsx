@@ -58,6 +58,7 @@ export function MobileDrawer({
         <div className="p-4 sm:p-5 flex flex-col gap-2 shrink-0">
           <div className="flex items-center justify-between gap-3">
             <Link
+              id="tour-brand-header"
               href={isAgent ? "/agent/dashboard" : "/dashboard"}
               aria-label="ConvoDeck Dashboard Home"
               onClick={onClose}
@@ -81,6 +82,7 @@ export function MobileDrawer({
 
             <button
               type="button"
+              id="tour-btn-collapse"
               onClick={onClose}
               aria-label="Close navigation menu"
               className="w-8 h-8 sm:w-9 sm:h-9 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer shrink-0"
@@ -132,6 +134,7 @@ export function MobileDrawer({
         <div className="p-3 sm:p-4 shrink-0">
           <div className="neu-dribbble-divider-full my-1.5" aria-hidden="true" />
           <Link
+            id="tour-btn-whatsapp-status"
             href={isAgent ? "/agent/dashboard" : "/settings"}
             onClick={onClose}
             className="block p-3 neu-pressed rounded-2xl space-y-1 transition-all border border-slate-300/40 group hover:border-slate-400/60"
@@ -194,6 +197,7 @@ export function MobileDrawer({
           <form action={logoutUser}>
             <button
               type="submit"
+              id="tour-btn-logout"
               aria-label="Sign out of your account"
               title="Sign Out"
               className="w-9 h-9 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer shrink-0"

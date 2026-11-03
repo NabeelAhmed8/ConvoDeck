@@ -103,37 +103,37 @@ export function ButtonsDirectoryModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="buttons-directory-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/70 backdrop-blur-sm pointer-events-auto animate-in fade-in"
+      className="fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-6 bg-slate-950/70 backdrop-blur-sm pointer-events-auto animate-in fade-in"
     >
       <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#ff6422]/10 text-[#ea5414] flex items-center justify-center shrink-0 border border-[#ff6422]/20">
-              <Compass className="w-5 h-5" />
+        <div className="p-3.5 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#ff6422]/10 text-[#ea5414] flex items-center justify-center shrink-0 border border-[#ff6422]/20">
+              <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div>
-              <h2 id="buttons-directory-title" className="text-base sm:text-lg font-bold text-slate-900">
-                Website Buttons & Controls Guide
+            <div className="min-w-0">
+              <h2 id="buttons-directory-title" className="text-sm sm:text-lg font-bold text-slate-900 truncate">
+                Website Buttons &amp; Controls Guide
               </h2>
-              <p className="text-xs text-slate-500">
-                Complete reference of all essential buttons, locations, and actions across ConvoDeck.
+              <p className="text-[11px] sm:text-xs text-slate-500 truncate sm:whitespace-normal">
+                Complete reference of essential buttons and controls.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={onStartStepTour}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl neu-btn-primary text-white transition-colors shadow-xs cursor-pointer"
+              className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 text-xs font-semibold rounded-xl neu-btn-primary text-white transition-colors shadow-xs cursor-pointer whitespace-nowrap"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              Start Interactive Tour
+              <span className="hidden min-[420px]:inline">Start Tour</span>
             </button>
             <button
               onClick={onClose}
               aria-label="Close Guide"
-              className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
             >
               <X className="w-5 h-5" />
             </button>

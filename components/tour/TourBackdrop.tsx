@@ -18,7 +18,7 @@ export function TourBackdrop({ targetRect, onClose }: TourBackdropProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 pointer-events-auto overflow-hidden"
+      className="fixed inset-0 z-[60] pointer-events-auto overflow-hidden"
       aria-hidden="true"
     >
       {/* Clickable backdrop overlay to dismiss */}

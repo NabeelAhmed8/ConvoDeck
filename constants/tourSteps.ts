@@ -24,6 +24,26 @@ export interface ITourStep {
   preferredPosition?: "top" | "bottom" | "left" | "right" | "center";
 }
 
+export const SIDEBAR_TOUR_TARGET_IDS = new Set<string>([
+  "tour-brand-header",
+  "tour-btn-collapse",
+  "tour-nav-dashboard",
+  "tour-nav-chat",
+  "tour-nav-pipeline",
+  "tour-nav-team",
+  "tour-nav-billing",
+  "tour-nav-settings",
+  "tour-nav-quick-add",
+  "tour-btn-whatsapp-status",
+  "tour-btn-launcher",
+  "tour-btn-logout",
+]);
+
+export function isSidebarTourTarget(targetId?: string): boolean {
+  if (!targetId) return false;
+  return SIDEBAR_TOUR_TARGET_IDS.has(targetId);
+}
+
 export const TOUR_STEPS: ITourStep[] = [
   {
     id: "welcome-brand",

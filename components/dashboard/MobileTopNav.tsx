@@ -24,15 +24,16 @@ export function MobileTopNav({
   onOpenDrawer,
 }: MobileTopNavProps) {
   return (
-    <header className="lg:hidden fixed top-0 inset-x-0 z-40 h-[56px] sm:h-[64px] px-2 sm:px-3 flex items-center justify-center w-full bg-[#f3f6fa]/95 backdrop-blur-md">
-      <div className="w-full h-10 sm:h-11 neu-card rounded-xl px-3 sm:px-4 flex items-center justify-between border border-white/90 shadow-[6px_6px_18px_rgba(160,178,204,0.25),-6px_-6px_18px_#ffffff] bg-white/95">
+    <header className="lg:hidden fixed top-0 inset-x-0 z-40 h-[56px] sm:h-[64px] px-2 sm:px-3 flex items-center justify-center w-full bg-[#ebf0f7]/95 backdrop-blur-md">
+      <div className="w-full h-10 sm:h-11 neu-card rounded-xl px-2.5 sm:px-4 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95">
         {/* Hamburger + Brand */}
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             type="button"
+            id="tour-btn-collapse"
             onClick={onOpenDrawer}
             aria-label="Open navigation menu"
-            className="w-10 h-10 sm:w-11 sm:h-11 neu-btn rounded-xl flex items-center justify-center text-slate-800 hover:text-[#ff6422] transition-colors cursor-pointer shrink-0"
+            className="w-8 h-8 sm:w-10 sm:h-10 neu-btn rounded-xl flex items-center justify-center text-slate-800 hover:text-[#ff6422] transition-colors cursor-pointer shrink-0"
           >
             <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-slate-900" aria-hidden="true" />
           </button>

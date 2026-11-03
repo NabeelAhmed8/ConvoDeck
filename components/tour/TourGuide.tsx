@@ -1,12 +1,18 @@
 "use client";
 
 import React from "react";
-import { useTourGuide } from "@/hooks/useTourGuide";
+import { useTourGuide, UseTourGuideOptions } from "@/hooks/useTourGuide";
 import { TourBackdrop } from "@/components/tour/TourBackdrop";
 import { TourCard } from "@/components/tour/TourCard";
 import { ButtonsDirectoryModal } from "@/components/tour/ButtonsDirectoryModal";
 
-export function TourGuide() {
+export interface TourGuideProps extends UseTourGuideOptions {}
+
+export function TourGuide({
+  onExpandMobileDrawer,
+  onCollapseMobileDrawer,
+  onExpandDesktopSidebar,
+}: TourGuideProps = {}) {
   const {
     isOpen,
     isDirectoryOpen,
@@ -23,13 +29,17 @@ export function TourGuide() {
     goToStep,
     openDirectory,
     closeDirectory,
-  } = useTourGuide();
+  } = useTourGuide({
+    onExpandMobileDrawer,
+    onCollapseMobileDrawer,
+    onExpandDesktopSidebar,
+  });
 
   return (
     <>
       {/* 1. Step-by-Step Interactive Button Tour */}
       {isOpen && (
-        <aside aria-label="Interactive Buttons Tour" className="relative z-50">
+        <aside aria-label="Interactive Buttons Tour" className="relative z-[60]">
           <TourBackdrop targetRect={targetRect} onClose={skipTour} />
           <TourCard
             step={currentStep}

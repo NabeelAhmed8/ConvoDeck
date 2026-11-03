@@ -23,15 +23,34 @@ export function computeTourCardPosition(
   const spacing = 16;
 
   // Responsive fallback for small mobile screens
-  if (!targetRect || winW < 768) {
+  if (!targetRect) {
     const mobileWidth = Math.min(cardWidth, winW - pad * 2);
     const left = Math.max(pad, (winW - mobileWidth) / 2);
-    // On mobile, pin near the bottom above navigation/safe areas
-    const top = Math.max(pad, winH - cardHeight - pad - 10);
+    const top = Math.max(pad, (winH - cardHeight) / 2);
     return {
       top,
       left,
       placement: "center",
+      arrowOffset: 50,
+    };
+  }
+
+  // Mobile layout (< 768px): Intelligent non-overlapping positioning
+  if (winW < 768) {
+    const mobileWidth = Math.min(cardWidth, winW - pad * 2);
+    const left = Math.max(pad, (winW - mobileWidth) / 2);
+
+    // If target element is located in the lower half of screen, position card at top
+    // If target element is in the upper half, position card at bottom
+    const isTargetInLowerHalf = targetRect.top > winH / 2;
+    const top = isTargetInLowerHalf
+      ? Math.max(pad, 16)
+      : Math.max(pad, winH - cardHeight - pad - 12);
+
+    return {
+      top,
+      left,
+      placement: isTargetInLowerHalf ? "top" : "bottom",
       arrowOffset: 50,
     };
   }

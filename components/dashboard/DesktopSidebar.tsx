@@ -52,6 +52,7 @@ export function DesktopSidebar({
       {isCollapsed ? (
         <div className="p-3 border-b-0 flex flex-col items-center gap-2">
           <Link
+            id="tour-brand-header"
             href={isAgent ? "/agent/dashboard" : "/dashboard"}
             aria-label="ConvoDeck Dashboard Home"
             title="ConvoDeck Dashboard"
@@ -171,6 +172,7 @@ export function DesktopSidebar({
           <>
             <div className="neu-dribbble-divider my-1.5 w-full" aria-hidden="true" />
             <Link
+              id="tour-btn-whatsapp-status"
               href={isAgent ? "/agent/dashboard" : "/settings"}
               aria-label={whatsappNumber ? `WhatsApp Live: ${whatsappNumber}` : "WhatsApp: Not Connected"}
               title={whatsappNumber ? `WhatsApp Live: ${whatsappNumber}` : "WhatsApp: Not Connected (Click to set up)"}

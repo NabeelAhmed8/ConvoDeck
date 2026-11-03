@@ -126,7 +126,7 @@ export function LandingNavbar() {
           <div
             role="dialog"
             aria-label="Mobile Navigation Menu"
-            className="absolute top-20 inset-x-0 neu-card rounded-3xl p-6 z-50 lg:hidden shadow-[12px_12px_30px_rgba(166,178,196,0.35),-10px_-10px_30px_#ffffff] animate-in slide-in-from-top-3 duration-200 bg-[#edf1f7] border border-white/80"
+            className="absolute top-20 inset-x-0 neu-card rounded-3xl p-4 sm:p-6 z-50 lg:hidden shadow-[12px_12px_30px_rgba(166,178,196,0.35),-10px_-10px_30px_#ffffff] animate-in slide-in-from-top-3 duration-200 bg-[#edf1f7] border border-white/80"
           >
             <nav className="flex flex-col space-y-4">
               <NavLinksMobile

@@ -1,13 +1,20 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { TOUR_STEPS, ITourStep } from "@/constants/tourSteps";
+import { useState, useEffect, useCallback } from "react";
+import { TOUR_STEPS, ITourStep, isSidebarTourTarget } from "@/constants/tourSteps";
+import { findVisibleTourElement } from "@/utils/tourElementFinder";
 
 const TOUR_STORAGE_KEY = "convodeck_tour_completed";
 export const START_TOUR_EVENT = "convodeck:start-tour";
 export const OPEN_DIRECTORY_EVENT = "convodeck:open-buttons-directory";
 
-export function useTourGuide() {
+export interface UseTourGuideOptions {
+  onExpandMobileDrawer?: () => void;
+  onCollapseMobileDrawer?: () => void;
+  onExpandDesktopSidebar?: () => void;
+}
+
+export function useTourGuide(options?: UseTourGuideOptions) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDirectoryOpen, setIsDirectoryOpen] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -28,7 +35,7 @@ export function useTourGuide() {
       setTargetRect(null);
       return;
     }
-    const el = document.getElementById(step.targetId);
+    const el = findVisibleTourElement(step.targetId);
     if (el) {
       const rect = el.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
@@ -39,6 +46,29 @@ export function useTourGuide() {
     setTargetRect(null);
   }, [isOpen, currentStepIndex]);
 
+  // Synchronize sidebar expansion/collapse based on target button location
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const step = TOUR_STEPS[currentStepIndex];
+    if (!step) return;
+
+    const isSidebar = isSidebarTourTarget(step.targetId);
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+
+    if (isSidebar) {
+      if (isMobile) {
+        options?.onExpandMobileDrawer?.();
+      } else {
+        options?.onExpandDesktopSidebar?.();
+      }
+    } else {
+      if (isMobile) {
+        options?.onCollapseMobileDrawer?.();
+      }
+    }
+  }, [isOpen, currentStepIndex, options]);
+
   // Smooth 60fps tracking loop when step changes or scrolling happens
   useEffect(() => {
     if (!isOpen) {
@@ -47,7 +77,7 @@ export function useTourGuide() {
     }
 
     const step = TOUR_STEPS[currentStepIndex];
-    const el = step?.targetId ? document.getElementById(step.targetId) : null;
+    const el = step?.targetId ? findVisibleTourElement(step.targetId) : null;
 
     if (el) {
       const rect = el.getBoundingClientRect();
@@ -102,13 +132,21 @@ export function useTourGuide() {
 
   const skipTour = useCallback(() => {
     markTourCompleted();
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+    if (isMobile) {
+      options?.onCollapseMobileDrawer?.();
+    }
     setIsOpen(false);
-  }, [markTourCompleted]);
+  }, [markTourCompleted, options]);
 
   const completeTour = useCallback(() => {
     markTourCompleted();
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+    if (isMobile) {
+      options?.onCollapseMobileDrawer?.();
+    }
     setIsOpen(false);
-  }, [markTourCompleted]);
+  }, [markTourCompleted, options]);
 
   const nextStep = useCallback(() => {
     if (isLastStep) {

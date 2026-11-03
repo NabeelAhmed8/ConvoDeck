@@ -37,7 +37,7 @@ export function PricingSection({ className }: { className?: string }) {
         {/* Currency Switcher */}
         <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-2">
           <span className="text-xs text-slate-500 font-medium">Currency:</span>
-          <div className="neu-tab-container p-1 rounded-full inline-flex items-center justify-center gap-1 sm:gap-1.5 max-w-full">
+          <div className="neu-tab-container p-1 rounded-full inline-flex items-center justify-center gap-1 sm:gap-1.5 max-w-full flex-wrap sm:flex-nowrap">
             {(["USD", "PKR", "AED", "EUR"] as CurrencyCode[]).map((c) => (
               <button
                 key={c}

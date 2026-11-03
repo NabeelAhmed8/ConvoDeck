@@ -88,7 +88,7 @@ export function TourCard({
         transition:
           "top 350ms cubic-bezier(0.16, 1, 0.3, 1), left 350ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease",
       }}
-      className="z-50 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-[0_20px_50px_rgba(15,23,42,0.35)] border border-slate-200/80 text-slate-900 pointer-events-auto select-none"
+      className="z-[70] bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-[0_20px_50px_rgba(15,23,42,0.35)] border border-slate-200/80 text-slate-900 pointer-events-auto select-none"
     >
       {/* Directional pointing arrow */}
       {placement === "right" && (

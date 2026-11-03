@@ -18,7 +18,7 @@ export function ShowcaseChatStream({
   return (
     <div className="my-5 p-4 neu-pressed rounded-2xl relative space-y-3 bg-[#e9eff6]">
       {/* Customer Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col min-[380px]:flex-row min-[380px]:items-center justify-between gap-2">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-7 h-7 rounded-full bg-[#25D366] text-white flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
             {deal.avatarLetter}
@@ -27,7 +27,7 @@ export function ShowcaseChatStream({
             <p className="text-xs font-bold text-slate-900 leading-none truncate">
               {deal.leadName} • <span className="font-normal text-slate-600">{deal.company}</span>
             </p>
-            <p className="text-[10px] text-slate-500 mt-0.5 leading-none font-mono">
+            <p className="text-[10px] text-slate-500 mt-0.5 leading-none font-mono truncate">
               {deal.phone} • WhatsApp Verified
             </p>
           </div>
@@ -36,7 +36,7 @@ export function ShowcaseChatStream({
         <button
           type="button"
           onClick={onToggleReply}
-          className="text-[10px] font-bold text-[#ea5414] hover:text-[#ff6422] neu-btn px-2.5 py-1 rounded-full flex items-center gap-1 transition-all shrink-0 cursor-pointer"
+          className="text-[10px] font-bold text-[#ea5414] hover:text-[#ff6422] neu-btn px-2.5 py-1 rounded-full flex items-center gap-1 transition-all shrink-0 self-start min-[380px]:self-auto cursor-pointer"
         >
           <Sparkles className="w-3 h-3 text-[#ff6422]" />
           <span>{showReply ? "Hide Reply" : "Simulate Reply"}</span>
