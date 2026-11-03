@@ -185,32 +185,30 @@ function CheckoutContent() {
               />
 
               {/* Step 3: Terms Agreement */}
-              <div className="border-t border-slate-200/80 pt-4">
+              <div className="border-t border-slate-200/80 pt-4 flex items-start gap-2.5">
+                <input
+                  id="checkout-agree-terms"
+                  name="agreeTerms"
+                  type="checkbox"
+                  aria-label="Agree to billing terms and terms of service"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  className="mt-0.5 rounded border-slate-300 text-[#ff6422] focus:ring-[#ff6422] cursor-pointer"
+                />
                 <label
                   htmlFor="checkout-agree-terms"
-                  className="flex items-start gap-2.5 text-xs text-slate-600 cursor-pointer"
+                  className="text-xs text-slate-600 leading-relaxed cursor-pointer select-none"
                 >
-                  <input
-                    id="checkout-agree-terms"
-                    name="agreeTerms"
-                    type="checkbox"
-                    aria-label="Agree to billing terms and terms of service"
-                    checked={agreeTerms}
-                    onChange={(e) => setAgreeTerms(e.target.checked)}
-                    className="mt-0.5 rounded border-slate-300 text-[#ff6422] focus:ring-[#ff6422] cursor-pointer"
-                  />
-                  <span className="leading-relaxed">
-                    I agree to the{" "}
-                    <Link href="/terms" className="text-[#ea5414] underline">
-                      Terms of Service
-                    </Link>{" "}
-                    and authorized billing recurring renewal at{" "}
-                    <strong>
-                      {symbol}
-                      {totalPrice.toLocaleString()}
-                    </strong>{" "}
-                    /{billingCycle}.
-                  </span>
+                  I agree to the{" "}
+                  <Link href="/terms" className="text-[#ea5414] underline hover:text-[#ff6422]">
+                    Terms of Service
+                  </Link>{" "}
+                  and authorized billing recurring renewal at{" "}
+                  <strong>
+                    {symbol}
+                    {totalPrice.toLocaleString()}
+                  </strong>{" "}
+                  /{billingCycle}.
                 </label>
               </div>
 

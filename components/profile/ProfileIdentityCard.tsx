@@ -109,7 +109,9 @@ export function ProfileIdentityCard({
             <div className="relative">
               <input
                 id="profile-name"
+                name="fullName"
                 type="text"
+                autoComplete="name"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -137,7 +139,9 @@ export function ProfileIdentityCard({
             <div className="relative">
               <input
                 id="profile-email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 disabled
                 value={email}
                 className="w-full pl-9 pr-3.5 py-2.5 text-xs neu-pressed rounded-2xl text-slate-500 cursor-not-allowed bg-[#edf2f8]"
@@ -158,7 +162,9 @@ export function ProfileIdentityCard({
           <div className="relative">
             <input
               id="profile-phone"
+              name="phone"
               type="tel"
+              autoComplete="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="e.g. +923001234567"

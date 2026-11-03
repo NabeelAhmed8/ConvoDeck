@@ -86,6 +86,7 @@ export function ForgotPasswordResetStep({
             />
             <input
               id="new-password"
+              name="newPassword"
               type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               placeholder="••••••••"
@@ -124,6 +125,7 @@ export function ForgotPasswordResetStep({
             />
             <input
               id="confirm-password"
+              name="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               autoComplete="new-password"
               placeholder="••••••••"

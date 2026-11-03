@@ -7,6 +7,8 @@ import {
   PRICING_TABLE,
   PaidPlanKey,
 } from "@/constants/pricing";
+import { BillingCycleSelect } from "./BillingCycleSelect";
+import { CurrencySelect } from "./CurrencySelect";
 
 interface OrderSummaryCardProps {
   planKey: PaidPlanKey;
@@ -48,14 +50,23 @@ export function OrderSummaryCard({
 
         {/* Plan Switcher Pills */}
         <div className="space-y-2">
-          <label className="block text-xs font-semibold text-slate-700">
+          <p
+            id="subscription-plan-label"
+            className="block text-xs font-semibold text-slate-700"
+          >
             Select Subscription Plan
-          </label>
-          <div className="neu-tab-container p-1 rounded-full grid grid-cols-3 gap-1">
+          </p>
+          <div
+            role="radiogroup"
+            aria-labelledby="subscription-plan-label"
+            className="neu-tab-container p-1 rounded-full grid grid-cols-3 gap-1"
+          >
             {(["starter", "growth", "enterprise"] as PaidPlanKey[]).map((p) => (
               <button
                 key={p}
                 type="button"
+                role="radio"
+                aria-checked={planKey === p}
                 onClick={() => setPlanKey(p)}
                 className={`px-1.5 py-2 sm:p-2.5 rounded-full text-[11px] sm:text-xs font-bold capitalize transition-all cursor-pointer text-center truncate ${
                   planKey === p ? "neu-tab-active" : "neu-tab"
@@ -76,19 +87,11 @@ export function OrderSummaryCard({
             >
               Currency
             </label>
-            <select
+            <CurrencySelect
               id="checkout-currency-select"
-              name="currency"
-              aria-label="Billing Currency"
               value={currency}
-              onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
-              className="w-full px-3 py-2 text-xs neu-input rounded-full text-slate-900 focus:outline-none font-semibold"
-            >
-              <option value="USD">USD ($)</option>
-              <option value="PKR">PKR (₨)</option>
-              <option value="AED">AED (AED)</option>
-              <option value="EUR">EUR (€)</option>
-            </select>
+              onChange={setCurrency}
+            />
           </div>
 
           <div>
@@ -98,17 +101,11 @@ export function OrderSummaryCard({
             >
               Billing Cycle
             </label>
-            <select
+            <BillingCycleSelect
               id="checkout-billing-cycle-select"
-              name="billingCycle"
-              aria-label="Billing Cycle"
               value={billingCycle}
-              onChange={(e) => setBillingCycle(e.target.value as BillingFrequency)}
-              className="w-full px-3 py-2 text-xs neu-input rounded-full text-slate-900 focus:outline-none font-semibold"
-            >
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly (Save 20%)</option>
-            </select>
+              onChange={setBillingCycle}
+            />
           </div>
         </div>
 

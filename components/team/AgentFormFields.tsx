@@ -2,6 +2,7 @@
 
 import React from "react";
 import { UserRole } from "@/types";
+import { AgentRoleSelect } from "./AgentRoleSelect";
 
 interface AgentFormFieldsProps {
   name: string;
@@ -94,7 +95,7 @@ export function AgentFormFields({
         />
       </div>
 
-      {/* Role & Permissions */}
+      {/* Role & Permissions Dynamic Select */}
       <div>
         <label
           htmlFor="agent-role-select"
@@ -102,19 +103,12 @@ export function AgentFormFields({
         >
           Role (RBAC) <span className="text-rose-500" aria-hidden="true">*</span>
         </label>
-        <select
+        <AgentRoleSelect
           id="agent-role-select"
-          name="agentRole"
-          aria-label="Agent Role and Permissions"
-          disabled={disabled}
           value={role}
-          onChange={(e) => onRoleChange(e.target.value as UserRole)}
-          className="w-full px-3.5 py-2 text-xs neu-input rounded-xl text-slate-900 font-semibold focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          <option value="agent">Sales Agent</option>
-          <option value="manager">Team Manager</option>
-          <option value="admin">Administrator</option>
-        </select>
+          onChange={onRoleChange}
+          disabled={disabled}
+        />
       </div>
     </div>
   );

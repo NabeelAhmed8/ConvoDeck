@@ -143,9 +143,15 @@ export function ButtonsDirectoryModal({
         {/* Search & Category Filter Bar */}
         <div className="p-4 bg-slate-50 border-b border-slate-100 space-y-3">
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <label htmlFor="tour-directory-search" className="sr-only">
+              Search buttons by name, location, or feature
+            </label>
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
             <input
-              type="text"
+              id="tour-directory-search"
+              name="tourDirectorySearch"
+              type="search"
+              aria-label="Search buttons by name, location, or feature"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search any button by name, location, or feature (e.g. Add Lead, Webhook, Collapse)..."

@@ -129,7 +129,9 @@ export function ForgotPasswordRequestStep({
             )}
             <input
               id="forgot-password-identifier"
+              name="identifier"
               type={method === "email" ? "email" : "tel"}
+              autoComplete={method === "email" ? "email" : "tel"}
               placeholder={
                 method === "email"
                   ? "name@company.com"

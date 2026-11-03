@@ -121,8 +121,10 @@ export default function LoginPage() {
               </div>
 
               <div className="flex items-center justify-between text-xs">
-                <label className="flex items-center gap-2 cursor-pointer text-slate-600">
+                <label htmlFor="login-remember-me" className="flex items-center gap-2 cursor-pointer text-slate-600">
                   <input
+                    id="login-remember-me"
+                    name="rememberMe"
                     type="checkbox"
                     defaultChecked
                     className="rounded border-slate-300 text-[#ff6422] focus:ring-[#ff6422]"

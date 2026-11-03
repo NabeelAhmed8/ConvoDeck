@@ -143,6 +143,7 @@ export function ForgotPasswordVerifyStep({
             />
             <input
               id="forgot-password-code"
+              name="otpCode"
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"

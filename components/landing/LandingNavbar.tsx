@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X, MessageSquare, Search } from "lucide-react";
+import { ArrowRight, Menu, X, MessageSquare } from "lucide-react";
 import { NAV_ITEMS } from "./navbar/navConfig";
 import { useScrollSpy } from "./navbar/useScrollSpy";
 import { NavLinksDesktop } from "./navbar/NavLinksDesktop";
 import { NavLinksMobile } from "./navbar/NavLinksMobile";
+import { NavbarQuickSearch } from "./search/NavbarQuickSearch";
 
 export function LandingNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -63,16 +64,8 @@ export function LandingNavbar() {
           onSelect={handleNavSelect}
         />
 
-        {/* Inset Pill Search Bar (Neumorphic reference design) */}
-        <div className="hidden xl:flex items-center relative neu-pressed px-3.5 py-1.5 rounded-full w-48 text-xs text-slate-500">
-          <Search className="w-3.5 h-3.5 text-slate-400 mr-2 shrink-0" />
-          <input
-            type="text"
-            placeholder="Search..."
-            readOnly
-            className="w-full bg-transparent border-none text-xs text-slate-700 placeholder-slate-400 focus:outline-none cursor-default"
-          />
-        </div>
+        {/* Dynamic & Responsive Quick Search Bar */}
+        <NavbarQuickSearch />
 
         {/* Desktop Auth Action Buttons */}
         <div className="hidden sm:flex items-center gap-2.5 shrink-0">
@@ -129,6 +122,14 @@ export function LandingNavbar() {
             className="absolute top-20 inset-x-0 neu-card rounded-3xl p-4 sm:p-6 z-50 lg:hidden shadow-[12px_12px_30px_rgba(166,178,196,0.35),-10px_-10px_30px_#ffffff] animate-in slide-in-from-top-3 duration-200 bg-[#edf1f7] border border-white/80"
           >
             <nav className="flex flex-col space-y-4">
+              {/* Mobile Quick Search */}
+              <div className="pb-1">
+                <NavbarQuickSearch
+                  isMobileFullWidth
+                  onItemNavigated={() => setMobileMenuOpen(false)}
+                />
+              </div>
+
               <NavLinksMobile
                 items={NAV_ITEMS}
                 activeId={activeId}

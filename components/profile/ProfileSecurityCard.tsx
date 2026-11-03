@@ -88,7 +88,9 @@ export function ProfileSecurityCard() {
           <div className="relative">
             <input
               id="sec-current-password"
+              name="currentPassword"
               type={showCurrent ? "text" : "password"}
+              autoComplete="current-password"
               required
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
@@ -118,7 +120,9 @@ export function ProfileSecurityCard() {
             <div className="relative">
               <input
                 id="sec-new-password"
+                name="newPassword"
                 type={showNew ? "text" : "password"}
+                autoComplete="new-password"
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -145,7 +149,9 @@ export function ProfileSecurityCard() {
             </label>
             <input
               id="sec-confirm-password"
+              name="confirmPassword"
               type="password"
+              autoComplete="new-password"
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
