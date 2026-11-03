@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useId } from "react";
 import { ChevronDown, Search } from "lucide-react";
 import { COUNTRIES, Country, DEFAULT_COUNTRY } from "@/lib/countries";
 import { CountryOptionItem } from "./CountryOptionItem";
 
 interface CountryCodeDropdownProps {
+  id?: string;
+  name?: string;
   selectedDialCode: string;
   onSelect: (country: Country) => void;
   disabled?: boolean;
@@ -13,15 +15,20 @@ interface CountryCodeDropdownProps {
 
 /**
  * CountryCodeDropdown
- * Single Responsibility: Compact, responsive country dialing code dropdown
- * placed directly under the input field with isolated scroll mechanics to
- * completely prevent background page scrolling.
+ * Single Responsibility: Compact country code selector that shows exactly 4 items
+ * at a time, includes native accessible form field attributes, and provides isolated
+ * scrolling so the background page never scrolls.
  */
 export function CountryCodeDropdown({
+  id,
+  name = "countryCode",
   selectedDialCode,
   onSelect,
   disabled = false,
 }: CountryCodeDropdownProps) {
+  const generatedId = useId();
+  const dropdownId = id || `country-code-select-${generatedId}`;
+
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -139,13 +146,39 @@ export function CountryCodeDropdown({
       className="relative shrink-0"
       onKeyDown={handleKeyDown}
     >
-      {/* Trigger Button: Attached cleanly to input */}
+      {/* 
+        Native HTML Form Field for WCAG & HTML Accessibility Compliance.
+        Guarantees form field associations and assistive tech compatibility.
+      */}
+      <select
+        id={dropdownId}
+        name={name}
+        aria-label="Select Country Dialing Code"
+        value={selectedCountry.dialCode}
+        onChange={(e) => {
+          const c = COUNTRIES.find((opt) => opt.dialCode === e.target.value);
+          if (c) onSelect(c);
+        }}
+        disabled={disabled}
+        className="sr-only"
+        tabIndex={-1}
+      >
+        {COUNTRIES.map((c) => (
+          <option key={c.code} value={c.dialCode}>
+            {c.flag} {c.name} ({c.dialCode})
+          </option>
+        ))}
+      </select>
+
+      {/* Dynamic Tactile Trigger Button: Attached cleanly to input */}
       <button
         type="button"
+        id={`${dropdownId}-trigger`}
         disabled={disabled}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        aria-controls={`${dropdownId}-listbox`}
         aria-label={`Select Country Code. Currently selected: ${selectedCountry.name} (${selectedCountry.dialCode})`}
         className="h-full flex items-center gap-1.5 px-3 py-2.5 rounded-l-2xl neu-pressed bg-[#edf2f8] text-slate-800 text-xs font-semibold hover:text-slate-950 focus:outline-none transition-colors cursor-pointer border-r border-slate-300/60 disabled:opacity-50 disabled:cursor-not-allowed select-none"
       >
@@ -166,6 +199,7 @@ export function CountryCodeDropdown({
       {/* Compact Popover Dropdown Menu right under the input */}
       {isOpen && (
         <div
+          id={`${dropdownId}-listbox`}
           role="listbox"
           aria-label="Country Dialing Codes"
           className="absolute z-50 left-0 top-full mt-1.5 w-64 max-w-[calc(100vw-2.5rem)] neu-card rounded-2xl p-2 bg-[#edf1f7] shadow-xl border border-white/80 animate-in fade-in zoom-in-95 duration-150 overscroll-contain select-none"
@@ -178,7 +212,10 @@ export function CountryCodeDropdown({
             />
             <input
               ref={searchInputRef}
-              type="text"
+              id={`${dropdownId}-search`}
+              name="countrySearch"
+              type="search"
+              autoComplete="off"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search country or code..."
@@ -187,13 +224,13 @@ export function CountryCodeDropdown({
             />
           </div>
 
-          {/* Isolated Scrollable Options List */}
+          {/* Isolated Scrollable Options List: exactly 4 items visible (140px max-height) */}
           <div
             ref={listRef}
             onWheel={handleListWheel}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            className="max-h-48 overflow-y-auto space-y-0.5 pr-1 overscroll-contain touch-pan-y custom-scrollbar"
+            className="max-h-[140px] overflow-y-auto space-y-1 pr-1 overscroll-contain touch-pan-y custom-scrollbar"
           >
             {filteredCountries.length === 0 ? (
               <div className="p-3 text-center text-xs text-slate-500">

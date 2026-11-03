@@ -70,6 +70,8 @@ export function PhoneInputField({
       <div className="relative flex items-stretch neu-input rounded-2xl overflow-visible focus-within:ring-2 focus-within:ring-[#ff6422]/20 transition-all">
         {/* Dynamic Country Code Dropdown Trigger & Popover */}
         <CountryCodeDropdown
+          id={`${inputId}-country`}
+          name="countryCode"
           selectedDialCode={dialCode || DEFAULT_COUNTRY.dialCode}
           onSelect={handleCountrySelect}
           disabled={disabled}
@@ -85,6 +87,7 @@ export function PhoneInputField({
             autoComplete={autoComplete}
             required={required}
             aria-required={required}
+            aria-label={label}
             aria-invalid={!!error}
             aria-describedby={errorId}
             disabled={disabled}

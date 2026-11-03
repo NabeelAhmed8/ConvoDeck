@@ -12,8 +12,8 @@ interface CountryOptionItemProps {
 
 /**
  * CountryOptionItem
- * Single Responsibility: Renders a single compact country option row with flag,
- * country name, international dial code, and active selection checkmark.
+ * Single Responsibility: Renders a single compact country option row with fixed height (h-8),
+ * flag, country name, international dial code, and active selection checkmark.
  */
 export function CountryOptionItem({
   country,
@@ -26,7 +26,7 @@ export function CountryOptionItem({
       role="option"
       aria-selected={isSelected}
       onClick={() => onSelect(country)}
-      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs text-left transition-all cursor-pointer select-none ${
+      className={`w-full h-8 px-2.5 flex items-center justify-between rounded-xl text-xs text-left transition-all cursor-pointer select-none shrink-0 ${
         isSelected
           ? "bg-orange-50 text-[#ea5414] font-semibold neu-pressed border border-orange-200/50"
           : "text-slate-700 hover:bg-slate-200/60 active:bg-slate-300/50"
