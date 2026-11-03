@@ -209,7 +209,7 @@ export function MetaApiConnectionForm({
               <button
                 type="button"
                 onClick={() => setShowGuide(true)}
-                className="text-[11px] text-blue-600 font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-[11px] text-[#ea5414] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <BookOpen className="w-3 h-3" /> Setup Guide
               </button>
@@ -234,7 +234,7 @@ export function MetaApiConnectionForm({
               type="button"
               onClick={handleVerify}
               disabled={verifying}
-              className="px-4 py-2 text-xs font-bold rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/60 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 text-xs font-bold rounded-xl bg-[#ff6422]/10 text-[#ea5414] hover:bg-[#ff6422]/20 border border-[#ff6422]/30 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {verifying ? (
                 <>
@@ -243,7 +243,7 @@ export function MetaApiConnectionForm({
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#ff6422]" />
                   Test &amp; Verify Credentials
                 </>
               )}

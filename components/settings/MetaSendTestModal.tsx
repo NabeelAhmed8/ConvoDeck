@@ -64,7 +64,7 @@ export function MetaSendTestModal({
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
+            <div className="w-9 h-9 rounded-2xl bg-[#ff6422]/10 text-[#ea5414] flex items-center justify-center border border-[#ff6422]/20">
               <Send className="w-4 h-4" />
             </div>
             <div>
@@ -111,7 +111,7 @@ export function MetaSendTestModal({
             <button
               type="submit"
               disabled={sending}
-              className="px-5 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-600/25 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-5 py-2 text-xs font-bold rounded-xl neu-btn-primary text-white shadow-md shadow-[#ff6422]/25 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {sending ? (
                 <>

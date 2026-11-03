@@ -120,12 +120,12 @@ export function ChatMessageList({
               <div
                 className={`max-w-[85%] sm:max-w-[70%] md:max-w-[60%] rounded-2xl px-3.5 py-2 relative text-xs leading-relaxed ${
                   isAgent
-                    ? "neu-card bg-[#eff6ff] text-slate-900 rounded-tr-none border-l-4 border-l-blue-600 shadow-sm"
+                    ? "neu-card bg-[#fff7ed] text-slate-900 rounded-tr-none border-l-4 border-l-[#ff6422] shadow-sm"
                     : "neu-card bg-white text-slate-900 rounded-tl-none shadow-sm"
                 }`}
               >
                 {isAgent && (
-                  <span className="block text-[10px] font-bold text-blue-600 mb-0.5">
+                  <span className="block text-[10px] font-bold text-[#ea5414] mb-0.5">
                     {msg.agentName
                       ? `✓ ${msg.agentName}`
                       : msg.senderName || "Sales Agent"}
@@ -145,7 +145,7 @@ export function ChatMessageList({
                     <span>
                       {msg.status === "read" ? (
                         <CheckCheck
-                          className="w-3.5 h-3.5 text-blue-600"
+                          className="w-3.5 h-3.5 text-[#ff6422]"
                           aria-label="Read"
                         />
                       ) : msg.status === "delivered" ? (

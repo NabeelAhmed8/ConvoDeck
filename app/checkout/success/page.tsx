@@ -16,14 +16,14 @@ function SuccessContent() {
   const symbol = CURRENCY_SYMBOLS[currency] || "$";
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] text-slate-900 flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#ebf0f7] text-slate-900 flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="max-w-xl mx-auto w-full relative z-10 text-center">
         {/* Success Icon */}
-        <div className="w-16 h-16 rounded-2xl neu-pressed text-blue-600 flex items-center justify-center mx-auto mb-6 bg-white">
+        <div className="w-16 h-16 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center mx-auto mb-6 bg-[#edf1f7]">
           <CheckCircle2 className="w-9 h-9" />
         </div>
 
-        <span className="text-[11px] font-bold uppercase tracking-widest text-blue-600 neu-pressed px-3 py-1 rounded-full border border-blue-200 bg-[#f1f5f9]">
+        <span className="text-[11px] font-bold uppercase tracking-widest text-[#ea5414] neu-pressed px-3 py-1 rounded-full border border-orange-200 bg-orange-50">
           Payment Confirmed
         </span>
 
@@ -35,13 +35,13 @@ function SuccessContent() {
         </p>
 
         {/* Invoice Summary Card */}
-        <div className="mt-8 neu-card rounded-3xl p-5 sm:p-6 text-left space-y-4 bg-white text-slate-800">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200/80">
+        <div className="mt-8 neu-card rounded-3xl p-5 sm:p-6 text-left space-y-4 bg-[#edf1f7] text-slate-800">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-300/40">
             <div>
               <span className="text-[10px] text-slate-500 uppercase font-semibold">Invoice Number</span>
               <p className="font-mono font-bold text-sm text-slate-900">{invoiceId}</p>
             </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200">
+            <span className="px-2.5 py-0.5 rounded-full bg-orange-50 text-[#ea5414] text-xs font-bold border border-orange-200">
               Paid in Full
             </span>
           </div>
@@ -53,7 +53,7 @@ function SuccessContent() {
             </div>
             <div>
               <span className="text-slate-500 block text-[11px]">Amount Paid</span>
-              <span className="font-bold text-blue-600">
+              <span className="font-bold text-[#ff6422]">
                 {symbol}{Number(amount).toLocaleString()}
               </span>
             </div>
@@ -63,7 +63,7 @@ function SuccessContent() {
             </div>
             <div>
               <span className="text-slate-500 block text-[11px]">License Status</span>
-              <span className="font-bold text-blue-700">Active & Verified</span>
+              <span className="font-bold text-[#ea5414]">Active & Verified</span>
             </div>
           </div>
         </div>
@@ -79,9 +79,9 @@ function SuccessContent() {
           </Link>
           <Link
             href="/chat"
-            className="w-full sm:w-auto px-7 py-3.5 neu-btn text-slate-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2 cursor-pointer bg-white"
+            className="w-full sm:w-auto px-7 py-3.5 neu-btn text-slate-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <MessageSquare className="w-4 h-4 text-blue-600" />
+            <MessageSquare className="w-4 h-4 text-[#ff6422]" />
             Open WhatsApp Inbox
           </Link>
         </div>
@@ -94,7 +94,7 @@ export default function CheckoutSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-xs text-slate-400">
+        <div className="min-h-screen bg-[#ebf0f7] flex items-center justify-center text-xs text-slate-500">
           Loading receipt...
         </div>
       }

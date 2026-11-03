@@ -2,10 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X, MessageSquare } from "lucide-react";
+import { ArrowRight, Menu, X, MessageSquare, Search } from "lucide-react";
+import { NAV_ITEMS } from "./navbar/navConfig";
+import { useScrollSpy } from "./navbar/useScrollSpy";
+import { NavLinksDesktop } from "./navbar/NavLinksDesktop";
+import { NavLinksMobile } from "./navbar/NavLinksMobile";
 
 export function LandingNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const sectionIds = NAV_ITEMS.map((item) => item.id);
+  const { activeId, scrollTo } = useScrollSpy(sectionIds, "");
 
   // Close mobile menu on escape key
   useEffect(() => {
@@ -22,10 +28,15 @@ export function LandingNavbar() {
     };
   }, [mobileMenuOpen]);
 
+  const handleNavSelect = (id: string) => {
+    scrollTo(id);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className="fixed top-2 sm:top-5 inset-x-2.5 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
-      <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/90 shadow-[8px_8px_24px_rgba(160,178,204,0.3),-8px_-8px_24px_#ffffff] bg-white/95 backdrop-blur-md">
-        {/* Brand Logo */}
+      <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
+        {/* Brand Logo with Tactile Squircle Icon */}
         <Link
           href="/"
           onClick={() => setMobileMenuOpen(false)}
@@ -39,54 +50,41 @@ export function LandingNavbar() {
             <span className="font-extrabold text-sm sm:text-lg tracking-tight text-slate-900 block leading-none truncate">
               ConvoDeck
             </span>
-            <span className="text-[8.5px] sm:text-[10px] text-blue-600 font-semibold tracking-wider uppercase block mt-0.5 truncate">
+            <span className="text-[8.5px] sm:text-[10px] text-[#ff6422] font-semibold tracking-wider uppercase block mt-0.5 truncate">
               WhatsApp Sales CRM
             </span>
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav
-          aria-label="Desktop Navigation"
-          className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs font-semibold text-slate-600"
-        >
-          <a
-            href="#features"
-            className="px-3.5 py-2 rounded-full hover:neu-pressed hover:text-blue-600 transition-all whitespace-nowrap"
-          >
-            Features
-          </a>
-          <a
-            href="#pipeline"
-            className="px-3.5 py-2 rounded-full hover:neu-pressed hover:text-blue-600 transition-all whitespace-nowrap"
-          >
-            Pipeline
-          </a>
-          <a
-            href="#pricing"
-            className="px-3.5 py-2 rounded-full hover:neu-pressed hover:text-blue-600 transition-all whitespace-nowrap"
-          >
-            Pricing Plans
-          </a>
-          <a
-            href="#contact"
-            className="px-3.5 py-2 rounded-full hover:neu-pressed hover:text-blue-600 transition-all whitespace-nowrap"
-          >
-            Contact Sales
-          </a>
-        </nav>
+        {/* Dynamic Neumorphic Segmented Navigation Bar */}
+        <NavLinksDesktop
+          items={NAV_ITEMS}
+          activeId={activeId}
+          onSelect={handleNavSelect}
+        />
+
+        {/* Inset Pill Search Bar (Neumorphic reference design) */}
+        <div className="hidden xl:flex items-center relative neu-pressed px-3.5 py-1.5 rounded-full w-48 text-xs text-slate-500">
+          <Search className="w-3.5 h-3.5 text-slate-400 mr-2 shrink-0" />
+          <input
+            type="text"
+            placeholder="Search..."
+            readOnly
+            className="w-full bg-transparent border-none text-xs text-slate-700 placeholder-slate-400 focus:outline-none cursor-default"
+          />
+        </div>
 
         {/* Desktop Auth Action Buttons */}
         <div className="hidden sm:flex items-center gap-2.5 shrink-0">
           <Link
             href="/login"
-            className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-4 py-2 rounded-full transition-all cursor-pointer bg-white whitespace-nowrap shrink-0"
+            className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-4 py-2 rounded-full transition-all cursor-pointer whitespace-nowrap shrink-0"
           >
             Sign In
           </Link>
           <Link
             href="/signup"
-            className="px-5 py-2 neu-btn-primary text-white rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md whitespace-nowrap shrink-0"
+            className="px-5 py-2 neu-btn-primary text-white rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
           >
             <span>Get Started</span>
             <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
@@ -97,7 +95,7 @@ export function LandingNavbar() {
         <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 shrink-0">
           <Link
             href="/login"
-            className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-3 py-1.5 rounded-full bg-white hidden min-[440px]:block sm:hidden whitespace-nowrap shrink-0"
+            className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-3 py-1.5 rounded-full hidden min-[440px]:block sm:hidden whitespace-nowrap shrink-0"
           >
             Sign In
           </Link>
@@ -106,7 +104,7 @@ export function LandingNavbar() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
-            className="p-2 text-slate-600 hover:text-slate-900 neu-btn rounded-full transition-colors cursor-pointer bg-white shrink-0"
+            className="p-2 text-slate-700 hover:text-slate-900 neu-btn rounded-full transition-colors cursor-pointer shrink-0"
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5" aria-hidden="true" />
@@ -128,39 +126,16 @@ export function LandingNavbar() {
           <div
             role="dialog"
             aria-label="Mobile Navigation Menu"
-            className="absolute top-20 inset-x-0 neu-card rounded-3xl p-6 z-50 lg:hidden shadow-[12px_12px_30px_rgba(160,178,204,0.35),-10px_-10px_30px_#ffffff] animate-in slide-in-from-top-3 duration-200 bg-white border border-slate-200/80"
+            className="absolute top-20 inset-x-0 neu-card rounded-3xl p-6 z-50 lg:hidden shadow-[12px_12px_30px_rgba(166,178,196,0.35),-10px_-10px_30px_#ffffff] animate-in slide-in-from-top-3 duration-200 bg-[#edf1f7] border border-white/80"
           >
-            <nav className="flex flex-col space-y-2 text-sm font-semibold text-slate-800">
-              <a
-                href="#features"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 px-4 rounded-full hover:neu-pressed hover:text-blue-600 transition-all"
-              >
-                Features &amp; Benefits
-              </a>
-              <a
-                href="#pipeline"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 px-4 rounded-full hover:neu-pressed hover:text-blue-600 transition-all"
-              >
-                Visual Sales Pipeline
-              </a>
-              <a
-                href="#pricing"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 px-4 rounded-full hover:neu-pressed hover:text-blue-600 transition-all"
-              >
-                Pricing Plans
-              </a>
-              <a
-                href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-2.5 px-4 rounded-full hover:neu-pressed hover:text-blue-600 transition-all"
-              >
-                Contact Sales Team
-              </a>
+            <nav className="flex flex-col space-y-4">
+              <NavLinksMobile
+                items={NAV_ITEMS}
+                activeId={activeId}
+                onSelect={handleNavSelect}
+              />
 
-              <div className="pt-4 border-t border-slate-200/80 flex flex-col gap-2.5">
+              <div className="pt-3 border-t border-slate-200/80 flex flex-col gap-2.5">
                 <Link
                   href="/signup"
                   onClick={() => setMobileMenuOpen(false)}

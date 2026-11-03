@@ -119,8 +119,8 @@ export default function SettingsPage() {
 
       {/* 1. Workspace Profile Card */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-4">
-        <div className="flex items-center gap-3 border-b border-slate-200/80 pb-3">
-          <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
+        <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
+          <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50">
             <Building2 className="w-4 h-4" />
           </div>
           <div>
@@ -213,7 +213,7 @@ export default function SettingsPage() {
       {/* 3. Platform & Desktop Version Control */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600">
+          <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">
             <Laptop className="w-5 h-5" aria-hidden="true" />
           </div>
           <div>
@@ -243,7 +243,7 @@ export default function SettingsPage() {
       {/* 4. Onboarding & Tour Guide */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
+          <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">
             <Sparkles className="w-5 h-5" aria-hidden="true" />
           </div>
           <div>

@@ -70,15 +70,15 @@ export function TourBackdrop({ targetRect, onClose }: TourBackdropProps) {
             width: `${cutoutW}px`,
             height: `${cutoutH}px`,
             borderRadius: `${rx}px`,
-            border: "2.5px solid rgba(96, 165, 250, 0.95)",
+            border: "2.5px solid rgba(255, 100, 34, 0.95)",
             boxShadow:
-              "0 0 25px rgba(59, 130, 246, 0.65), inset 0 0 12px rgba(59, 130, 246, 0.2)",
+              "0 0 25px rgba(255, 100, 34, 0.5), inset 0 0 12px rgba(255, 100, 34, 0.2)",
           }}
         >
           {/* Animated beacon badge */}
           <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-80" />
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-blue-500 shadow-sm" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6422] opacity-80" />
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#ea5414] shadow-sm" />
           </span>
         </div>
       )}

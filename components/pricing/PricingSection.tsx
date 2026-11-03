@@ -21,12 +21,12 @@ export function PricingSection({ className }: { className?: string }) {
     <div className={className}>
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-        <span className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-2.5 sm:mb-3 inline-block">
+        <span className="text-xs font-bold uppercase tracking-widest text-[#ff6422] mb-2.5 sm:mb-3 inline-block">
           Simple, Transparent Plans
         </span>
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
           Invest in your sales pipeline. <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
+          <span className="text-[#ff6422]">
             No hidden fees. Cancel anytime.
           </span>
         </h2>
@@ -83,7 +83,7 @@ export function PricingSection({ className }: { className?: string }) {
           >
             <span>Annual</span>
             <span className="hidden min-[380px]:inline ml-1">Billing</span>
-            <span className="px-1.5 py-0.5 rounded-full bg-blue-600 text-white text-[9px] sm:text-[10px] font-black shadow-xs shrink-0">
+            <span className="px-1.5 py-0.5 rounded-full bg-[#ff6422] text-white text-[9px] sm:text-[10px] font-black shadow-xs shrink-0">
               <span className="hidden min-[380px]:inline">Save </span>20%
             </span>
           </button>
@@ -93,7 +93,7 @@ export function PricingSection({ className }: { className?: string }) {
       {/* Pricing Cards Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
         {/* 1. Starter Plan */}
-        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-white text-slate-800">
+        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-[#edf1f7] text-slate-800">
           <div>
             <h3 className="font-bold text-lg text-slate-900">{pricingData.starter.name}</h3>
             <p className="text-xs text-slate-500 mt-1 min-h-[36px]">
@@ -108,19 +108,19 @@ export function PricingSection({ className }: { className?: string }) {
               <span className="text-xs text-slate-500">/agent-team /mo</span>
             </div>
             {billingCycle === "yearly" && (
-              <span className="text-[11px] text-blue-600 font-medium block mt-1">
+              <span className="text-[11px] text-[#ea5414] font-medium block mt-1">
                 Billed annually ({currencySymbols[currency]}
                 {(pricingData.starter.prices[currency].yearly * 12).toLocaleString()}/yr)
               </span>
             )}
 
-            <div className="mt-8 border-t border-slate-200/80 pt-6 space-y-3">
+            <div className="mt-8 border-t border-slate-300/40 pt-6 space-y-3">
               <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 What&apos;s Included:
               </p>
               {pricingData.starter.features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700">
-                  <Check className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#ff6422] shrink-0 mt-0.5" />
                   <span>{feature}</span>
                 </div>
               ))}
@@ -139,15 +139,15 @@ export function PricingSection({ className }: { className?: string }) {
         </div>
 
         {/* 2. Growth Plan (Featured) */}
-        <div className="relative neu-convex rounded-3xl border-2 border-blue-600 p-6 sm:p-8 flex flex-col justify-between bg-white text-slate-900 shadow-xl">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md">
+        <div className="relative neu-convex rounded-3xl border-2 border-[#ff6422] p-6 sm:p-8 flex flex-col justify-between bg-[#edf1f7] text-slate-900 shadow-xl">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#ff6422] text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md">
             Most Popular & Recommended
           </div>
 
           <div>
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-lg text-slate-900">{pricingData.growth.name}</h3>
-              <Sparkles className="w-5 h-5 text-blue-600" />
+              <Sparkles className="w-5 h-5 text-[#ff6422]" />
             </div>
             <p className="text-xs text-slate-500 mt-1 min-h-[36px]">
               {pricingData.growth.description}
@@ -161,19 +161,19 @@ export function PricingSection({ className }: { className?: string }) {
               <span className="text-xs text-slate-500">/agent-team /mo</span>
             </div>
             {billingCycle === "yearly" && (
-              <span className="text-[11px] text-blue-600 font-medium block mt-1">
+              <span className="text-[11px] text-[#ea5414] font-medium block mt-1">
                 Billed annually ({currencySymbols[currency]}
                 {(pricingData.growth.prices[currency].yearly * 12).toLocaleString()}/yr)
               </span>
             )}
 
-            <div className="mt-8 border-t border-slate-200/80 pt-6 space-y-3">
+            <div className="mt-8 border-t border-slate-300/40 pt-6 space-y-3">
               <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 Everything in Starter, plus:
               </p>
               {pricingData.growth.features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-800">
-                  <Check className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#ff6422] shrink-0 mt-0.5" />
                   <span className="font-medium">{feature}</span>
                 </div>
               ))}
@@ -192,7 +192,7 @@ export function PricingSection({ className }: { className?: string }) {
         </div>
 
         {/* 3. Enterprise Plan */}
-        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-white text-slate-800">
+        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-[#edf1f7] text-slate-800">
           <div>
             <h3 className="font-bold text-lg text-slate-900">{pricingData.enterprise.name}</h3>
             <p className="text-xs text-slate-500 mt-1 min-h-[36px]">
@@ -207,26 +207,26 @@ export function PricingSection({ className }: { className?: string }) {
               <span className="text-xs text-slate-500">/enterprise /mo</span>
             </div>
             {billingCycle === "yearly" && (
-              <span className="text-[11px] text-blue-600 font-medium block mt-1">
+              <span className="text-[11px] text-[#ea5414] font-medium block mt-1">
                 Billed annually ({currencySymbols[currency]}
                 {(pricingData.enterprise.prices[currency].yearly * 12).toLocaleString()}/yr)
               </span>
             )}
 
-            <div className="mt-8 border-t border-slate-200/80 pt-6 space-y-3">
+            <div className="mt-8 border-t border-slate-300/40 pt-6 space-y-3">
               <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
                 Full Power & Customization:
               </p>
               {pricingData.enterprise.features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700">
-                  <Check className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 text-[#ff6422] shrink-0 mt-0.5" />
                   <span>{feature}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-slate-200/80">
+          <div className="mt-8 pt-6 border-t border-slate-300/40">
             <Link
               href={getCheckoutUrl("enterprise")}
               className="w-full py-3.5 rounded-full neu-btn text-slate-800 font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
@@ -239,9 +239,9 @@ export function PricingSection({ className }: { className?: string }) {
       </div>
 
       {/* Trust & Guarantee Banner */}
-      <div className="mt-10 sm:mt-12 max-w-4xl mx-auto px-4 sm:px-6 py-3.5 sm:py-4 rounded-2xl sm:rounded-full neu-card text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] sm:text-xs text-slate-600 bg-white">
+      <div className="mt-10 sm:mt-12 max-w-4xl mx-auto px-4 sm:px-6 py-3.5 sm:py-4 rounded-2xl sm:rounded-full neu-card text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] sm:text-xs text-slate-600 bg-[#edf1f7]">
         <span className="flex items-center gap-1.5 font-medium">
-          <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
+          <ShieldCheck className="w-4 h-4 text-[#ff6422] shrink-0" />
           14-Day Free Evaluation
         </span>
         <span className="flex items-center gap-1.5 font-medium">

@@ -33,9 +33,9 @@ export function OrderSummaryCard({
 
   return (
     <div className="space-y-5 sm:space-y-6">
-      <div className="neu-card rounded-3xl p-4 sm:p-8 space-y-5 sm:space-y-6 text-slate-800 bg-white">
+      <div className="neu-card rounded-3xl p-4 sm:p-8 space-y-5 sm:space-y-6 text-slate-800 bg-[#edf1f7]">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#ff6422]">
             Order Summary
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
@@ -125,7 +125,7 @@ export function OrderSummaryCard({
           </div>
 
           {billingCycle === "yearly" && (
-            <div className="flex items-center justify-between text-blue-600 font-semibold">
+            <div className="flex items-center justify-between text-[#ea5414] font-semibold">
               <span>Annual Pre-pay Savings (20%)</span>
               <span>Applied ✓</span>
             </div>
@@ -136,10 +136,10 @@ export function OrderSummaryCard({
             <span>{symbol}0.00</span>
           </div>
 
-          <div className="border-t border-slate-200/80 pt-4 flex items-center justify-between text-base">
+          <div className="border-t border-slate-300/40 pt-4 flex items-center justify-between text-base">
             <span className="font-bold text-slate-900">Total Due Today</span>
             <div className="text-right">
-              <span className="font-black text-2xl text-blue-600">
+              <span className="font-black text-2xl text-[#ff6422]">
                 {symbol}
                 {totalPrice.toLocaleString()}
               </span>
@@ -151,13 +151,13 @@ export function OrderSummaryCard({
         </div>
 
         {/* What's Included */}
-        <div className="border-t border-slate-200/80 pt-5 space-y-2.5">
+        <div className="border-t border-slate-300/40 pt-5 space-y-2.5">
           <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
             Plan Inclusions:
           </p>
           {activePlan.features.map((feat: string, i: number) => (
             <div key={i} className="flex items-center gap-2 text-xs text-slate-700">
-              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#ff6422] shrink-0" />
               <span>{feat}</span>
             </div>
           ))}
@@ -165,8 +165,8 @@ export function OrderSummaryCard({
       </div>
 
       {/* Guarantee Pill */}
-      <div className="p-4 rounded-2xl neu-card flex items-center gap-3 text-xs text-slate-600 bg-white">
-        <Lock className="w-4 h-4 text-blue-600 shrink-0" />
+      <div className="p-4 rounded-2xl neu-card flex items-center gap-3 text-xs text-slate-600 bg-[#edf1f7]">
+        <Lock className="w-4 h-4 text-[#ff6422] shrink-0" />
         <span>
           30-day money-back guarantee. No questions asked. Cancel anytime from your billing settings.
         </span>

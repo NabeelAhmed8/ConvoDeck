@@ -8,7 +8,7 @@ interface StatsCardProps {
   icon: LucideIcon;
   trend?: string;
   trendPositive?: boolean;
-  color?: "blue" | "green" | "purple" | "amber";
+  color?: "orange" | "brand" | "green" | "purple" | "amber";
 }
 
 export function StatsCard({
@@ -18,13 +18,14 @@ export function StatsCard({
   icon: Icon,
   trend,
   trendPositive = true,
-  color = "blue",
+  color = "orange",
 }: StatsCardProps) {
-  const colorStyles = {
-    blue: "text-slate-900 border-slate-300/50 bg-[#eef2f8]",
-    green: "text-slate-900 border-slate-300/50 bg-[#eef2f8]",
-    purple: "text-slate-900 border-slate-300/50 bg-[#eef2f8]",
-    amber: "text-slate-900 border-slate-300/50 bg-[#eef2f8]",
+  const colorStyles: Record<string, string> = {
+    orange: "text-[#ea5414] border-[#ff6422]/30 bg-[#ff6422]/5",
+    brand: "text-[#ea5414] border-[#ff6422]/30 bg-[#ff6422]/5",
+    green: "text-emerald-700 border-emerald-300/50 bg-[#eef2f8]",
+    purple: "text-purple-700 border-purple-300/50 bg-[#eef2f8]",
+    amber: "text-amber-700 border-amber-300/50 bg-[#eef2f8]",
   };
 
   return (

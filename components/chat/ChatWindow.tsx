@@ -98,7 +98,7 @@ export function ChatWindow() {
   if (!activeLead) {
     return (
       <div className="hidden md:flex flex-1 min-w-0 min-h-0 flex-col items-center justify-center p-6 text-center text-slate-600 bg-[#f0f4fa]">
-        <div className="w-16 h-16 rounded-2xl neu-pressed text-blue-600 flex items-center justify-center mb-4 bg-white">
+        <div className="w-16 h-16 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center mb-4 bg-white">
           <Phone className="w-8 h-8" aria-hidden="true" />
         </div>
         <h3 className="text-lg font-bold text-slate-900">No Conversation Selected</h3>

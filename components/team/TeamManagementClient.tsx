@@ -149,7 +149,7 @@ export function TeamManagementClient({
         <div className="neu-card neu-card-hover p-5 rounded-2xl bg-white">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500">Total Team</span>
-            <div className="p-2.5 rounded-xl neu-pressed text-blue-600 bg-[#f1f5f9]">
+            <div className="p-2.5 rounded-xl neu-pressed text-[#ff6422] bg-[#f1f5f9]">
               <Users className="w-4 h-4" />
             </div>
           </div>

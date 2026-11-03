@@ -68,7 +68,7 @@ export function TeamAgentsList({
                       <span className="font-bold text-slate-900 block text-xs">
                         {member.name}{" "}
                         {isSelf && (
-                          <span className="text-[10px] text-blue-600 font-bold">
+                          <span className="text-[10px] text-[#ea5414] font-bold">
                             (You)
                           </span>
                         )}
@@ -96,7 +96,7 @@ export function TeamAgentsList({
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold capitalize ${
                       member.role === "admin"
                         ? "bg-purple-100 text-purple-800 border border-purple-200"
-                        : "bg-blue-100 text-blue-800 border border-blue-200"
+                        : "bg-[#ff6422]/10 text-[#ea5414] border border-[#ff6422]/20"
                     }`}
                   >
                     {member.role === "admin" ? "Workspace Admin" : "Sales Agent"}

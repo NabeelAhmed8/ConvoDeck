@@ -3,15 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --background: #f3f6fa;
-  --foreground: #0f172a;
+  --background: #ebf0f7;
+  --foreground: #19202c;
+  --accent-orange: #ff6422;
+  --accent-orange-hover: #ea5414;
+  --accent-orange-light: #fff1eb;
 }
 
 html {
   overflow-x: clip;
   width: 100%;
   max-width: 100vw;
-  background-color: #f3f6fa;
+  background-color: #ebf0f7;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -33,7 +36,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent mobile browser (iOS Safari / Android Chrome) auto-zoom on input focus */
+/* Prevent mobile browser auto-zoom on input focus */
 @media screen and (max-width: 768px) {
   input,
   select,
@@ -43,21 +46,22 @@ body {
 }
 
 /* ============================================================== */
-/* White & Royal Blue Neumorphism (Soft UI) System Utilities      */
-/* Pristine pure white cards, soft blue-slate shadows, debossed   */
-/* wells, and vibrant Royal Blue (#3674fe / #2563eb) accents.    */
+/* Soft Neumorphism (Claymorphism) & Tangerine Accent System      */
+/* Tactile soft-grey surfaces (#ebf0f7), dual specular light and  */
+/* ambient occlusion shadows, recessed wells, and warm orange     */
+/* (#ff6422) primary highlights matching the visual design.       */
 /* ============================================================== */
 @layer utilities {
-  /* Dribbble Burak Ünal Neumorphic Side Menu System */
+  /* Dribbble Neumorphic Side Menu System */
   .neu-dribbble-rail {
-    background: #f0f3f8;
-    box-shadow: 10px 10px 24px rgba(166, 180, 200, 0.45), -10px -10px 24px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    background: #edf1f7;
+    box-shadow: 10px 10px 24px rgba(166, 178, 196, 0.45), -10px -10px 24px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
   }
 
   .neu-dribbble-active {
-    background: #edf2f7;
-    box-shadow: inset 3px 3px 6px #cbd6e2, inset -3px -3px 6px #ffffff;
+    background: #e6ecf4;
+    box-shadow: inset 3px 3px 6px #c4cedc, inset -3px -3px 6px #ffffff;
     border: 1px solid rgba(203, 213, 225, 0.45);
   }
 
@@ -77,25 +81,25 @@ body {
     margin: 0.5rem auto;
   }
 
-  /* Extruded / Raised Surfaces (Pure White Brilliance) */
+  /* Extruded / Raised Surfaces */
   .neu-convex {
-    background: linear-gradient(145deg, #ffffff, #f7f9fd);
-    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.32), -6px -6px 18px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.95);
-    border-radius: 1.5rem;
-  }
-
-  .neu-flat {
-    background: #ffffff;
-    box-shadow: 5px 5px 15px rgba(160, 178, 204, 0.28), -5px -5px 15px #ffffff;
+    background: linear-gradient(145deg, #ffffff, #e6ecf4);
+    box-shadow: 6px 6px 16px #c8d3e0, -6px -6px 16px #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 1.5rem;
   }
 
+  .neu-flat {
+    background: #edf1f7;
+    box-shadow: 5px 5px 14px #c8d3e0, -5px -5px 14px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 1.5rem;
+  }
+
   .neu-card {
-    background: #ffffff;
-    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.3), -6px -6px 18px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    background: #edf1f7;
+    box-shadow: 7px 7px 18px #c8d3e0, -7px -7px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 1.75rem;
   }
 
@@ -103,93 +107,93 @@ body {
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .neu-card-hover:hover {
-    box-shadow: 9px 9px 24px rgba(150, 170, 200, 0.38), -8px -8px 20px #ffffff;
+    box-shadow: 10px 10px 24px #bcc7d6, -9px -9px 22px #ffffff;
     transform: translateY(-2px);
   }
 
-  /* Debossed / Inset Wells (Inputs, Active Tabs, Dropzones) */
+  /* Debossed / Inset Wells (Inputs, Active Tabs, Search Bar) */
   .neu-pressed {
-    background: #f0f4f9;
-    box-shadow: inset 4px 4px 8px #d5e0ee, inset -4px -4px 8px #ffffff;
-    border: 1px solid rgba(203, 213, 225, 0.5);
+    background: #e9eff6;
+    box-shadow: inset 4px 4px 8px #c4cedc, inset -4px -4px 8px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.45);
     border-radius: 1.25rem;
   }
 
   .neu-pressed-accent {
-    background: #eaf1fe;
-    box-shadow: inset 3px 3px 7px rgba(37, 99, 235, 0.22), inset -4px -4px 8px #ffffff, inset 0 0 10px rgba(54, 116, 254, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.45);
-    color: #1d4ed8;
+    background: #fff3ec;
+    box-shadow: inset 3px 3px 6px rgba(255, 100, 34, 0.2), inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 100, 34, 0.35);
+    color: #ea5414;
     border-radius: 1.25rem;
   }
 
   .neu-pressed-emerald {
-    background: #eaf1fe;
-    box-shadow: inset 3px 3px 7px rgba(37, 99, 235, 0.22), inset -4px -4px 8px #ffffff, inset 0 0 10px rgba(54, 116, 254, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.45);
-    color: #1d4ed8;
+    background: #fff3ec;
+    box-shadow: inset 3px 3px 6px rgba(255, 100, 34, 0.2), inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 100, 34, 0.35);
+    color: #ea5414;
     border-radius: 1.25rem;
   }
 
   /* Neumorphic Segmented Tab Controls */
   .neu-tab-container {
-    background: #edf2f8;
-    box-shadow: inset 3px 3px 6px #d1dced, inset -3px -3px 6px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: #e6edf5;
+    box-shadow: inset 3px 3px 6px #c4cedc, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: 9999px;
   }
 
   .neu-tab {
-    background: #ffffff;
-    box-shadow: 3px 3px 7px rgba(160, 178, 204, 0.25), -3px -3px 7px #ffffff;
-    color: #475569;
+    background: #edf1f7;
+    box-shadow: 3px 3px 7px #c8d3e0, -3px -3px 7px #ffffff;
+    color: #5a6679;
     transition: all 0.2s ease;
     border-radius: 9999px;
   }
   .neu-tab:hover {
-    color: #0f172a;
-    box-shadow: 4px 4px 10px rgba(150, 170, 200, 0.35), -4px -4px 10px #ffffff;
+    color: #19202c;
+    box-shadow: 4px 4px 10px #bcc7d6, -4px -4px 10px #ffffff;
   }
 
   .neu-tab-active {
-    background: #eaf1fe;
-    box-shadow: inset 3px 3px 6px #c4d7f8, inset -3px -3px 6px #ffffff;
-    color: #1d4ed8;
+    background: #ff6422;
+    box-shadow: 3px 3px 10px rgba(255, 100, 34, 0.35), -2px -2px 6px #ffffff;
+    color: #ffffff;
     font-weight: 700;
     border-radius: 9999px;
   }
 
   /* Sidebar */
   .neu-sidebar {
-    background: #ffffff;
-    box-shadow: 6px 0 20px rgba(160, 178, 204, 0.25);
-    border-right: 1px solid rgba(226, 232, 240, 0.85);
+    background: #edf1f7;
+    box-shadow: 6px 0 20px rgba(166, 178, 196, 0.3);
+    border-right: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 1.75rem;
   }
 
   /* Tactile Neumorphic Buttons */
   .neu-btn {
-    background: #ffffff;
-    box-shadow: 4px 4px 12px rgba(160, 178, 204, 0.28), -4px -4px 12px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    color: #0f172a;
+    background: #edf1f7;
+    box-shadow: 4px 4px 12px #c8d3e0, -4px -4px 12px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    color: #19202c;
     transition: all 0.2s ease;
     border-radius: 9999px;
   }
   .neu-btn:hover {
-    box-shadow: 6px 6px 16px rgba(150, 170, 200, 0.35), -5px -5px 14px #ffffff;
+    box-shadow: 6px 6px 16px #bcc7d6, -5px -5px 14px #ffffff;
     transform: translateY(-1px);
     color: #000000;
   }
   .neu-btn:active {
-    box-shadow: inset 3px 3px 6px #d5e0ee, inset -3px -3px 6px #ffffff;
+    box-shadow: inset 3px 3px 6px #c4cedc, inset -3px -3px 6px #ffffff;
     transform: translateY(0);
   }
 
-  /* Signature Royal Blue Primary Button */
+  /* Signature Vibrant Warm Orange Primary Button */
   .neu-btn-primary {
-    background: linear-gradient(135deg, #3674fe, #1e5ade);
-    box-shadow: 5px 5px 16px rgba(37, 99, 235, 0.38), -3px -3px 10px #ffffff;
+    background: linear-gradient(135deg, #ff6a28, #f55513);
+    box-shadow: 5px 5px 16px rgba(245, 85, 19, 0.36), -3px -3px 10px #ffffff;
     color: #ffffff !important;
     font-weight: 700;
     border: none;
@@ -197,19 +201,18 @@ body {
     border-radius: 9999px;
   }
   .neu-btn-primary:hover {
-    background: linear-gradient(135deg, #2b6bf5, #164ec9);
-    box-shadow: 6px 6px 18px rgba(37, 99, 235, 0.48), -4px -4px 12px #ffffff;
+    background: linear-gradient(135deg, #ff783b, #ea4c0b);
+    box-shadow: 6px 6px 18px rgba(245, 85, 19, 0.46), -4px -4px 12px #ffffff;
     transform: translateY(-1px);
   }
   .neu-btn-primary:active {
-    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.25);
     transform: translateY(0);
   }
 
-  /* Signature Blue & White Action Button (Also aliases emerald to royal blue for unified theme) */
   .neu-btn-emerald {
-    background: linear-gradient(135deg, #3674fe, #1e5ade);
-    box-shadow: 5px 5px 16px rgba(37, 99, 235, 0.38), -3px -3px 10px #ffffff;
+    background: linear-gradient(135deg, #ff6a28, #f55513);
+    box-shadow: 5px 5px 16px rgba(245, 85, 19, 0.36), -3px -3px 10px #ffffff;
     color: #ffffff !important;
     font-weight: 700;
     border: none;
@@ -217,61 +220,145 @@ body {
     border-radius: 9999px;
   }
   .neu-btn-emerald:hover {
-    background: linear-gradient(135deg, #2b6bf5, #164ec9);
-    box-shadow: 6px 6px 18px rgba(37, 99, 235, 0.48), -4px -4px 12px #ffffff;
+    background: linear-gradient(135deg, #ff783b, #ea4c0b);
+    box-shadow: 6px 6px 18px rgba(245, 85, 19, 0.46), -4px -4px 12px #ffffff;
     transform: translateY(-1px);
   }
-  .neu-btn-emerald:active {
-    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.3);
-    transform: translateY(0);
-  }
 
-  /* Inputs */
+  /* Inset Inputs & Search Capsules */
   .neu-input {
-    background: #ffffff;
-    box-shadow: inset 3px 3px 6px rgba(160, 178, 204, 0.25), inset -3px -3px 6px #ffffff;
-    border: 1px solid rgba(203, 213, 225, 0.6);
-    color: #0f172a;
+    background: #e9eff6;
+    box-shadow: inset 3px 3px 6px #c4cedc, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.5);
+    color: #19202c;
     border-radius: 1.25rem;
   }
   .neu-input:focus {
-    box-shadow: inset 2px 2px 5px rgba(160, 178, 204, 0.2), inset -2px -2px 5px #ffffff, 0 0 0 3px rgba(37, 99, 235, 0.18);
-    border-color: #2563eb;
+    box-shadow: inset 2px 2px 5px #c4cedc, inset -2px -2px 5px #ffffff, 0 0 0 3px rgba(255, 100, 34, 0.25);
+    border-color: #ff6422;
     outline: none;
+  }
+
+  /* Signature Orange Dot Indicator */
+  .neu-dot-accent {
+    width: 6px;
+    height: 6px;
+    background-color: #ff6422;
+    border-radius: 9999px;
+    display: inline-block;
+  }
+
+  /* Squircle Feature Icon Tile (Bottom-left from screenshot) */
+  .neu-icon-tile {
+    background: #edf1f7;
+    box-shadow: 5px 5px 14px #c8d3e0, -5px -5px 14px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 1.25rem;
+    transition: all 0.2s ease;
+  }
+  .neu-icon-tile:hover {
+    box-shadow: 7px 7px 18px #bcc7d6, -6px -6px 16px #ffffff;
+    transform: translateY(-2px);
+  }
+
+  /* Segmented Capsule Bar (Bottom-right from screenshot) */
+  .neu-segmented-bar {
+    background: #edf1f7;
+    box-shadow: 6px 6px 16px #c8d3e0, -6px -6px 16px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 9999px;
+  }
+
+  /* Tactile Neumorphic Navigation Buttons with 3D elevation and pressed depression */
+  .neu-nav-btn {
+    background: #edf1f7;
+    box-shadow: 3px 3px 8px #c8d3e0, -3px -3px 8px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    color: #475569;
+    border-radius: 9999px;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .neu-nav-btn:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 5px 5px 14px #bcc7d6, -5px -5px 12px #ffffff;
+  }
+  .neu-nav-btn:active {
+    transform: translateY(0.5px) scale(0.97);
+    box-shadow: inset 2.5px 2.5px 5px #c4cedc, inset -2.5px -2.5px 5px #ffffff;
+  }
+  .neu-nav-btn-active {
+    background: #fff4ed;
+    color: #ea5414;
+    font-weight: 700;
+    box-shadow: inset 3px 3px 6px rgba(234, 84, 20, 0.22), inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 100, 34, 0.35);
+    border-radius: 9999px;
+    transform: scale(0.98);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .neu-nav-btn-active:hover {
+    color: #ea5414;
+    box-shadow: inset 3px 3px 7px rgba(234, 84, 20, 0.28), inset -3px -3px 7px #ffffff;
+  }
+
+  /* Active Option Pill (like size 8 pill) */
+  .neu-pill-active {
+    background: #ff6422;
+    color: #ffffff;
+    box-shadow: 3px 3px 8px rgba(255, 100, 34, 0.35), -2px -2px 6px #ffffff;
+  }
+
+  .neu-pill-idle {
+    background: #edf1f7;
+    color: #5a6679;
+    box-shadow: 3px 3px 7px #c8d3e0, -3px -3px 7px #ffffff;
+  }
+
+  /* Circular Floating Play Button (Watch video) */
+  .neu-circle-btn {
+    background: #edf1f7;
+    box-shadow: 4px 4px 10px #c8d3e0, -4px -4px 10px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+  }
+  .neu-circle-btn:hover {
+    box-shadow: 6px 6px 14px #bcc7d6, -5px -5px 12px #ffffff;
+    transform: scale(1.05);
   }
 
   /* Aliases for compatibility */
   .glass-panel {
-    background: #ffffff;
-    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.3), -6px -6px 18px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    background: #edf1f7;
+    box-shadow: 7px 7px 18px #c8d3e0, -7px -7px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
   }
   .glass-card {
-    background: #ffffff;
-    box-shadow: 6px 6px 18px rgba(160, 178, 204, 0.3), -6px -6px 18px #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.95);
+    background: #edf1f7;
+    box-shadow: 7px 7px 18px #c8d3e0, -7px -7px 18px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
   }
   .glass-sidebar {
-    background: #ffffff;
-    box-shadow: 6px 0 20px rgba(160, 178, 204, 0.25);
-    border-right: 1px solid rgba(226, 232, 240, 0.85);
+    background: #edf1f7;
+    box-shadow: 6px 0 20px rgba(166, 178, 196, 0.3);
+    border-right: 1px solid rgba(255, 255, 255, 0.85);
   }
   .glass-tab {
-    background: #ffffff;
-    box-shadow: 3px 3px 7px rgba(160, 178, 204, 0.25), -3px -3px 7px #ffffff;
-    color: #475569;
+    background: #edf1f7;
+    box-shadow: 3px 3px 7px #c8d3e0, -3px -3px 7px #ffffff;
+    color: #5a6679;
   }
   .glass-tab-active {
-    background: #eaf1fe;
-    box-shadow: inset 3px 3px 6px #c4d7f8, inset -3px -3px 6px #ffffff;
-    color: #1d4ed8;
+    background: #ff6422;
+    box-shadow: 3px 3px 10px rgba(255, 100, 34, 0.35), -2px -2px 6px #ffffff;
+    color: #ffffff;
     font-weight: 700;
   }
   .glass-input {
-    background: #ffffff;
-    box-shadow: inset 3px 3px 6px rgba(160, 178, 204, 0.25), inset -3px -3px 6px #ffffff;
-    border: 1px solid rgba(203, 213, 225, 0.6);
-    color: #0f172a;
+    background: #e9eff6;
+    box-shadow: inset 3px 3px 6px #c4cedc, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(203, 213, 225, 0.5);
+    color: #19202c;
   }
 }
 
@@ -349,4 +436,9 @@ button.neu-btn-primary svg.lucide,
 .text-white svg.lucide,
 [class*="neu-btn-primary"] svg.lucide {
   color: #ffffff !important;
+}
+
+/* Active orange icon illumination on Neumorphic Nav Buttons */
+.neu-nav-btn-active svg.lucide {
+  color: #ea5414 !important;
 }

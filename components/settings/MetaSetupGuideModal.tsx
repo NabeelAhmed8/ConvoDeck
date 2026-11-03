@@ -28,7 +28,7 @@ export function MetaSetupGuideModal({
         {/* Header */}
         <div className="p-3 sm:p-4 border-b border-slate-100 flex items-center justify-between gap-2.5 shrink-0">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#ff6422]/10 text-[#ea5414] flex items-center justify-center border border-[#ff6422]/20 shrink-0">
               <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="min-w-0 flex-1">
@@ -56,7 +56,7 @@ export function MetaSetupGuideModal({
           <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 min-w-0">
-                <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#ff6422] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                   1
                 </span>
                 <span className="font-bold text-slate-900 text-xs sm:text-sm">
@@ -67,7 +67,7 @@ export function MetaSetupGuideModal({
                 href="https://developers.facebook.com/apps"
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-600 font-semibold inline-flex items-center gap-1 hover:underline text-[11px] shrink-0"
+                className="text-[#ea5414] font-semibold inline-flex items-center gap-1 hover:underline text-[11px] shrink-0"
               >
                 Meta Apps <ExternalLink className="w-3 h-3" />
               </a>
@@ -84,7 +84,7 @@ export function MetaSetupGuideModal({
           {/* Step 2 */}
           <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+              <span className="w-5 h-5 rounded-full bg-[#ff6422] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                 2
               </span>
               <span className="font-bold text-slate-900 text-xs sm:text-sm">
@@ -104,7 +104,7 @@ export function MetaSetupGuideModal({
           {/* Step 3 */}
           <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+              <span className="w-5 h-5 rounded-full bg-[#ff6422] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                 3
               </span>
               <span className="font-bold text-slate-900 text-xs sm:text-sm">

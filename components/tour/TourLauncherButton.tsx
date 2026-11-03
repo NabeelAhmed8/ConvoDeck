@@ -31,7 +31,7 @@ export function TourLauncherButton({
         <button
           type="button"
           onClick={triggerTour}
-          className="px-4 py-2 text-xs font-semibold rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
+          className="px-4 py-2 text-xs font-semibold rounded-2xl neu-btn-primary text-white transition-colors flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
         >
           <Compass className="w-4 h-4 text-white" aria-hidden="true" />
           Start Button Tour
@@ -56,7 +56,7 @@ export function TourLauncherButton({
         onClick={triggerTour}
         title="Website Buttons Guide"
         aria-label="Website Buttons Guide"
-        className="group relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full neu-btn text-slate-700 hover:text-blue-600 transition-colors cursor-pointer"
+        className="group relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full neu-btn text-slate-700 hover:text-[#ea5414] transition-colors cursor-pointer"
       >
         <Compass className="w-5 h-5 transition-transform group-hover:rotate-45" aria-hidden="true" />
       </button>
@@ -69,13 +69,13 @@ export function TourLauncherButton({
         type="button"
         onClick={triggerTour}
         aria-label="Start Website Buttons Tour"
-        className="flex-1 flex items-center justify-between px-3.5 py-2 rounded-2xl text-xs font-medium text-slate-700 hover:text-blue-600 hover:bg-white/60 neu-flat transition-colors cursor-pointer group"
+        className="flex-1 flex items-center justify-between px-3.5 py-2 rounded-2xl text-xs font-medium text-slate-700 hover:text-[#ea5414] hover:bg-white/60 neu-flat transition-colors cursor-pointer group"
       >
         <div className="flex items-center gap-2.5">
-          <Compass className="w-4 h-4 text-blue-600 transition-transform group-hover:rotate-45" aria-hidden="true" />
+          <Compass className="w-4 h-4 text-[#ea5414] transition-transform group-hover:rotate-45" aria-hidden="true" />
           <span>Buttons Tour</span>
         </div>
-        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200/50 font-bold">
+        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#ff6422]/10 text-[#ea5414] border border-[#ff6422]/30 font-bold">
           Guide
         </span>
       </button>

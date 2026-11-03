@@ -22,7 +22,7 @@ export function ChatSidebarHeader({
     <div className="p-3 sm:p-4 border-b border-slate-200/70 bg-white shadow-xs shrink-0">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full neu-convex flex items-center justify-center text-blue-600 bg-white">
+          <div className="w-8 h-8 rounded-full neu-convex flex items-center justify-center text-[#ff6422] bg-white">
             <MessageSquareDot className="w-4 h-4" aria-hidden="true" />
           </div>
           <div>

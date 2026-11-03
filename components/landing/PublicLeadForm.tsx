@@ -42,9 +42,9 @@ export function PublicLeadForm() {
       <div
         role="alert"
         aria-live="polite"
-        className="neu-card p-8 rounded-3xl text-center space-y-3 bg-white text-slate-800"
+        className="neu-card p-8 rounded-3xl text-center space-y-3 bg-[#edf1f7] text-slate-800"
       >
-        <div className="w-12 h-12 neu-pressed text-blue-600 rounded-2xl flex items-center justify-center mx-auto bg-[#f1f5f9]">
+        <div className="w-12 h-12 neu-pressed text-[#ff6422] rounded-2xl flex items-center justify-center mx-auto">
           <CheckCircle2 className="w-6 h-6" aria-hidden="true" />
         </div>
         <h4 className="text-xl font-bold text-slate-900">Inquiry Received</h4>
@@ -60,7 +60,7 @@ export function PublicLeadForm() {
             setEmail("");
             setMessage("");
           }}
-          className="text-xs font-semibold text-blue-600 neu-btn px-5 py-2 rounded-full pt-2 inline-block cursor-pointer"
+          className="text-xs font-semibold text-[#ea5414] neu-btn px-5 py-2 rounded-full pt-2 inline-block cursor-pointer"
         >
           Send another message
         </button>
@@ -72,7 +72,7 @@ export function PublicLeadForm() {
     <form
       onSubmit={handleSubmit}
       aria-label="Direct sales contact form"
-      className="neu-card p-6 sm:p-8 rounded-3xl space-y-4 text-left bg-white text-slate-800"
+      className="neu-card p-6 sm:p-8 rounded-3xl space-y-4 text-left bg-[#edf1f7] text-slate-800"
     >
       <div>
         <h4 className="text-lg font-bold text-slate-900">Connect with Our Sales Team</h4>

@@ -34,7 +34,7 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
   return (
     <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3">
       <div className="flex items-center gap-2">
-        <Globe className="w-4 h-4 text-blue-600" />
+        <Globe className="w-4 h-4 text-[#ea5414]" />
         <span className="text-xs font-bold text-slate-800">
           Meta WhatsApp Webhook Configuration
         </span>
@@ -59,7 +59,7 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
             type="button"
             onClick={handleCopyUrl}
             title="Copy Callback URL"
-            className="p-1.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-600 hover:text-[#ea5414] hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
           >
             {copiedUrl ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -79,7 +79,7 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
             type="button"
             onClick={handleCopyToken}
             title="Copy Verify Token"
-            className="p-1.5 rounded-lg text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-600 hover:text-[#ea5414] hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
           >
             {copiedToken ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
           </button>

@@ -64,7 +64,7 @@ export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
                         log.action === "REVOKED_ACCESS"
                       ? "bg-rose-100 text-rose-800 border border-rose-300"
                       : log.action === "UPDATED_LEAD_STAGE"
-                      ? "bg-blue-100 text-blue-800 border border-blue-300"
+                      ? "bg-[#ff6422]/10 text-[#ea5414] border border-[#ff6422]/30"
                       : "bg-purple-100 text-purple-800 border border-purple-300"
                   }`}
                 >

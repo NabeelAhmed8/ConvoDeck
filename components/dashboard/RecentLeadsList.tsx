@@ -19,13 +19,13 @@ export function RecentLeadsList({ leads }: RecentLeadsListProps) {
         <Link
           href="/pipeline"
           aria-label="View all leads in sales pipeline"
-          className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors"
+          className="text-xs font-bold text-[#ea5414] hover:text-[#c2410c] flex items-center gap-1 transition-colors"
         >
           View Pipeline <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
       </div>
 
-      <div role="list" aria-label="Recent leads" className="divide-y divide-slate-200/60">
+      <div role="list" aria-label="Recent leads" className="divide-y divide-slate-300/40">
         {leads.slice(0, 5).map((lead) => (
           <div
             key={lead._id}
@@ -35,7 +35,7 @@ export function RecentLeadsList({ leads }: RecentLeadsListProps) {
             <div className="flex items-center gap-3 min-w-0">
               <div
                 aria-hidden="true"
-                className="w-10 h-10 rounded-2xl neu-pressed text-blue-600 flex items-center justify-center font-bold text-xs shrink-0"
+                className="w-10 h-10 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center font-bold text-xs shrink-0"
               >
                 {lead.name.substring(0, 2).toUpperCase()}
               </div>
@@ -56,7 +56,7 @@ export function RecentLeadsList({ leads }: RecentLeadsListProps) {
               <Link
                 href={`/chat?leadId=${lead._id}`}
                 aria-label={`Open WhatsApp conversation with ${lead.name}`}
-                className="w-8 h-8 rounded-full neu-btn text-blue-600 hover:text-blue-700 flex items-center justify-center transition-all cursor-pointer"
+                className="w-8 h-8 rounded-full neu-btn text-[#ff6422] hover:text-[#ea5414] flex items-center justify-center transition-all cursor-pointer"
                 title="Open WhatsApp Chat"
               >
                 <MessageSquare className="w-4 h-4" aria-hidden="true" />

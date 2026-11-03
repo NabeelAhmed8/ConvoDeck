@@ -119,7 +119,7 @@ export function TourCard({
       {/* Header: Badge & Controls */}
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#ff6422]/10 text-[#ea5414] border border-[#ff6422]/20">
             {step.badge}
           </span>
           <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500">
@@ -132,7 +132,7 @@ export function TourCard({
             onClick={onOpenDirectory}
             aria-label="Browse All Buttons"
             title="Browse All Buttons Guide"
-            className="px-2 py-1 text-[11px] font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+            className="px-2 py-1 text-[11px] font-medium text-slate-600 hover:text-[#ea5414] hover:bg-[#ff6422]/10 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
           >
             <BookOpen className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">All Buttons</span>
@@ -151,7 +151,7 @@ export function TourCard({
 
       {/* Button Title & Icon */}
       <div className="flex items-start gap-3 mb-2">
-        <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20">
+        <div className="w-9 h-9 rounded-2xl neu-btn-primary text-white flex items-center justify-center shrink-0 shadow-sm shadow-[#ff6422]/20">
           <IconComponent className="w-4 h-4" />
         </div>
         <div>
@@ -182,7 +182,7 @@ export function TourCard({
               aria-label={`Go to button ${idx + 1}`}
               className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer shrink-0 ${
                 idx === currentStepIndex
-                  ? "w-4 bg-blue-600"
+                  ? "w-4 bg-[#ff6422]"
                   : "w-1.5 bg-slate-200 hover:bg-slate-300"
               }`}
             />
@@ -205,7 +205,7 @@ export function TourCard({
           <button
             onClick={onNext}
             type="button"
-            className="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-600/25 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+            className="px-3.5 py-1.5 text-xs font-bold rounded-xl neu-btn-primary text-white shadow-md shadow-[#ff6422]/25 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
           >
             {isLastStep ? (
               <>

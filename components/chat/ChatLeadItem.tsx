@@ -64,7 +64,7 @@ export function ChatLeadItem({
       }}
       className={`p-3.5 flex items-start gap-3 cursor-pointer transition-all relative ${
         isSelected
-          ? "neu-pressed-accent border-l-4 border-blue-600 bg-[#eff6ff]/40"
+          ? "neu-pressed-accent border-l-4 border-[#ff6422] bg-[#fff7ed]/50"
           : "hover:bg-slate-50/80"
       }`}
     >
@@ -72,7 +72,7 @@ export function ChatLeadItem({
       <div className="relative flex-shrink-0">
         <div
           aria-hidden="true"
-          className="w-11 h-11 rounded-full neu-pressed text-slate-800 flex items-center justify-center font-bold text-xs bg-[#f1f5f9]"
+          className="w-11 h-11 rounded-full neu-pressed text-slate-800 flex items-center justify-center font-bold text-xs"
         >
           {initials}
         </div>
@@ -91,7 +91,7 @@ export function ChatLeadItem({
         <div className="flex items-center justify-between mb-1 gap-1">
           <h3
             className={`text-xs font-bold truncate ${
-              isSelected ? "text-blue-600" : "text-slate-900"
+              isSelected ? "text-[#ff6422]" : "text-slate-900"
             }`}
           >
             {lead.name}
@@ -163,12 +163,12 @@ export function ChatLeadItem({
           >
             {lead.unreadCount ? (
               <>
-                <CheckCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <CheckCheck className="w-3.5 h-3.5 text-[#ff6422] shrink-0" />
                 <span className="truncate">Mark as read</span>
               </>
             ) : (
               <>
-                <MessageSquareDot className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <MessageSquareDot className="w-3.5 h-3.5 text-[#ff6422] shrink-0" />
                 <span className="truncate">Mark as unread</span>
               </>
             )}

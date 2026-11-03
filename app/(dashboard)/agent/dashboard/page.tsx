@@ -46,10 +46,10 @@ export default async function AgentDashboardPage() {
   return (
     <div className="max-w-7xl mx-auto space-y-6 w-full min-w-0">
       {/* Agent Welcome Hero Banner */}
-      <div className="relative overflow-hidden rounded-3xl neu-card p-4 sm:p-6 md:p-8 text-slate-900 bg-white">
+      <div className="relative overflow-hidden rounded-3xl neu-card p-4 sm:p-6 md:p-8 text-slate-900 bg-[#edf1f7]">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full neu-pressed text-blue-700 text-xs font-bold mb-3 border border-blue-200 bg-[#f1f5f9]">
-            <Headphones className="w-3.5 h-3.5 text-blue-600" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full neu-pressed text-[#ea5414] text-xs font-bold mb-3 border border-orange-200 bg-orange-50">
+            <Headphones className="w-3.5 h-3.5 text-[#ff6422]" />
             Agent Workstation • {workspace?.name || "ConvoDeck CRM"}
           </div>
 
@@ -70,7 +70,7 @@ export default async function AgentDashboardPage() {
             </Link>
             <Link
               href="/pipeline"
-              className="px-5 py-2.5 neu-btn text-slate-800 rounded-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer bg-white"
+              className="px-5 py-2.5 neu-btn text-slate-800 rounded-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
             >
               <Kanban className="w-4 h-4" />
               View Sales Pipeline
@@ -78,15 +78,15 @@ export default async function AgentDashboardPage() {
           </div>
         </div>
 
-        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-[#ff6422]/5 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* Agent Performance & Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="neu-card neu-card-hover p-5 rounded-2xl text-slate-900 bg-white">
+        <div className="neu-card neu-card-hover p-5 rounded-2xl text-slate-900 bg-[#edf1f7]">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500">Assigned Inquiries</span>
-            <div className="w-8 h-8 rounded-xl neu-pressed text-blue-600 flex items-center justify-center font-bold bg-[#f1f5f9]">
+            <div className="w-8 h-8 rounded-xl neu-pressed text-[#ff6422] flex items-center justify-center font-bold">
               <MessageSquare className="w-4 h-4" />
             </div>
           </div>
@@ -145,7 +145,7 @@ export default async function AgentDashboardPage() {
             </div>
             <Link
               href="/chat"
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors"
+              className="text-xs font-semibold text-[#ea5414] hover:text-[#c2410c] flex items-center gap-1 transition-colors"
             >
               Open Inbox <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -201,9 +201,9 @@ export default async function AgentDashboardPage() {
         {/* Right Column: Agent Checklist & Security Notice */}
         <div className="lg:col-span-4 space-y-6">
           {/* Agent Security Attribution Card */}
-          <div className="neu-card text-slate-900 rounded-3xl p-6 space-y-3 bg-white">
+          <div className="neu-card text-slate-900 rounded-3xl p-6 space-y-3 bg-[#edf1f7]">
             <div className="flex items-center gap-2.5">
-              <ShieldCheck className="w-5 h-5 text-blue-600" />
+              <ShieldCheck className="w-5 h-5 text-[#ff6422]" />
               <h3 className="font-bold text-sm text-slate-900">
                 Agent Security & Accountability
               </h3>
@@ -211,22 +211,22 @@ export default async function AgentDashboardPage() {
             <p className="text-xs text-slate-600 leading-relaxed">
               Every message you send from this workstation is stamped with your agent name (<strong className="text-slate-900">{user.name}</strong>) and logged to the company audit trail.
             </p>
-            <div className="pt-2 text-[11px] text-blue-700 font-semibold flex items-center gap-1.5">
+            <div className="pt-2 text-[11px] text-[#ea5414] font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
               Verified Agent Session Active
             </div>
           </div>
 
           {/* Daily Sales Best Practices */}
-          <div className="neu-card rounded-3xl p-6 space-y-3 text-slate-900 bg-white">
+          <div className="neu-card rounded-3xl p-6 space-y-3 text-slate-900 bg-[#edf1f7]">
             <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-              <Zap className="w-4 h-4 text-amber-600" />
+              <Zap className="w-4 h-4 text-[#ff6422]" />
               <span>Agent Daily Best Practices</span>
             </div>
 
             <div className="space-y-2.5 text-xs text-slate-600">
               <div className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full neu-pressed text-blue-700 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-5 h-5 rounded-full neu-pressed text-[#ff6422] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                   1
                 </span>
                 <span>
@@ -234,7 +234,7 @@ export default async function AgentDashboardPage() {
                 </span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full neu-pressed text-blue-700 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-5 h-5 rounded-full neu-pressed text-[#ff6422] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                   2
                 </span>
                 <span>
@@ -242,7 +242,7 @@ export default async function AgentDashboardPage() {
                 </span>
               </div>
               <div className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full neu-pressed text-blue-700 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-5 h-5 rounded-full neu-pressed text-[#ff6422] font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                   3
                 </span>
                 <span>

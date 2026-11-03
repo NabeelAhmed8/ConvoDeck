@@ -109,7 +109,7 @@ export function ButtonsDirectoryModal({
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+            <div className="w-10 h-10 rounded-2xl bg-[#ff6422]/10 text-[#ea5414] flex items-center justify-center shrink-0 border border-[#ff6422]/20">
               <Compass className="w-5 h-5" />
             </div>
             <div>
@@ -125,7 +125,7 @@ export function ButtonsDirectoryModal({
           <div className="flex items-center gap-2">
             <button
               onClick={onStartStepTour}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-xs cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-xl neu-btn-primary text-white transition-colors shadow-xs cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               Start Interactive Tour
@@ -149,7 +149,7 @@ export function ButtonsDirectoryModal({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search any button by name, location, or feature (e.g. Add Lead, Webhook, Collapse)..."
-              className="w-full pl-9 pr-4 py-2 text-xs bg-white rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-all"
+              className="w-full pl-9 pr-4 py-2 text-xs bg-white rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#ff6422] transition-all"
             />
           </div>
 
@@ -183,12 +183,12 @@ export function ButtonsDirectoryModal({
                 return (
                   <div
                     key={btn.id}
-                    className="p-3.5 rounded-2xl border border-slate-150 hover:border-blue-300 hover:shadow-xs transition-all bg-white flex flex-col justify-between gap-2"
+                    className="p-3.5 rounded-2xl border border-slate-150 hover:border-[#ff6422]/40 hover:shadow-xs transition-all bg-white flex flex-col justify-between gap-2"
                   >
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-[#ff6422]/10 text-[#ea5414] flex items-center justify-center shrink-0">
                             <Icon className="w-3.5 h-3.5" />
                           </div>
                           <span className="font-bold text-xs text-slate-900">{btn.name}</span>

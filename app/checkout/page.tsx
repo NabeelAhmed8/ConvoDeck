@@ -86,10 +86,10 @@ function CheckoutContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-[#ebf0f7] text-slate-900 selection:bg-[#ff6422] selection:text-white">
       {/* Top Header */}
       <header className="fixed top-2.5 sm:top-5 inset-x-2 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-40 transition-all">
-        <div className="neu-card rounded-2xl sm:rounded-full px-3 sm:px-6 h-15 sm:h-18 flex items-center justify-between border border-white/90 shadow-[8px_8px_24px_rgba(160,178,204,0.3),-8px_-8px_24px_#ffffff] bg-white/95 backdrop-blur-md">
+        <div className="neu-card rounded-2xl sm:rounded-full px-3 sm:px-6 h-15 sm:h-18 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
           <Link
             href="/"
             className="flex items-center gap-2 sm:gap-3 group min-w-0"
@@ -102,20 +102,20 @@ function CheckoutContent() {
               <span className="font-extrabold text-sm sm:text-lg tracking-tight text-slate-900 block leading-none truncate">
                 ConvoDeck
               </span>
-              <span className="text-[8.5px] sm:text-[10px] text-blue-600 font-semibold uppercase tracking-wider block mt-0.5 truncate">
+              <span className="text-[8.5px] sm:text-[10px] text-[#ff6422] font-semibold uppercase tracking-wider block mt-0.5 truncate">
                 Official Stripe Checkout
               </span>
             </div>
           </Link>
 
           <div className="flex items-center gap-2 sm:gap-4 text-xs text-slate-500 shrink-0">
-            <span className="hidden md:flex items-center gap-1.5 text-blue-600 font-semibold">
+            <span className="hidden md:flex items-center gap-1.5 text-[#ff6422] font-semibold">
               <ShieldCheck className="w-4 h-4" />
               Stripe 256-Bit SSL
             </span>
             <Link
               href="/billing"
-              className="text-slate-600 hover:text-slate-900 neu-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full flex items-center gap-1 transition-all cursor-pointer bg-white whitespace-nowrap text-[11px] sm:text-xs shrink-0"
+              className="text-slate-600 hover:text-slate-900 neu-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full flex items-center gap-1 transition-all cursor-pointer whitespace-nowrap text-[11px] sm:text-xs shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Back to Plans
             </Link>
@@ -197,11 +197,11 @@ function CheckoutContent() {
                     aria-label="Agree to billing terms and terms of service"
                     checked={agreeTerms}
                     onChange={(e) => setAgreeTerms(e.target.checked)}
-                    className="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    className="mt-0.5 rounded border-slate-300 text-[#ff6422] focus:ring-[#ff6422] cursor-pointer"
                   />
                   <span className="leading-relaxed">
                     I agree to the{" "}
-                    <Link href="/terms" className="text-blue-600 underline">
+                    <Link href="/terms" className="text-[#ea5414] underline">
                       Terms of Service
                     </Link>{" "}
                     and authorized billing recurring renewal at{" "}

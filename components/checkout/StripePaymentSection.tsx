@@ -50,17 +50,17 @@ export function StripePaymentSection({
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600">
           2. Payment Method (Stripe)
         </h3>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-[11px] font-bold">
-          <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 border border-orange-200/60 text-[#ea5414] text-[11px] font-bold">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#ff6422]" />
           <span>Powered by Stripe</span>
         </div>
       </div>
 
       {/* Stripe Payment Card Box */}
-      <div className="neu-pressed p-4 sm:p-5 rounded-2xl space-y-3.5 bg-slate-50/60 border border-slate-200/60">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
+      <div className="neu-pressed p-4 sm:p-5 rounded-2xl space-y-3.5 bg-[#e9eff6] border border-slate-300/40">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-300/40">
           <div className="flex items-center gap-2">
-            <CreditCard className="w-4 h-4 text-blue-600" />
+            <CreditCard className="w-4 h-4 text-[#ff6422]" />
             <span className="text-xs font-bold text-slate-900">
               Credit or Debit Card
             </span>

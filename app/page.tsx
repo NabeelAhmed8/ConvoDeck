@@ -1,78 +1,26 @@
 import React from "react";
 import Link from "next/link";
-import {
-  MessageSquare,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { LandingNavbar } from "@/components/landing/LandingNavbar";
+import { HeroSection } from "@/components/landing/HeroSection";
 import { PublicLeadForm } from "@/components/landing/PublicLeadForm";
 import { PricingSection } from "@/components/pricing/PricingSection";
+import { LandingFooter } from "@/components/landing/LandingFooter";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-dvh w-full max-w-full overflow-x-clip bg-[#f3f6fa] text-slate-900 selection:bg-blue-600 selection:text-white flex flex-col justify-between">
+    <div className="min-h-dvh w-full max-w-full overflow-x-clip bg-[#ebf0f7] text-slate-900 selection:bg-[#ff6422] selection:text-white flex flex-col justify-between">
       {/* Responsive Navigation Header */}
       <LandingNavbar />
 
-      {/* Hero Section */}
-      <section className="relative pt-28 sm:pt-36 lg:pt-40 pb-14 sm:pb-20 px-3 sm:px-6 overflow-hidden">
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full neu-pressed text-blue-700 text-[11px] sm:text-xs font-semibold mb-6 border border-blue-200 bg-white max-w-full">
-            <Sparkles className="w-3.5 h-3.5 shrink-0 text-blue-600" />
-            <span className="truncate">Official WhatsApp Business API Platform</span>
-          </div>
-
-          <h1 className="text-2xl xs:text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-[1.15] sm:leading-[1.1] text-slate-900 break-words">
-            Turn WhatsApp into your <br />
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-800 bg-clip-text text-transparent">
-              #1 Sales Conversion Machine.
-            </span>
-          </h1>
-
-          <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Eliminate single-device phone limits, missed follow-ups, and lost leads. Equip your entire sales team with a unified WhatsApp inbox and a visual sales pipeline.
-          </p>
-
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <Link
-              href="/signup"
-              className="w-full sm:w-auto px-7 py-3.5 neu-btn-primary text-white font-bold rounded-full text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
-            >
-              <MessageSquare className="w-4 h-4 text-white" />
-              Start Free Workspace
-            </Link>
-            <a
-              href="#pricing"
-              className="w-full sm:w-auto px-7 py-3.5 neu-btn text-slate-800 font-bold rounded-full text-sm transition-all flex items-center justify-center gap-2 cursor-pointer bg-white"
-            >
-              View Pricing Plans
-            </a>
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-slate-600">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              Shared Team Inbox
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              Visual Sales Funnel
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              Instant Lead Sync
-            </span>
-          </div>
-        </div>
-      </section>
+      {/* Tactile Neumorphic Hero Section */}
+      <HeroSection />
 
       {/* Core Pain Points Solved */}
-      <section id="features" className="py-14 sm:py-20 px-4 sm:px-6 border-t border-slate-200/80">
+      <section id="features" className="py-14 sm:py-20 px-4 sm:px-6 border-t border-slate-300/40">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-700 mb-3">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[#ff6422] mb-3">
               Built for Modern Sales Teams
             </h2>
             <h3 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
@@ -108,9 +56,9 @@ export default function LandingPage() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-3xl neu-card neu-card-hover bg-white text-slate-800"
+                className="p-6 rounded-3xl neu-card neu-card-hover bg-[#edf1f7] text-slate-800"
               >
-                <div className="w-8 h-8 rounded-full neu-pressed text-blue-600 flex items-center justify-center font-bold text-xs mb-4 bg-[#f1f5f9]">
+                <div className="w-8 h-8 rounded-full neu-pressed text-[#ff6422] flex items-center justify-center font-bold text-xs mb-4">
                   0{idx + 1}
                 </div>
                 <h4 className="font-bold text-base text-slate-900 mb-2">
@@ -119,7 +67,7 @@ export default function LandingPage() {
                 <p className="text-xs text-slate-600 leading-relaxed mb-4">
                   {item.desc}
                 </p>
-                <div className="pt-3 border-t border-slate-200/80 text-xs font-semibold text-blue-600">
+                <div className="pt-3 border-t border-slate-300/40 text-xs font-semibold text-[#ea5414]">
                   ✦ {item.solution}
                 </div>
               </div>
@@ -129,15 +77,15 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section with Currency Toggle */}
-      <section id="pricing" className="py-14 sm:py-24 px-3 sm:px-6 border-t border-slate-200/80 relative bg-[#f3f6fa]">
+      <section id="pricing" className="py-14 sm:py-24 px-3 sm:px-6 border-t border-slate-300/40 relative bg-[#ebf0f7]">
         <PricingSection />
       </section>
 
       {/* Real Inbound Lead Capture Section */}
-      <section id="contact" className="py-12 sm:py-20 px-3 sm:px-6 border-t border-slate-200/80 relative bg-[#f3f6fa]">
+      <section id="contact" className="py-12 sm:py-20 px-3 sm:px-6 border-t border-slate-300/40 relative bg-[#ebf0f7]">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-6 space-y-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#ff6422]">
               Get Started Today
             </span>
             <h3 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
@@ -149,15 +97,15 @@ export default function LandingPage() {
 
             <div className="space-y-3 pt-2 text-xs text-slate-700">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <CheckCircle2 className="w-4 h-4 text-[#ff6422]" />
                 <span>Dedicated account onboarding</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <CheckCircle2 className="w-4 h-4 text-[#ff6422]" />
                 <span>Official Meta WhatsApp Business verification assistance</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <CheckCircle2 className="w-4 h-4 text-[#ff6422]" />
                 <span>Custom team training and pipeline configuration</span>
               </div>
             </div>
@@ -169,30 +117,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-10 sm:py-12 px-4 sm:px-6 border-t border-slate-200 text-slate-500 text-xs bg-white pb-[max(2.5rem,calc(1.5rem+env(safe-area-inset-bottom)))]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-            <div className="w-7 h-7 rounded-xl neu-convex text-slate-900 font-black flex items-center justify-center text-xs shrink-0 shadow-xs">
-              C
-            </div>
-            <span className="font-bold text-slate-800">ConvoDeck CRM</span>
-            <span>— The WhatsApp Sales Operating System.</span>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-            <Link href="/dashboard" className="hover:text-slate-900 transition-colors">
-              Dashboard
-            </Link>
-            <a href="#pricing" className="hover:text-slate-900 transition-colors">
-              Pricing
-            </a>
-            <Link href="/login" className="hover:text-slate-900 transition-colors">
-              Sign In
-            </Link>
-          </div>
-        </div>
-      </footer>
+      {/* Clean Modular Neumorphic Footer */}
+      <LandingFooter />
     </div>
   );
 }

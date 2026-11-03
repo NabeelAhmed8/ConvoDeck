@@ -44,7 +44,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#ebf0f7] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
           <div className="w-10 h-10 rounded-2xl neu-convex flex items-center justify-center font-black text-slate-900 shadow-md text-lg">
@@ -65,7 +65,7 @@ export default function LoginPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 w-full">
-        <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-white">
+        <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-[#edf1f7]">
           {error && step === "credentials" && (
             <div
               role="alert"
@@ -125,13 +125,13 @@ export default function LoginPage() {
                   <input
                     type="checkbox"
                     defaultChecked
-                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-slate-300 text-[#ff6422] focus:ring-[#ff6422]"
                   />
                   <span>Remember this device</span>
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="font-medium text-blue-600 hover:text-blue-700"
+                  className="font-medium text-[#ea5414] hover:text-[#c2410c]"
                 >
                   Forgot password?
                 </Link>
@@ -155,12 +155,12 @@ export default function LoginPage() {
           )}
 
           {step === "credentials" && (
-            <div className="mt-6 border-t border-slate-100 pt-5 text-center text-xs text-slate-500">
+            <div className="mt-6 border-t border-slate-200/60 pt-5 text-center text-xs text-slate-500">
               <p>
                 Don&apos;t have a workspace yet?{" "}
                 <Link
                   href="/signup"
-                  className="font-bold text-blue-600 hover:text-blue-700 ml-1"
+                  className="font-bold text-[#ea5414] hover:text-[#c2410c] ml-1"
                 >
                   Start free 14-day trial
                 </Link>

@@ -13,10 +13,10 @@ interface KanbanBoardProps {
 }
 
 const COLUMNS: KanbanColumnDef[] = [
-  { id: "NEW", title: "New Inquiries", color: "border-sky-500", badgeBg: "bg-sky-100 text-sky-800" },
+  { id: "NEW", title: "New Inquiries", color: "border-[#ff6422]", badgeBg: "bg-[#ff6422]/10 text-[#ea5414]" },
   { id: "CONTACTED", title: "Contacted", color: "border-purple-500", badgeBg: "bg-purple-100 text-purple-800" },
   { id: "DEMO_SCHEDULED", title: "Demo Scheduled", color: "border-amber-500", badgeBg: "bg-amber-100 text-amber-800" },
-  { id: "PROPOSAL_SENT", title: "Proposal Sent", color: "border-indigo-500", badgeBg: "bg-indigo-100 text-indigo-800" },
+  { id: "PROPOSAL_SENT", title: "Proposal Sent", color: "border-slate-400", badgeBg: "bg-slate-100 text-slate-800" },
   { id: "WON", title: "Deals Won 🎉", color: "border-emerald-500", badgeBg: "bg-emerald-100 text-emerald-800" },
   { id: "LOST", title: "Lost", color: "border-rose-400", badgeBg: "bg-rose-100 text-rose-800" },
 ];
@@ -159,14 +159,14 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
             {/* Total Leads Pill */}
             <div className="neu-pressed px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full flex items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-xs bg-[#f1f5f9]">
               <span className="text-slate-500 font-semibold"><span className="hidden sm:inline">Total </span>Leads:</span>
-              <span className="font-extrabold text-blue-600 font-mono">
+              <span className="font-extrabold text-[#ea5414] font-mono">
                 {filteredLeads.length}
               </span>
             </div>
           </div>
 
           <div className="text-[11px] text-slate-400 hidden md:flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" aria-hidden="true" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff6422] animate-pulse" aria-hidden="true" />
             <span>Interactive Drag &amp; Drop Board</span>
           </div>
         </div>
@@ -195,7 +195,7 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
                 onDrop={(e) => handleDrop(e, column.id)}
                 className={`flex-1 flex flex-col min-w-[280px] max-w-[320px] neu-pressed rounded-3xl transition-all overflow-hidden ${
                   isOver
-                    ? "ring-2 ring-blue-500/50 neu-pressed-accent"
+                    ? "ring-2 ring-[#ff6422]/50 neu-pressed-accent"
                     : ""
                 }`}
               >

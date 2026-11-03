@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   const userRole = authData.user.role || "agent";
 
   return (
-    <div className="fixed inset-0 h-[100dvh] max-h-[100dvh] bg-[#f3f6fa] text-slate-900 flex flex-col lg:flex-row overflow-hidden selection:bg-blue-600/20 selection:text-slate-900 w-full max-w-full">
+    <div className="fixed inset-0 h-[100dvh] max-h-[100dvh] bg-[#ebf0f7] text-slate-900 flex flex-col lg:flex-row overflow-hidden selection:bg-[#ff6422]/20 selection:text-slate-900 w-full max-w-full">
       {/* Soft Ambient Light Source for tactile Neumorphic shadows */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-white/60 rounded-full blur-[140px]" />

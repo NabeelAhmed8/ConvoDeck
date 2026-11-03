@@ -56,7 +56,7 @@ function AgentLoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#ebf0f7] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
           <div className="w-10 h-10 rounded-2xl neu-convex flex items-center justify-center font-black text-slate-900 shadow-md text-lg">
@@ -66,8 +66,8 @@ function AgentLoginForm() {
             ConvoDeck
           </span>
         </Link>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-3">
-          <Headphones className="w-3.5 h-3.5" aria-hidden="true" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full neu-pressed text-[#ea5414] text-xs font-semibold mb-3">
+          <Headphones className="w-3.5 h-3.5 text-[#ff6422]" aria-hidden="true" />
           Agent Support Desk
         </div>
         <h1 className="text-xl font-bold text-slate-900 tracking-tight">
@@ -81,7 +81,7 @@ function AgentLoginForm() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 w-full">
-        <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-white">
+        <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-[#edf1f7]">
           {error && step === "credentials" && (
             <div
               role="alert"
@@ -154,12 +154,12 @@ function AgentLoginForm() {
           )}
 
           {step === "credentials" && (
-            <div className="mt-6 border-t border-slate-100 pt-5 text-center text-xs text-slate-500">
+            <div className="mt-6 border-t border-slate-300/40 pt-5 text-center text-xs text-slate-500">
               <p>
                 Are you an account administrator?{" "}
                 <Link
                   href="/login"
-                  className="font-bold text-blue-600 hover:text-blue-700 ml-1"
+                  className="font-bold text-[#ea5414] hover:text-[#c2410c] ml-1"
                 >
                   Admin workspace login &rarr;
                 </Link>
@@ -174,7 +174,7 @@ function AgentLoginForm() {
 
 export default function AgentLoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f3f6fa]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#ebf0f7]" />}>
       <AgentLoginForm />
     </Suspense>
   );

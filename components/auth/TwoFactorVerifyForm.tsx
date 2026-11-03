@@ -191,7 +191,7 @@ export function TwoFactorVerifyForm({
             className={`font-semibold flex items-center gap-1 cursor-pointer ${
               resendCooldown > 0
                 ? "text-slate-400 cursor-not-allowed"
-                : "text-blue-600 hover:text-blue-700"
+                : "text-[#ea5414] hover:text-[#c2410c]"
             }`}
           >
             <RefreshCw

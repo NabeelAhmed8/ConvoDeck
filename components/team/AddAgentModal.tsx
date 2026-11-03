@@ -63,7 +63,7 @@ export function AddAgentModal({
     >
       <div className="neu-card rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 bg-white border border-slate-200/80 relative space-y-5 animate-in zoom-in-95 duration-150 text-slate-900">
         <div>
-          <div className="w-10 h-10 rounded-2xl neu-pressed text-blue-600 flex items-center justify-center mb-3">
+          <div className="w-10 h-10 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center mb-3">
             <UserPlus className="w-5 h-5" />
           </div>
           <h3 className="text-lg font-black text-slate-900 tracking-tight">
@@ -92,7 +92,7 @@ export function AddAgentModal({
                 href={previewUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-600 underline pt-1 font-semibold flex items-center gap-1"
+                className="text-[#ea5414] underline pt-1 font-semibold flex items-center gap-1"
               >
                 View Dispatched Email Preview <ExternalLink className="w-3 h-3" />
               </a>

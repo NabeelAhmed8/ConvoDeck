@@ -56,7 +56,7 @@ export function KanbanCard({ lead, onRefresh }: KanbanCardProps) {
       {/* Top Header: Name & Menu */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-slate-900 text-sm truncate hover:text-blue-600 transition-colors">
+          <h4 className="font-semibold text-slate-900 text-sm truncate hover:text-[#ea5414] transition-colors">
             {lead.name}
           </h4>
           {lead.company && (
@@ -102,7 +102,7 @@ export function KanbanCard({ lead, onRefresh }: KanbanCardProps) {
                     onClick={() => handleStageChange(s.value)}
                     disabled={s.value === lead.stage}
                     className={`w-full text-left px-3 py-1.5 hover:neu-flat hover:text-slate-900 flex items-center justify-between cursor-pointer transition-all ${
-                      s.value === lead.stage ? "font-bold text-blue-600 neu-pressed-accent" : "text-slate-700"
+                      s.value === lead.stage ? "font-bold text-[#ea5414] neu-pressed-accent" : "text-slate-700"
                     }`}
                   >
                     {s.label}
@@ -153,7 +153,7 @@ export function KanbanCard({ lead, onRefresh }: KanbanCardProps) {
           {lead.tags.map((tag, i) => (
             <span
               key={i}
-              className="px-2 py-0.5 neu-pressed text-blue-700 rounded-md text-[10px] font-medium"
+              className="px-2 py-0.5 neu-pressed text-[#ea5414] rounded-md text-[10px] font-medium"
             >
               {tag}
             </span>
@@ -174,7 +174,7 @@ export function KanbanCard({ lead, onRefresh }: KanbanCardProps) {
           href={`/chat?leadId=${lead._id}`}
           onClick={handleOpenChat}
           aria-label={`Open WhatsApp conversation with ${lead.name}`}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 neu-btn px-3 py-1 rounded-full transition-all"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#ea5414] neu-btn px-3 py-1 rounded-full transition-all"
         >
           <MessageSquare className="w-3.5 h-3.5" aria-hidden="true" />
           WhatsApp Chat

@@ -42,10 +42,10 @@ export default async function BillingPage() {
       </div>
 
       {/* Current Active Plan Overview Card */}
-      <div className="neu-card rounded-3xl p-4 sm:p-6 md:p-8 text-slate-900 bg-white">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 pb-6 border-b border-slate-200/80">
+      <div className="neu-card rounded-3xl p-4 sm:p-6 md:p-8 text-slate-900 bg-[#edf1f7]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 pb-6 border-b border-slate-300/40">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl neu-pressed text-blue-600 flex items-center justify-center font-black text-xl shrink-0 bg-[#f1f5f9]">
+            <div className="w-12 h-12 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center font-black text-xl shrink-0 bg-[#e9eff6]">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
@@ -55,7 +55,7 @@ export default async function BillingPage() {
                     ? "Growth Plan (14-Day Free Evaluation)"
                     : `${currentPlan} Plan`}
                 </h3>
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold capitalize">
+                <span className="px-2.5 py-0.5 rounded-full bg-orange-50 text-[#ea5414] border border-orange-200 text-xs font-bold capitalize">
                   {planStatus === "trial" ? "Active Trial" : "Active Subscription"}
                 </span>
               </div>
@@ -86,7 +86,7 @@ export default async function BillingPage() {
               {currentPlan === "starter" ? "1 / 2 Seats" : currentPlan === "growth" ? "1 / 5 Seats" : "1 / Unlimited"}
             </p>
             <div className="w-full neu-pressed rounded-full h-2 mt-2 overflow-hidden">
-              <div className="bg-blue-600 h-2 rounded-full w-[20%]" />
+              <div className="bg-[#ff6422] h-2 rounded-full w-[20%]" />
             </div>
           </div>
 

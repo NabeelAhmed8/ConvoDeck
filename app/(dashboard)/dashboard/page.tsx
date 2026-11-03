@@ -53,8 +53,8 @@ export default async function DashboardPage() {
       {/* Top Banner */}
       <div className="relative overflow-hidden rounded-3xl neu-card p-4 sm:p-6 md:p-8">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full neu-pressed text-blue-600 text-xs font-bold mb-3 border border-blue-500/20 bg-[#f1f5f9]">
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full neu-pressed text-[#ea5414] text-xs font-bold mb-3 border border-orange-200 bg-orange-50">
+            <span className="w-2 h-2 rounded-full bg-[#ff6422] animate-pulse" />
             {workspaceName}
           </div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             <Link
               id="tour-btn-dashboard-pipeline"
               href="/pipeline"
-              className="px-5 py-2.5 neu-btn text-slate-800 rounded-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer bg-white"
+              className="px-5 py-2.5 neu-btn text-slate-800 rounded-full text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
             >
               Sales Pipeline
               <ArrowUpRight className="w-4 h-4 text-slate-600" />
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-[#ff6422]/5 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* KPI Cards Grid */}
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
           value={totalLeads}
           subtitle="Active prospects"
           icon={Users}
-          color="blue"
+          color="orange"
         />
         <StatsCard
           title="Pipeline Value"
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/pipeline"
-            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors shrink-0"
+            className="text-xs font-bold text-[#ea5414] hover:text-[#c2410c] flex items-center gap-1 transition-colors shrink-0"
           >
             Manage Pipeline <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
@@ -162,10 +162,10 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
           {[
-            { stage: "New Inquiries", count: stageCounts.NEW, color: "text-sky-700 border-sky-300/40" },
-            { stage: "Contacted", count: stageCounts.CONTACTED, color: "text-purple-700 border-purple-300/40" },
-            { stage: "Demo Given", count: stageCounts.DEMO_SCHEDULED, color: "text-amber-700 border-amber-300/40" },
-            { stage: "Proposal Sent", count: stageCounts.PROPOSAL_SENT, color: "text-indigo-700 border-indigo-300/40" },
+            { stage: "New Inquiries", count: stageCounts.NEW, color: "text-slate-800 border-slate-300/40" },
+            { stage: "Contacted", count: stageCounts.CONTACTED, color: "text-slate-800 border-slate-300/40" },
+            { stage: "Demo Given", count: stageCounts.DEMO_SCHEDULED, color: "text-[#ff6422] border-orange-200/50" },
+            { stage: "Proposal Sent", count: stageCounts.PROPOSAL_SENT, color: "text-slate-800 border-slate-300/40" },
             { stage: "Won Deals 🎉", count: stageCounts.WON, color: "text-emerald-700 border-emerald-300/40" },
             { stage: "Lost", count: stageCounts.LOST, color: "text-rose-700 border-rose-300/40" },
           ].map((item, i) => (
@@ -194,7 +194,7 @@ export default async function DashboardPage() {
           {/* Quick Setup Card */}
           <div className="neu-card p-5 sm:p-6 rounded-3xl">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-blue-600" />
+              <Sparkles className="w-5 h-5 text-[#ff6422]" />
               <h4 className="font-bold text-sm sm:text-base text-slate-900">WhatsApp Business Connection</h4>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed mb-4">

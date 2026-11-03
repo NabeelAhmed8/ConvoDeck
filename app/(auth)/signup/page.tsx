@@ -123,7 +123,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#ebf0f7] flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
           <div className="w-10 h-10 rounded-2xl neu-convex flex items-center justify-center font-black text-slate-900 shadow-md text-lg">
@@ -144,7 +144,7 @@ export default function SignupPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 w-full">
-        <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-white">
+        <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-[#edf1f7]">
           {error && (
             <div
               role="alert"
@@ -265,7 +265,7 @@ export default function SignupPage() {
             /* STEP 2: Email OTP Verification Form */
             <form className="space-y-5" onSubmit={handleVerifyCode} aria-label="Verify your email code">
               <div className="text-center py-2">
-                <div className="w-12 h-12 rounded-2xl neu-pressed text-blue-600 flex items-center justify-center mx-auto mb-3 bg-[#f1f5f9]">
+                <div className="w-12 h-12 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center mx-auto mb-3 bg-[#e9eff6]">
                   <Mail className="w-6 h-6 animate-pulse" />
                 </div>
                 <p className="text-xs text-slate-600">
@@ -299,13 +299,13 @@ export default function SignupPage() {
               </div>
 
               {previewUrl && (
-                <div className="p-3 bg-blue-100 border border-blue-300 rounded-2xl text-xs text-blue-800 flex items-center justify-between">
+                <div className="p-3 bg-orange-50 border border-orange-200 rounded-2xl text-xs text-[#ea5414] flex items-center justify-between">
                   <span>Development Preview Available</span>
                   <a
                     href={previewUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="underline font-bold flex items-center gap-1 hover:text-blue-900"
+                    className="underline font-bold flex items-center gap-1 hover:text-[#c2410c]"
                   >
                     View Email <ExternalLink className="w-3 h-3" />
                   </a>
@@ -338,7 +338,7 @@ export default function SignupPage() {
                   type="button"
                   disabled={resendCooldown > 0 || loading}
                   onClick={handleResend}
-                  className="text-blue-600 hover:text-blue-800 disabled:opacity-50 font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                  className="text-[#ea5414] hover:text-[#c2410c] disabled:opacity-50 font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
                   {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend Code"}
@@ -347,11 +347,11 @@ export default function SignupPage() {
             </form>
           )}
 
-          <div className="mt-6 pt-6 border-t border-slate-200/80 text-center text-xs text-slate-500">
+          <div className="mt-6 pt-6 border-t border-slate-300/40 text-center text-xs text-slate-500">
             Already registered?{" "}
             <Link
               href="/login"
-              className="font-bold text-blue-600 hover:underline"
+              className="font-bold text-[#ea5414] hover:underline"
             >
               Sign In
             </Link>

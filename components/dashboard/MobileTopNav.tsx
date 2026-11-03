@@ -32,7 +32,7 @@ export function MobileTopNav({
             type="button"
             onClick={onOpenDrawer}
             aria-label="Open navigation menu"
-            className="w-10 h-10 sm:w-11 sm:h-11 neu-btn rounded-xl flex items-center justify-center text-slate-800 hover:text-blue-600 transition-colors cursor-pointer shrink-0"
+            className="w-10 h-10 sm:w-11 sm:h-11 neu-btn rounded-xl flex items-center justify-center text-slate-800 hover:text-[#ff6422] transition-colors cursor-pointer shrink-0"
           >
             <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-slate-900" aria-hidden="true" />
           </button>
@@ -52,7 +52,7 @@ export function MobileTopNav({
               <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 block leading-tight truncate">
                 ConvoDeck
               </span>
-              <span className="text-[9px] sm:text-[10px] text-blue-600 font-bold uppercase tracking-wider block truncate">
+              <span className="text-[9px] sm:text-[10px] text-[#ff6422] font-bold uppercase tracking-wider block truncate">
                 {workspaceName}
               </span>
             </div>

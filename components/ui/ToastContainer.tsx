@@ -40,11 +40,11 @@ const STYLES: Record<
   },
   info: {
     bg: "neu-card bg-white shadow-xl",
-    border: "border-blue-500/40",
-    iconColor: "text-blue-600",
+    border: "border-[#ff6422]/40",
+    iconColor: "text-[#ea5414]",
     titleColor: "text-slate-900",
     descColor: "text-slate-600",
-    accent: "bg-blue-600",
+    accent: "bg-[#ff6422]",
   },
   warning: {
     bg: "neu-card bg-white shadow-xl",
