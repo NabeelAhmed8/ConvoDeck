@@ -55,7 +55,7 @@ export function TourGuidePopup({
       />
 
       {/* Tactile Neumorphic Central Popup Card */}
-      <div className="relative z-10 w-full max-w-2xl bg-[#edf1f7] rounded-3xl sm:rounded-[32px] p-5 sm:p-7 border border-white/90 shadow-[14px_14px_35px_rgba(166,178,196,0.5),-12px_-12px_35px_#ffffff] text-slate-900 animate-in zoom-in-95 duration-200 overflow-hidden">
+      <div className="relative z-10 w-full max-w-2xl bg-[#edf1f7] rounded-3xl sm:rounded-[32px] p-4 sm:p-7 border border-white/90 shadow-[14px_14px_35px_rgba(166,178,196,0.5),-12px_-12px_35px_#ffffff] text-slate-900 animate-in zoom-in-95 duration-200 overflow-hidden max-h-[92dvh] flex flex-col">
         {/* Top Header */}
         <GuideHeader
           step={step}
@@ -64,11 +64,13 @@ export function TourGuidePopup({
           onClose={onClose}
         />
 
-        {/* Feature Narrative & Highlights */}
-        <GuideStepContent
-          step={step}
-          onNavigate={onClose}
-        />
+        {/* Feature Narrative & Highlights (Scrollable on small mobile viewports) */}
+        <div className="overflow-y-auto overscroll-contain flex-1 pr-1 -mr-1">
+          <GuideStepContent
+            step={step}
+            onNavigate={onClose}
+          />
+        </div>
 
         {/* Navigation & Jump Controls */}
         <GuideControls

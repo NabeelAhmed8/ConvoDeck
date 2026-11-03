@@ -60,17 +60,17 @@ export function ProfileSecurityCard() {
   };
 
   return (
-    <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5">
+    <div className="neu-card rounded-2xl sm:rounded-3xl p-4 sm:p-7 space-y-4 sm:space-y-5 w-full max-w-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
-        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50">
+      <div className="flex items-center gap-2.5 sm:gap-3 border-b border-slate-300/40 pb-3 min-w-0">
+        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50 shrink-0">
           <KeyRound className="w-4 h-4" />
         </div>
-        <div>
-          <h2 className="font-bold text-sm sm:text-base text-slate-900">
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-sm sm:text-base text-slate-900 truncate">
             Account Security &amp; Password
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 leading-tight">
             Update your master login credentials and secure your account.
           </p>
         </div>
@@ -162,9 +162,9 @@ export function ProfileSecurityCard() {
         </div>
 
         {/* Password Strength Checklist */}
-        <div className="p-3 rounded-2xl neu-pressed bg-[#edf2f8] flex items-center gap-3 text-xs text-slate-600">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-          <p className="text-[11px] leading-tight text-slate-500">
+        <div className="p-3 rounded-2xl neu-pressed bg-[#edf2f8] flex items-start sm:items-center gap-2.5 sm:gap-3 text-xs text-slate-600 min-w-0">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5 sm:mt-0" />
+          <p className="text-[11px] leading-tight text-slate-500 min-w-0 flex-1">
             Changing your password will keep this session active while safely invalidating previous tokens on unverified devices.
           </p>
         </div>
@@ -174,7 +174,7 @@ export function ProfileSecurityCard() {
           <button
             type="submit"
             disabled={isChanging}
-            className="px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all"
+            className="w-full sm:w-auto px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all shadow-md"
           >
             <Check className="w-3.5 h-3.5" />
             {isChanging ? "Updating Password..." : "Update Password"}

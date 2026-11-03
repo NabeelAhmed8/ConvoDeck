@@ -76,7 +76,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto pb-16 text-slate-800">
+    <div className="space-y-5 sm:space-y-6 max-w-4xl mx-auto pb-16 text-slate-800 w-full max-w-full min-w-0 overflow-x-hidden">
       {/* Page Header */}
       <ProfileHeader
         role={profileData.role}

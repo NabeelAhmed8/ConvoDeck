@@ -29,29 +29,29 @@ export function ProfileSessionsCard() {
   }, []);
 
   return (
-    <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-4">
+    <div className="neu-card rounded-2xl sm:rounded-3xl p-4 sm:p-7 space-y-3.5 sm:space-y-4 w-full max-w-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
-        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50">
+      <div className="flex items-center gap-2.5 sm:gap-3 border-b border-slate-300/40 pb-3 min-w-0">
+        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50 shrink-0">
           <Laptop className="w-4 h-4" />
         </div>
-        <div>
-          <h2 className="font-bold text-sm sm:text-base text-slate-900">
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-sm sm:text-base text-slate-900 truncate">
             Active Device &amp; Session
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 leading-tight">
             Current authenticated device connected to your ConvoDeck account.
           </p>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl neu-pressed bg-[#edf2f8]">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-9 h-9 rounded-xl neu-convex flex items-center justify-center text-slate-700 shrink-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl neu-pressed bg-[#edf2f8] w-full min-w-0">
+        <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+          <div className="w-9 h-9 rounded-xl neu-convex flex items-center justify-center text-slate-700 shrink-0 mt-0.5 sm:mt-0">
             <Laptop className="w-4 h-4" />
           </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
               <p className="text-xs font-bold text-slate-900 truncate">
                 {deviceInfo}
               </p>
@@ -60,17 +60,17 @@ export function ProfileSessionsCard() {
                 Active Now
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1 flex-wrap">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span>Signed in on this device • Secure encrypted session</span>
+              <span className="break-words leading-tight">Signed in on this device • Secure encrypted session</span>
             </div>
           </div>
         </div>
 
-        <form action={logoutUser} className="self-end sm:self-auto shrink-0">
+        <form action={logoutUser} className="self-start sm:self-auto shrink-0 w-full sm:w-auto">
           <button
             type="submit"
-            className="px-4 py-2 neu-btn rounded-xl text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50/50 flex items-center gap-1.5 cursor-pointer transition-colors"
+            className="w-full sm:w-auto px-4 py-2 neu-btn rounded-xl text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50/50 flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
             Sign Out

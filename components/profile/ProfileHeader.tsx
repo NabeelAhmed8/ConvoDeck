@@ -12,13 +12,13 @@ export function ProfileHeader({ role, workspaceName }: ProfileHeaderProps) {
   const isOwner = role === "admin";
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2">
-      <div>
-        <div className="flex items-center gap-2 mb-1">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 w-full max-w-full min-w-0">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 mb-1 min-w-0">
           <div className="w-8 h-8 rounded-xl neu-convex flex items-center justify-center text-[#ff6422] shrink-0">
             <User className="w-4 h-4" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight truncate">
             Personal Profile &amp; Security
           </h1>
         </div>
@@ -27,20 +27,20 @@ export function ProfileHeader({ role, workspaceName }: ProfileHeaderProps) {
         </p>
       </div>
 
-      <div className="flex items-center gap-2 self-start sm:self-auto">
+      <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap shrink-0">
         <span
-          className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-xs ${
+          className={`px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-xs shrink-0 ${
             isOwner
               ? "bg-amber-50 text-amber-800 border-amber-200/80"
               : "bg-slate-100 text-slate-700 border-slate-200"
           }`}
         >
-          <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
-          {isOwner ? "Workspace Owner" : "Agent Seat"}
+          <ShieldCheck className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+          <span>{isOwner ? "Workspace Owner" : "Agent Seat"}</span>
         </span>
 
         {workspaceName && (
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/70 border border-slate-200/70 text-slate-600 truncate max-w-[180px]">
+          <span className="px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium bg-white/70 border border-slate-200/70 text-slate-600 truncate max-w-[150px] sm:max-w-[200px]">
             {workspaceName}
           </span>
         )}

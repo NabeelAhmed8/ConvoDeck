@@ -61,17 +61,17 @@ export function ProfileIdentityCard({
   };
 
   return (
-    <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5">
+    <div className="neu-card rounded-2xl sm:rounded-3xl p-4 sm:p-7 space-y-4 sm:space-y-5 w-full max-w-full overflow-hidden">
       {/* Card Title */}
-      <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
-        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50">
+      <div className="flex items-center gap-2.5 sm:gap-3 border-b border-slate-300/40 pb-3 min-w-0">
+        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50 shrink-0">
           <User className="w-4 h-4" />
         </div>
-        <div>
-          <h2 className="font-bold text-sm sm:text-base text-slate-900">
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-sm sm:text-base text-slate-900 truncate">
             Personal Identity
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 leading-tight">
             Your name and contact details visible to team members and in internal logs.
           </p>
         </div>
@@ -85,12 +85,12 @@ export function ProfileIdentityCard({
       />
 
       {/* Account Info Bar */}
-      <div className="flex items-center justify-between gap-3 p-3 rounded-2xl neu-pressed bg-[#edf2f8] text-xs">
-        <div className="min-w-0">
+      <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2.5 p-3 rounded-2xl neu-pressed bg-[#edf2f8] text-xs w-full min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-xs font-bold text-slate-900 truncate">{name || "User"}</p>
           <p className="text-[11px] text-slate-500 truncate">{email}</p>
         </div>
-        <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full bg-orange-100/70 text-[#ea5414] border border-orange-200/60 uppercase tracking-wider">
+        <span className="self-start xs:self-auto shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full bg-orange-100/70 text-[#ea5414] border border-orange-200/60 uppercase tracking-wider">
           {role === "admin" ? "Workspace Owner" : "Sales Agent"}
         </span>
       </div>
@@ -182,7 +182,7 @@ export function ProfileIdentityCard({
           <button
             type="submit"
             disabled={isSaving}
-            className="px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all"
+            className="w-full sm:w-auto px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all shadow-md"
           >
             <Save className="w-3.5 h-3.5" />
             {isSaving ? "Saving..." : "Save Identity"}

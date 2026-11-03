@@ -90,12 +90,12 @@ export function ProfileAvatarUploader({
   };
 
   return (
-    <div className="p-4 rounded-2xl neu-pressed bg-[#e9eff6] space-y-4">
+    <div className="p-3.5 sm:p-4 rounded-2xl neu-pressed bg-[#e9eff6] space-y-3.5 sm:space-y-4 w-full max-w-full overflow-hidden">
       {/* Current Avatar & Actions Row */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3.5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 w-full min-w-0">
+        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
           {/* Avatar Preview */}
-          <div className="w-16 h-16 rounded-full neu-convex flex items-center justify-center overflow-hidden shrink-0 border-2 border-white/80 shadow-md">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full neu-convex flex items-center justify-center overflow-hidden shrink-0 border-2 border-white/80 shadow-md">
             {currentAvatar ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -104,20 +104,20 @@ export function ProfileAvatarUploader({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="font-black text-lg text-slate-800">{initials}</span>
+              <span className="font-black text-base sm:text-lg text-slate-800">{initials}</span>
             )}
           </div>
 
-          <div>
-            <p className="text-xs font-bold text-slate-900">Profile Photo &amp; Avatar</p>
-            <p className="text-[11px] text-slate-500">
-              Upload custom image or pick from curated preset avatars below.
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold text-slate-900 truncate">Profile Photo &amp; Avatar</p>
+            <p className="text-[11px] text-slate-500 leading-tight">
+              Upload custom photo or pick from instant offline avatars.
             </p>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
           <input
             ref={fileInputRef}
             type="file"
@@ -154,12 +154,12 @@ export function ProfileAvatarUploader({
       </div>
 
       {/* Curated Presets Bar */}
-      <div>
+      <div className="w-full max-w-full min-w-0">
         <div className="flex items-center gap-1.5 mb-2">
           <Sparkles className="w-3 h-3 text-[#ff6422]" />
           <span className="text-[11px] font-bold text-slate-700">Quick Avatar Presets:</span>
         </div>
-        <div className="flex items-center gap-2.5 overflow-x-auto pb-1 chat-scrollbar">
+        <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1.5 chat-scrollbar w-full max-w-full touch-pan-x">
           {AVATAR_PRESETS.map((preset) => {
             const isSelected = currentAvatar === preset.src;
             return (

@@ -87,40 +87,40 @@ export function ProfilePreferencesCard() {
   };
 
   return (
-    <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5">
+    <div className="neu-card rounded-2xl sm:rounded-3xl p-4 sm:p-7 space-y-4 sm:space-y-5 w-full max-w-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
-        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50">
+      <div className="flex items-center gap-2.5 sm:gap-3 border-b border-slate-300/40 pb-3 min-w-0">
+        <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50 shrink-0">
           <Bell className="w-4 h-4" />
         </div>
-        <div>
-          <h2 className="font-bold text-sm sm:text-base text-slate-900">
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-sm sm:text-base text-slate-900 truncate">
             Notifications &amp; Audio Preferences
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 leading-tight">
             Customize incoming lead chimes and desktop alert settings.
           </p>
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {/* Audio Chime Setting */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl neu-pressed bg-[#edf2f8]">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl neu-pressed bg-[#edf2f8] w-full min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
             <div className="w-9 h-9 rounded-xl neu-convex flex items-center justify-center text-slate-700 shrink-0">
               <Volume2 className="w-4 h-4" />
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-900">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-slate-900 truncate">
                 Incoming Message Audio Chimes
               </p>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-500 leading-tight">
                 Play a pleasant audio chime when new WhatsApp leads arrive.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <button
               type="button"
               onClick={playTestChime}
@@ -133,7 +133,8 @@ export function ProfilePreferencesCard() {
               role="switch"
               aria-checked={soundEnabled}
               onClick={toggleSound}
-              className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
+              aria-label="Toggle audio chimes"
+              className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer shrink-0 ${
                 soundEnabled ? "bg-[#ff6422]" : "bg-slate-300"
               }`}
             >
@@ -147,22 +148,22 @@ export function ProfilePreferencesCard() {
         </div>
 
         {/* Desktop Notifications Setting */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl neu-pressed bg-[#edf2f8]">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl neu-pressed bg-[#edf2f8] w-full min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
             <div className="w-9 h-9 rounded-xl neu-convex flex items-center justify-center text-slate-700 shrink-0">
               <BellRing className="w-4 h-4" />
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-900">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold text-slate-900 truncate">
                 Browser Desktop Notifications
               </p>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-500 leading-tight">
                 Receive pop-up notifications even when ConvoDeck is minimized.
               </p>
             </div>
           </div>
 
-          <div className="self-end sm:self-auto">
+          <div className="self-end sm:self-auto shrink-0">
             {notificationPermission === "granted" ? (
               <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-xs font-bold flex items-center gap-1.5 shadow-xs">
                 <CheckCircle2 className="w-3.5 h-3.5" />

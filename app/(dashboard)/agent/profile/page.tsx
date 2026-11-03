@@ -83,21 +83,21 @@ export default function AgentProfilePage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto pb-16 text-slate-800">
+    <div className="space-y-5 sm:space-y-6 max-w-4xl mx-auto pb-16 text-slate-800 w-full max-w-full min-w-0 overflow-x-hidden">
       {/* Agent Workstation Quick Switcher Banner */}
-      <div className="p-4 sm:p-5 rounded-3xl neu-card bg-[#edf2f8] flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-orange-200/50">
-        <div className="flex items-center gap-3">
+      <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl neu-card bg-[#edf2f8] flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-orange-200/50 w-full min-w-0">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
           <div className="w-10 h-10 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/60 shrink-0">
             <Headphones className="w-5 h-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-black text-slate-900">Agent Workstation Identity</h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h2 className="text-sm font-black text-slate-900 truncate">Agent Workstation Identity</h2>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 shrink-0">
                 Live Seat
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5 leading-tight truncate">
               Assigned to {profileData.workspaceName}. Manage your credentials &amp; customer chat chimes.
             </p>
           </div>
@@ -105,7 +105,7 @@ export default function AgentProfilePage() {
 
         <Link
           href="/agent/dashboard"
-          className="px-4 py-2 neu-btn-primary rounded-xl text-xs font-bold text-white flex items-center justify-center gap-1.5 shrink-0 shadow-xs cursor-pointer hover:scale-102 transition-transform"
+          className="w-full sm:w-auto px-4 py-2 neu-btn-primary rounded-xl text-xs font-bold text-white flex items-center justify-center gap-1.5 shrink-0 shadow-xs cursor-pointer hover:scale-102 transition-transform"
         >
           Open Workstation
           <ArrowRight className="w-3.5 h-3.5" />
