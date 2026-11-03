@@ -2,9 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import { X, ShieldCheck, CheckCircle2, LogOut } from "lucide-react";
+import { X, ShieldCheck, LogOut } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
+import { SidebarWhatsAppCard } from "@/components/dashboard/SidebarWhatsAppCard";
 import { logoutUser } from "@/actions/authActions";
 
 interface MobileDrawerProps {
@@ -133,42 +134,12 @@ export function MobileDrawer({
         {/* WhatsApp Business Live Card */}
         <div className="p-3 sm:p-4 shrink-0">
           <div className="neu-dribbble-divider-full my-1.5" aria-hidden="true" />
-          <Link
-            id="tour-btn-whatsapp-status"
-            href={isAgent ? "/agent/dashboard" : "/settings"}
-            onClick={onClose}
-            className="block p-3 neu-pressed rounded-2xl space-y-1 transition-all border border-slate-300/40 group hover:border-slate-400/60"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span
-                  className={`w-2.5 h-2.5 rounded-full ${
-                    whatsappNumber ? "bg-[#25D366] animate-pulse" : "bg-amber-400"
-                  }`}
-                  aria-hidden="true"
-                />
-                <span className="text-xs font-bold text-slate-900">
-                  WhatsApp Business
-                </span>
-              </div>
-              <span
-                className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border ${
-                  whatsappNumber
-                    ? "bg-slate-900/10 text-slate-900 border-slate-300/60"
-                    : "bg-amber-50 text-amber-700 border-amber-200/60"
-                }`}
-              >
-                <CheckCircle2 className="w-2.5 h-2.5" />
-                {whatsappNumber ? "Live" : "Setup"}
-              </span>
-            </div>
-            <p className="text-xs font-mono font-bold text-slate-900 truncate">
-              {whatsappNumber || "Not connected"}
-            </p>
-            <p className="text-[10px] text-slate-500">
-              {whatsappNumber ? "Shared multi-agent line active." : "Click to connect line in Settings."}
-            </p>
-          </Link>
+          <SidebarWhatsAppCard
+            whatsappNumber={whatsappNumber}
+            isAgent={isAgent}
+            isCollapsed={false}
+            onNavigate={onClose}
+          />
         </div>
 
         {/* Interactive Tour Guide */}

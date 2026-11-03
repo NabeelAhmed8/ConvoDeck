@@ -5,13 +5,12 @@ import Link from "next/link";
 import {
   ShieldCheck,
   LogOut,
-  CheckCircle2,
-  Phone,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
+import { SidebarWhatsAppCard } from "@/components/dashboard/SidebarWhatsAppCard";
 import { logoutUser } from "@/actions/authActions";
 
 interface DesktopSidebarProps {
@@ -168,64 +167,15 @@ export function DesktopSidebar({
 
       {/* WhatsApp Business Connected Line Card */}
       <div className={isCollapsed ? "p-2 flex flex-col items-center" : "p-3 sm:p-4"}>
-        {isCollapsed ? (
-          <>
-            <div className="neu-dribbble-divider my-1.5 w-full" aria-hidden="true" />
-            <Link
-              id="tour-btn-whatsapp-status"
-              href={isAgent ? "/agent/dashboard" : "/settings"}
-              aria-label={whatsappNumber ? `WhatsApp Live: ${whatsappNumber}` : "WhatsApp: Not Connected"}
-              title={whatsappNumber ? `WhatsApp Live: ${whatsappNumber}` : "WhatsApp: Not Connected (Click to set up)"}
-              className="w-12 h-12 neu-pressed rounded-full flex items-center justify-center border border-slate-300/40 text-slate-900 relative hover:scale-105 transition-transform"
-            >
-              <Phone className="w-5 h-5 text-slate-900" />
-              <span
-                className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ${
-                  whatsappNumber ? "bg-[#25D366] animate-pulse" : "bg-amber-400"
-                }`}
-              />
-            </Link>
-          </>
-        ) : (
-          <>
-            <div className="neu-dribbble-divider-full my-2" aria-hidden="true" />
-            <Link
-              id="tour-btn-whatsapp-status"
-              href={isAgent ? "/agent/dashboard" : "/settings"}
-              className="block p-3 neu-pressed rounded-2xl space-y-1 transition-all border border-slate-300/40 group hover:border-slate-400/60"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`w-2.5 h-2.5 rounded-full ${
-                      whatsappNumber ? "bg-[#25D366] animate-pulse" : "bg-amber-400"
-                    }`}
-                    aria-hidden="true"
-                  />
-                  <span className="text-xs font-bold text-slate-900">
-                    WhatsApp Business
-                  </span>
-                </div>
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border ${
-                    whatsappNumber
-                      ? "bg-slate-900/10 text-slate-900 border-slate-300/60"
-                      : "bg-amber-50 text-amber-700 border-amber-200/60"
-                  }`}
-                >
-                  <CheckCircle2 className="w-2.5 h-2.5" />
-                  {whatsappNumber ? "Live" : "Setup"}
-                </span>
-              </div>
-              <p className="text-xs font-mono font-bold text-slate-900 truncate">
-                {whatsappNumber || "Not connected"}
-              </p>
-              <p className="text-[10px] text-slate-500">
-                {whatsappNumber ? "Shared multi-agent line active." : "Click to connect line in Settings."}
-              </p>
-            </Link>
-          </>
-        )}
+        <div
+          className={isCollapsed ? "neu-dribbble-divider my-1.5 w-full" : "neu-dribbble-divider-full my-2"}
+          aria-hidden="true"
+        />
+        <SidebarWhatsAppCard
+          whatsappNumber={whatsappNumber}
+          isAgent={isAgent}
+          isCollapsed={isCollapsed}
+        />
       </div>
 
       {/* Interactive Tour Guide Launcher */}
