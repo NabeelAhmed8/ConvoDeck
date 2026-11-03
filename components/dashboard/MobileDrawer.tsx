@@ -50,7 +50,7 @@ export function MobileDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Main Navigation Menu"
-        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 sm:w-80 max-w-[85vw] h-full neu-dribbble-rail bg-[#f0f3f8] text-slate-900 flex flex-col shadow-2xl transition-transform duration-300 ease-out transform ${
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 sm:w-80 max-w-[85vw] h-full neu-dribbble-rail bg-[#edf1f7] text-slate-900 flex flex-col shadow-2xl transition-transform duration-300 ease-out transform overflow-y-auto chat-scrollbar ${
           isOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
         }`}
       >

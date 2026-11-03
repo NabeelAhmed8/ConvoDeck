@@ -3,37 +3,37 @@
 import React, { useMemo } from "react";
 import {
   Sparkles,
-  MessageSquare,
-  Kanban,
-  Users,
-  PlusCircle,
-  Settings,
   ChevronLeft,
   ChevronRight,
-  CreditCard,
-  Phone,
-  LogOut,
-  Compass,
-  ArrowUpRight,
-  BookOpen,
-  X,
-  Check,
-} from "lucide-react";
-import { ITourStep, TourIconName } from "@/constants/tourSteps";
-import { computeTourCardPosition } from "@/utils/tourPositioning";
-
-const ICONS: Record<TourIconName, React.ComponentType<{ className?: string }>> = {
-  Sparkles,
+  LayoutDashboard,
   MessageSquare,
   Kanban,
   Users,
-  PlusCircle,
-  Settings,
-  ChevronLeft,
   CreditCard,
+  Settings,
+  PlusCircle,
   Phone,
-  LogOut,
   Compass,
+  LogOut,
+  ArrowUpRight,
+  X,
+  BookOpen,
+} from "lucide-react";
+import { ITourStep } from "./tourTypes";
+
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Sparkles,
+  ChevronLeft,
+  LayoutDashboard,
+  MessageSquare,
+  Kanban,
+  Users,
+  CreditCard,
+  Settings,
+  PlusCircle,
+  Phone,
+  Compass,
+  LogOut,
   ArrowUpRight,
 };
 
@@ -64,160 +64,164 @@ export function TourCard({
   onGoToStep,
   onOpenDirectory,
 }: TourCardProps) {
-  const IconComponent = ICONS[step.iconName] || Sparkles;
+  const Icon = ICONS[step.iconName] || Sparkles;
 
-  const { top, left, placement, arrowOffset } = useMemo(() => {
-    return computeTourCardPosition(
-      targetRect,
-      380,
-      270,
-      step.preferredPosition || "right"
-    );
-  }, [targetRect, step.preferredPosition]);
+  // Compute responsive card position
+  const { top, left } = useMemo(() => {
+    if (typeof window === "undefined") {
+      return { top: 100, left: 100 };
+    }
+
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const cardW = 360;
+    const cardH = 260;
+    const pad = 16;
+
+    // Mobile screens (< 768px): Dock at bottom or top away from target
+    if (winW < 768 || !targetRect) {
+      const mobileW = Math.min(cardW, winW - pad * 2);
+      const l = Math.max(pad, (winW - mobileW) / 2);
+
+      if (!targetRect) {
+        return { top: Math.max(pad, (winH - cardH) / 2), left: l };
+      }
+
+      // If target is in the lower half of screen, position card near top
+      // If target is in the upper half of screen, position card near bottom
+      const isTargetInLowerHalf = targetRect.top > winH / 2;
+      const t = isTargetInLowerHalf
+        ? Math.max(pad, 16)
+        : Math.max(pad, winH - cardH - pad - 10);
+
+      return { top: t, left: l };
+    }
+
+    // Desktop: Position to the right of target if room allows, otherwise left/bottom
+    const spacing = 18;
+    let l = targetRect.right + spacing;
+
+    // If runs out of right room, place to left
+    if (l + cardW > winW - pad) {
+      if (targetRect.left - cardW - spacing >= pad) {
+        l = targetRect.left - cardW - spacing;
+      } else {
+        l = Math.max(pad, Math.min(targetRect.left, winW - cardW - pad));
+      }
+    }
+
+    // Vertically center with target
+    const targetMidY = targetRect.top + targetRect.height / 2;
+    let t = targetMidY - cardH / 2;
+    t = Math.max(pad, Math.min(t, winH - cardH - pad));
+
+    return { top: t, left: l };
+  }, [targetRect]);
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-labelledby="tour-step-title"
+      aria-label="ConvoDeck Interactive Tour"
       style={{
         position: "fixed",
         top: `${top}px`,
         left: `${left}px`,
-        width: "min(380px, calc(100vw - 32px))",
+        width: "min(360px, calc(100vw - 28px))",
         transition:
-          "top 350ms cubic-bezier(0.16, 1, 0.3, 1), left 350ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease",
+          "top 0.28s cubic-bezier(0.16, 1, 0.3, 1), left 0.28s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className="z-[70] bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-[0_20px_50px_rgba(15,23,42,0.35)] border border-slate-200/80 text-slate-900 pointer-events-auto select-none"
+      className="z-[70] bg-[#edf1f7] rounded-[28px] p-5 sm:p-6 shadow-[10px_10px_28px_rgba(166,178,196,0.5),-10px_-10px_28px_#ffffff] border border-white/90 text-slate-900 pointer-events-auto select-none"
     >
-      {/* Directional pointing arrow */}
-      {placement === "right" && (
-        <div
-          className="absolute -left-2 w-4 h-4 bg-white transform rotate-45 border-l border-b border-slate-200/80 -z-10"
-          style={{ top: `${arrowOffset - 8}px` }}
-        />
-      )}
-      {placement === "left" && (
-        <div
-          className="absolute -right-2 w-4 h-4 bg-white transform rotate-45 border-r border-t border-slate-200/80 -z-10"
-          style={{ top: `${arrowOffset - 8}px` }}
-        />
-      )}
-      {placement === "bottom" && (
-        <div
-          className="absolute -top-2 w-4 h-4 bg-white transform rotate-45 border-l border-t border-slate-200/80 -z-10"
-          style={{ left: `${arrowOffset - 8}px` }}
-        />
-      )}
-      {placement === "top" && (
-        <div
-          className="absolute -bottom-2 w-4 h-4 bg-white transform rotate-45 border-r border-b border-slate-200/80 -z-10"
-          style={{ left: `${arrowOffset - 8}px` }}
-        />
-      )}
-
-      {/* Header: Badge & Controls */}
-      <div className="flex items-center justify-between gap-2 mb-3">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#ff6422]/10 text-[#ea5414] border border-[#ff6422]/20">
-            {step.badge}
-          </span>
-          <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500">
-            {step.subtitle}
+      {/* 1. Header Row: Step Pill + Category Tag + Close X */}
+      <div className="flex items-center justify-between mb-3.5">
+        <div className="flex items-center gap-2">
+          <div className="neu-pressed px-2.5 py-1 rounded-full text-[11px] font-bold text-[#ea5414] flex items-center gap-1.5 bg-[#fff4ed]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff6422] animate-pulse" />
+            <span>Step {currentStepIndex + 1} of {totalSteps}</span>
+          </div>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+            {step.category}
           </span>
         </div>
 
-        <div className="flex items-center gap-1">
-          <button
-            onClick={onOpenDirectory}
-            aria-label="Browse All Buttons"
-            title="Browse All Buttons Guide"
-            className="px-2 py-1 text-[11px] font-medium text-slate-600 hover:text-[#ea5414] hover:bg-[#ff6422]/10 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">All Buttons</span>
-          </button>
-
-          <button
-            onClick={onSkip}
-            aria-label="Skip Tour"
-            title="Skip Tour (Esc)"
-            className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={onSkip}
+          aria-label="Close tour"
+          className="w-7 h-7 rounded-full neu-btn flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
       </div>
 
-      {/* Button Title & Icon */}
-      <div className="flex items-start gap-3 mb-2">
-        <div className="w-9 h-9 rounded-2xl neu-btn-primary text-white flex items-center justify-center shrink-0 shadow-sm shadow-[#ff6422]/20">
-          <IconComponent className="w-4 h-4" />
+      {/* 2. Middle Row: Squircle Tile + Title + Friendly Description */}
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-10 h-10 rounded-2xl neu-convex flex items-center justify-center shrink-0 text-slate-900 shadow-sm mt-0.5">
+          <Icon className="w-5 h-5 text-slate-900" />
         </div>
-        <div>
-          <h2 id="tour-step-title" className="text-base font-bold text-slate-900 leading-snug">
+        <div className="min-w-0">
+          <h3 className="font-extrabold text-slate-900 text-sm sm:text-base tracking-tight leading-snug">
             {step.title}
-          </h2>
-          {step.shortcut && (
-            <span className="text-[10px] text-slate-500 font-mono bg-slate-100 px-1.5 py-0.5 rounded-md inline-block mt-0.5">
-              Shortcut: {step.shortcut}
-            </span>
-          )}
+          </h3>
+          <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {step.description}
+          </p>
         </div>
       </div>
 
-      {/* Step Description */}
-      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 min-h-[46px]">
-        {step.description}
-      </p>
-
-      {/* Footer Controls: Dots & Navigation */}
-      <div className="flex items-center justify-between pt-3 border-t border-slate-100 gap-2">
-        {/* Step dots */}
-        <div className="flex items-center gap-1 overflow-x-hidden max-w-[120px]">
-          {Array.from({ length: totalSteps }).map((_, idx) => (
+      {/* 3. Interactive Step Dots Indicator */}
+      <div className="flex items-center gap-1.5 mb-4 px-0.5">
+        {Array.from({ length: totalSteps }).map((_, idx) => {
+          const isActive = idx === currentStepIndex;
+          return (
             <button
               key={idx}
+              type="button"
               onClick={() => onGoToStep(idx)}
-              aria-label={`Go to button ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer shrink-0 ${
-                idx === currentStepIndex
-                  ? "w-4 bg-[#ff6422]"
-                  : "w-1.5 bg-slate-200 hover:bg-slate-300"
+              aria-label={`Jump to step ${idx + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
+                isActive
+                  ? "w-6 bg-[#ff6422]"
+                  : "w-2 bg-slate-300 hover:bg-slate-400"
               }`}
             />
-          ))}
-        </div>
+          );
+        })}
+      </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-1.5 shrink-0">
+      {/* 4. Controls Row: Directory link + Prev + Next */}
+      <div className="flex items-center justify-between pt-3 border-t border-slate-300/40">
+        <button
+          type="button"
+          onClick={onOpenDirectory}
+          className="text-[11px] font-bold text-slate-500 hover:text-[#ea5414] flex items-center gap-1 transition-colors cursor-pointer"
+        >
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>All Buttons</span>
+        </button>
+
+        <div className="flex items-center gap-2">
           {!isFirstStep && (
             <button
-              onClick={onPrev}
               type="button"
-              className="px-2.5 py-1.5 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1 cursor-pointer"
+              onClick={onPrev}
+              aria-label="Previous step"
+              className="px-3.5 py-1.5 text-xs font-bold neu-btn rounded-full text-slate-700 hover:text-slate-900 flex items-center gap-1 cursor-pointer"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              Back
+              <span>Back</span>
             </button>
           )}
 
           <button
-            onClick={onNext}
             type="button"
-            className="px-3.5 py-1.5 text-xs font-bold rounded-xl neu-btn-primary text-white shadow-md shadow-[#ff6422]/25 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+            onClick={onNext}
+            aria-label={isLastStep ? "Finish tour" : "Next step"}
+            className="px-4 py-1.5 text-xs font-bold neu-btn-primary rounded-full text-white flex items-center gap-1 cursor-pointer shadow-sm"
           >
-            {isLastStep ? (
-              <>
-                <Check className="w-3.5 h-3.5" />
-                Finish Guide
-              </>
-            ) : (
-              <>
-                Next Button
-                <ChevronRight className="w-3.5 h-3.5" />
-              </>
-            )}
+            <span>{isLastStep ? "Done" : "Next"}</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
