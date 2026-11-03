@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Lock,
   Mail,
   User,
   Building,
@@ -15,6 +14,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import {
   signupUser,
   verifySignupCode,
@@ -235,22 +235,16 @@ export default function SignupPage() {
                 <label htmlFor="signup-account-password" className="block text-xs font-semibold text-slate-700 mb-1">
                   Password <span className="text-rose-500" aria-hidden="true">*</span>
                 </label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
-                  <input
-                    id="signup-account-password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    placeholder="At least 6 characters"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-9 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-                    required
-                    aria-required="true"
-                    minLength={6}
-                  />
-                </div>
+                <PasswordInput
+                  id="signup-account-password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="At least 6 characters"
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                />
               </div>
 
               <Button
