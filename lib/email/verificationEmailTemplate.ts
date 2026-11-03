@@ -2,7 +2,7 @@ import { EMAIL_THEME } from "./emailTheme";
 
 export interface VerificationEmailTemplateProps {
   code: string;
-  type: "signup" | "login" | "reset_password";
+  type: "signup" | "login" | "reset_password" | "change_email";
   recipientName?: string;
 }
 
@@ -13,17 +13,22 @@ export function renderVerificationEmailHtml({
 }: VerificationEmailTemplateProps): { subject: string; title: string; html: string } {
   const isSignup = type === "signup";
   const isReset = type === "reset_password";
+  const isChangeEmail = type === "change_email";
 
   const subject = isReset
     ? `${code} is your ConvoDeck password reset code`
     : isSignup
     ? `${code} is your ConvoDeck verification code`
+    : isChangeEmail
+    ? `${code} is your ConvoDeck email change verification code`
     : `${code} is your ConvoDeck sign-in code`;
 
   const title = isReset
     ? "Reset your password"
     : isSignup
     ? "Verify your new account"
+    : isChangeEmail
+    ? "Verify email address change"
     : "Verify your sign-in attempt";
 
   const greeting = recipientName ? `Hello ${recipientName},` : "Hello,";
@@ -32,6 +37,8 @@ export function renderVerificationEmailHtml({
     ? "We received a request to reset your ConvoDeck password. Enter this 6-digit verification code to choose a new password:"
     : isSignup
     ? "Thank you for creating your ConvoDeck workspace. Enter this 6-digit verification code to complete registration:"
+    : isChangeEmail
+    ? "We received a request to change the primary email address for your ConvoDeck account. Enter this 6-digit verification code to confirm your identity:"
     : "We received a sign-in request for your ConvoDeck workspace. Enter this 6-digit code to securely log in:";
 
   const html = `

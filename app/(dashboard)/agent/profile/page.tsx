@@ -56,7 +56,8 @@ export default function AgentProfilePage() {
   const handleProfileUpdated = (
     newName: string,
     newAvatar?: string,
-    newPhone?: string
+    newPhone?: string,
+    newEmail?: string
   ) => {
     setProfileData((prev) =>
       prev
@@ -65,6 +66,7 @@ export default function AgentProfilePage() {
             name: newName,
             ...(newAvatar !== undefined ? { avatar: newAvatar } : {}),
             ...(newPhone !== undefined ? { phone: newPhone } : {}),
+            ...(newEmail !== undefined ? { email: newEmail } : {}),
           }
         : null
     );

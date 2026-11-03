@@ -5,7 +5,7 @@ import { renderAgentWelcomeEmailHtml } from "./email/agentWelcomeEmailTemplate";
 export interface SendVerificationEmailParams {
   to: string;
   code: string;
-  type: "signup" | "login" | "reset_password";
+  type: "signup" | "login" | "reset_password" | "change_email";
   recipientName?: string;
 }
 
