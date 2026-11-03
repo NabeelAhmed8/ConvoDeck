@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { ChevronDown, Search, Check } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import { COUNTRIES, Country, DEFAULT_COUNTRY } from "@/lib/countries";
+import { CountryOptionItem } from "./CountryOptionItem";
 
 interface CountryCodeDropdownProps {
   selectedDialCode: string;
@@ -12,8 +13,9 @@ interface CountryCodeDropdownProps {
 
 /**
  * CountryCodeDropdown
- * Single Responsibility: Interactive dynamic Neumorphic dropdown for selecting
- * an international country dialing code with live real-time search filtering.
+ * Single Responsibility: Dynamic, responsive country dialing code selector.
+ * Renders an accessible Neumorphic popover on desktop and a smooth bottom-sheet
+ * dialog on mobile devices to prevent any viewport clipping.
  */
 export function CountryCodeDropdown({
   selectedDialCode,
@@ -23,7 +25,8 @@ export function CountryCodeDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const desktopSearchInputRef = useRef<HTMLInputElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
 
   // Active selected country
   const selectedCountry = useMemo(() => {
@@ -46,7 +49,7 @@ export function CountryCodeDropdown({
     );
   }, [searchQuery]);
 
-  // Handle outside click to close dropdown
+  // Close on outside click for desktop popover
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -64,13 +67,28 @@ export function CountryCodeDropdown({
     };
   }, [isOpen]);
 
-  // Auto-focus search input when opening
+  // Handle focus & body scroll lock on mobile when open
   useEffect(() => {
     if (isOpen) {
       setSearchQuery("");
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 50);
+      // Lock body scroll on small screens
+      const originalOverflow = document.body.style.overflow;
+      if (window.innerWidth < 640) {
+        document.body.style.overflow = "hidden";
+      }
+
+      const timer = setTimeout(() => {
+        if (window.innerWidth >= 640) {
+          desktopSearchInputRef.current?.focus();
+        } else {
+          mobileSearchInputRef.current?.focus();
+        }
+      }, 60);
+
+      return () => {
+        clearTimeout(timer);
+        document.body.style.overflow = originalOverflow;
+      };
     }
   }, [isOpen]);
 
@@ -117,21 +135,100 @@ export function CountryCodeDropdown({
         />
       </button>
 
-      {/* Dynamic Popover Dropdown Menu */}
+      {/* 1. MOBILE RESPONSIVE BOTTOM SHEET (Viewport < 640px) */}
+      {isOpen && (
+        <div className="sm:hidden fixed inset-0 z-[100] flex flex-col justify-end">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Bottom Sheet Drawer */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Select Country Code"
+            className="relative z-10 w-full bg-[#edf1f7] neu-card rounded-t-3xl p-4 max-h-[82vh] flex flex-col shadow-2xl border-t border-white/80 animate-in slide-in-from-bottom duration-200"
+          >
+            {/* Grab Handle */}
+            <div className="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3 shrink-0" />
+
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-300/50 mb-3 shrink-0">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  Select Country Code
+                </h3>
+                <p className="text-[11px] text-slate-500">
+                  Choose your international calling prefix
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close country selector"
+                className="p-1.5 rounded-full hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input on Mobile */}
+            <div className="relative mb-3 shrink-0">
+              <Search
+                className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                aria-hidden="true"
+              />
+              <input
+                ref={mobileSearchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search country or code (e.g. +92, US)..."
+                className="w-full pl-9 pr-3 py-2.5 text-sm neu-input rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none"
+                aria-label="Search country or dial code"
+              />
+            </div>
+
+            {/* Countries Scrollable List on Mobile */}
+            <div className="flex-1 overflow-y-auto space-y-1 pr-1 custom-scrollbar min-h-0">
+              {filteredCountries.length === 0 ? (
+                <div className="p-6 text-center text-xs text-slate-500">
+                  No country found matching &ldquo;{searchQuery}&rdquo;
+                </div>
+              ) : (
+                filteredCountries.map((c) => (
+                  <CountryOptionItem
+                    key={`mobile-${c.code}`}
+                    country={c}
+                    isSelected={c.code === selectedCountry.code}
+                    onSelect={handleSelectCountry}
+                    isMobile={true}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. DESKTOP POPOVER DROPDOWN (Viewport >= 640px) */}
       {isOpen && (
         <div
           role="listbox"
           aria-label="Country Dialing Codes"
-          className="absolute z-50 left-0 top-full mt-2 w-72 max-w-[90vw] neu-card rounded-2xl p-2 bg-[#edf1f7] shadow-xl border border-white/60 animate-in fade-in zoom-in-95 duration-150"
+          className="hidden sm:block absolute z-50 left-0 top-full mt-2 w-80 max-w-[calc(100vw-3rem)] neu-card rounded-2xl p-2 bg-[#edf1f7] shadow-xl border border-white/60 animate-in fade-in zoom-in-95 duration-150"
         >
-          {/* Search Box */}
+          {/* Desktop Search Box */}
           <div className="relative mb-2 px-1">
             <Search
               className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
               aria-hidden="true"
             />
             <input
-              ref={searchInputRef}
+              ref={desktopSearchInputRef}
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -141,45 +238,22 @@ export function CountryCodeDropdown({
             />
           </div>
 
-          {/* Options List */}
+          {/* Desktop Options List */}
           <div className="max-h-56 overflow-y-auto space-y-0.5 pr-0.5 custom-scrollbar">
             {filteredCountries.length === 0 ? (
               <div className="p-3 text-center text-xs text-slate-500">
                 No country found matching &ldquo;{searchQuery}&rdquo;
               </div>
             ) : (
-              filteredCountries.map((c) => {
-                const isSelected = c.code === selectedCountry.code;
-                return (
-                  <button
-                    key={c.code}
-                    type="button"
-                    role="option"
-                    aria-selected={isSelected}
-                    onClick={() => handleSelectCountry(c)}
-                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs text-left transition-colors cursor-pointer ${
-                      isSelected
-                        ? "bg-orange-50 text-[#ea5414] font-semibold neu-pressed"
-                        : "text-slate-700 hover:bg-slate-200/60"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-base shrink-0 leading-none" aria-hidden="true">
-                        {c.flag}
-                      </span>
-                      <span className="truncate">{c.name}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 shrink-0 pl-2">
-                      <span className="font-mono text-[11px] text-slate-500">
-                        {c.dialCode}
-                      </span>
-                      {isSelected && (
-                        <Check className="w-3.5 h-3.5 text-[#ff6422]" aria-hidden="true" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })
+              filteredCountries.map((c) => (
+                <CountryOptionItem
+                  key={`desktop-${c.code}`}
+                  country={c}
+                  isSelected={c.code === selectedCountry.code}
+                  onSelect={handleSelectCountry}
+                  isMobile={false}
+                />
+              ))
             )}
           </div>
         </div>
@@ -187,4 +261,3 @@ export function CountryCodeDropdown({
     </div>
   );
 }
-
