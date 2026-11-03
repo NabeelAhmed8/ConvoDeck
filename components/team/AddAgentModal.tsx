@@ -5,6 +5,7 @@ import { UserPlus, AlertCircle, CheckCircle2, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/Button";
 import { createTeamAgent } from "@/actions/teamActions";
 import { IUser, UserRole } from "@/types";
+import { AgentFormFields } from "@/components/team/AgentFormFields";
 
 interface AddAgentModalProps {
   isOpen: boolean;
@@ -12,6 +13,11 @@ interface AddAgentModalProps {
   onAgentCreated: (newMember: IUser) => void;
 }
 
+/**
+ * AddAgentModal
+ * Modal dialog for onboarding a new team agent, sending credentials,
+ * and transitioning to a 'Done' confirmation state that closes on click.
+ */
 export function AddAgentModal({
   isOpen,
   onClose,
@@ -25,11 +31,31 @@ export function AddAgentModal({
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isDone, setIsDone] = useState(false);
 
   if (!isOpen) return null;
 
+  const handleClose = () => {
+    setIsDone(false);
+    setError("");
+    setSuccessMsg("");
+    setPreviewUrl(null);
+    setName("");
+    setEmail("");
+    setPassword("Agent@2026!");
+    setRole("agent");
+    onClose();
+  };
+
   const handleCreateAgent = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // If already completed, clicking Done immediately closes the modal
+    if (isDone) {
+      handleClose();
+      return;
+    }
+
     setLoading(true);
     setError("");
     setSuccessMsg("");
@@ -47,9 +73,7 @@ export function AddAgentModal({
       onAgentCreated(res.member);
       setSuccessMsg(`Agent account created successfully for ${res.member.name}`);
       if (res.previewUrl) setPreviewUrl(res.previewUrl);
-      setName("");
-      setEmail("");
-      setPassword("Agent@2026!");
+      setIsDone(true);
     } else {
       setError(res.error || "Failed to create agent");
     }
@@ -82,9 +106,9 @@ export function AddAgentModal({
         )}
 
         {successMsg && (
-          <div className="p-3 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-2xl text-xs space-y-1">
+          <div className="p-3.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-2xl text-xs space-y-1.5 shadow-xs">
             <div className="flex items-center gap-2 font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>{successMsg}</span>
             </div>
             {previewUrl && (
@@ -92,7 +116,7 @@ export function AddAgentModal({
                 href={previewUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#ea5414] underline pt-1 font-semibold flex items-center gap-1"
+                className="text-[#ea5414] underline pt-0.5 font-semibold flex items-center gap-1 hover:text-[#ff6422] transition-colors"
               >
                 View Dispatched Email Preview <ExternalLink className="w-3 h-3" />
               </a>
@@ -101,98 +125,46 @@ export function AddAgentModal({
         )}
 
         <form onSubmit={handleCreateAgent} className="space-y-4">
-          <div>
-            <label
-              htmlFor="agent-full-name"
-              className="block text-xs font-semibold text-slate-700 mb-1"
-            >
-              Agent Full Name <span className="text-rose-500" aria-hidden="true">*</span>
-            </label>
-            <input
-              id="agent-full-name"
-              name="agentName"
-              required
-              placeholder="e.g. Asad Ali"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="agent-work-email"
-              className="block text-xs font-semibold text-slate-700 mb-1"
-            >
-              Agent Work Email <span className="text-rose-500" aria-hidden="true">*</span>
-            </label>
-            <input
-              id="agent-work-email"
-              name="agentEmail"
-              type="email"
-              required
-              placeholder="asad@agency.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="agent-initial-password"
-              className="block text-xs font-semibold text-slate-700 mb-1"
-            >
-              Temporary Password <span className="text-rose-500" aria-hidden="true">*</span>
-            </label>
-            <input
-              id="agent-initial-password"
-              name="agentPassword"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="agent-role-select"
-              className="block text-xs font-semibold text-slate-700 mb-1"
-            >
-              Agent Role & Permissions (RBAC) <span className="text-rose-500" aria-hidden="true">*</span>
-            </label>
-            <select
-              id="agent-role-select"
-              name="agentRole"
-              aria-label="Agent Role and Permissions"
-              value={role}
-              onChange={(e) => setRole(e.target.value as UserRole)}
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 font-semibold focus:outline-none"
-            >
-              <option value="agent">Sales Agent (Chat & Pipeline access only)</option>
-              <option value="manager">Team Manager (Pipeline, Analytics & Reports)</option>
-              <option value="admin">Administrator / Co-Owner (Full access)</option>
-            </select>
-          </div>
+          <AgentFormFields
+            name={name}
+            email={email}
+            password={password}
+            role={role}
+            disabled={loading || isDone}
+            onNameChange={setName}
+            onEmailChange={setEmail}
+            onPasswordChange={setPassword}
+            onRoleChange={setRole}
+          />
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="neu-btn text-slate-700 border-none"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="neu-btn-primary cursor-pointer border-none"
-            >
-              {loading ? "Creating..." : "Create & Send Credentials"}
-            </Button>
+            {isDone ? (
+              <Button
+                type="button"
+                onClick={handleClose}
+                className="neu-btn-primary cursor-pointer border-none px-8 py-2.5 text-xs font-bold shadow-md hover:scale-102 transition-transform"
+              >
+                Done
+              </Button>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleClose}
+                  className="neu-btn text-slate-700 border-none cursor-pointer"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="neu-btn-primary cursor-pointer border-none"
+                >
+                  {loading ? "Creating..." : "Create & Send Credentials"}
+                </Button>
+              </>
+            )}
           </div>
         </form>
       </div>
