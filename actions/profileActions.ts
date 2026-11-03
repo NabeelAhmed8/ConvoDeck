@@ -13,6 +13,7 @@ import {
 export interface UpdateProfileParams {
   name: string;
   phone?: string;
+  avatar?: string;
 }
 
 export interface ChangePasswordParams {
@@ -47,6 +48,9 @@ export async function updateUserProfile(params: UpdateProfileParams) {
     if (params.phone !== undefined) {
       user.phone = params.phone.trim();
     }
+    if (params.avatar !== undefined) {
+      user.avatar = params.avatar;
+    }
     await user.save();
 
     // Refresh active session cookie with updated name
@@ -80,6 +84,7 @@ export async function updateUserProfile(params: UpdateProfileParams) {
         name: user.name,
         email: user.email,
         phone: user.phone || "",
+        avatar: user.avatar || "",
         role: user.role,
       },
     };

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Laptop, LogOut, CheckCircle } from "lucide-react";
+import { Laptop, LogOut, ShieldCheck } from "lucide-react";
 import { logoutUser } from "@/actions/authActions";
 
 export function ProfileSessionsCard() {
@@ -60,9 +60,10 @@ export function ProfileSessionsCard() {
                 Active Now
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 mt-0.5">
-              Current session verified with secure HTTP-only JWT.
-            </p>
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span>Signed in on this device • Secure encrypted session</span>
+            </div>
           </div>
         </div>
 

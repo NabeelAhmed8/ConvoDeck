@@ -4,24 +4,28 @@ import React, { useState } from "react";
 import { User, Mail, Phone, Save, Lock } from "lucide-react";
 import { updateUserProfile } from "@/actions/profileActions";
 import { toast } from "@/store/useToastStore";
+import { ProfileAvatarUploader } from "@/components/profile/ProfileAvatarUploader";
 
 interface ProfileIdentityCardProps {
   initialName: string;
   email: string;
   initialPhone?: string;
+  initialAvatar?: string;
   role: string;
-  onProfileUpdated?: (newName: string) => void;
+  onProfileUpdated?: (newName: string, newAvatar?: string) => void;
 }
 
 export function ProfileIdentityCard({
   initialName,
   email,
   initialPhone = "",
+  initialAvatar = "",
   role,
   onProfileUpdated,
 }: ProfileIdentityCardProps) {
   const [name, setName] = useState(initialName);
   const [phone, setPhone] = useState(initialPhone);
+  const [avatar, setAvatar] = useState(initialAvatar);
   const [isSaving, setIsSaving] = useState(false);
 
   // Compute initials
@@ -42,10 +46,10 @@ export function ProfileIdentityCard({
 
     setIsSaving(true);
     try {
-      const res = await updateUserProfile({ name, phone });
+      const res = await updateUserProfile({ name, phone, avatar });
       if (res.success) {
         toast.success("Profile Updated", "Your personal details have been saved.");
-        onProfileUpdated?.(name);
+        onProfileUpdated?.(name, avatar);
       } else {
         toast.error("Update Failed", res.error || "Could not update profile.");
       }
@@ -73,18 +77,22 @@ export function ProfileIdentityCard({
         </div>
       </div>
 
-      {/* Avatar & Info Row */}
-      <div className="flex items-center gap-4 p-3.5 rounded-2xl neu-pressed bg-[#e9eff6]">
-        <div className="w-14 h-14 rounded-full neu-convex flex items-center justify-center font-black text-base text-slate-800 shrink-0 border border-white/60">
-          {initials}
-        </div>
+      {/* Avatar Uploader Component */}
+      <ProfileAvatarUploader
+        currentAvatar={avatar}
+        initials={initials}
+        onAvatarChange={setAvatar}
+      />
+
+      {/* Account Info Bar */}
+      <div className="flex items-center justify-between gap-3 p-3 rounded-2xl neu-pressed bg-[#edf2f8] text-xs">
         <div className="min-w-0">
-          <p className="text-sm font-bold text-slate-900 truncate">{name || "Administrator"}</p>
-          <p className="text-xs text-slate-500 truncate">{email}</p>
-          <span className="inline-block text-[10px] font-semibold text-[#ea5414] uppercase tracking-wider mt-0.5">
-            {role === "admin" ? "Super Admin & Workspace Owner" : "Team Member"}
-          </span>
+          <p className="text-xs font-bold text-slate-900 truncate">{name || "User"}</p>
+          <p className="text-[11px] text-slate-500 truncate">{email}</p>
         </div>
+        <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full bg-orange-100/70 text-[#ea5414] border border-orange-200/60 uppercase tracking-wider">
+          {role === "admin" ? "Workspace Owner" : "Sales Agent"}
+        </span>
       </div>
 
       {/* Form Fields */}

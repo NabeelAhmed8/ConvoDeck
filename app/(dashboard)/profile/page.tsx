@@ -13,6 +13,7 @@ interface UserProfileData {
   name: string;
   email: string;
   phone?: string;
+  avatar?: string;
   role: string;
   workspaceName: string;
 }
@@ -31,6 +32,7 @@ export default function ProfilePage() {
             name: authData.user.name || "",
             email: authData.user.email || "",
             phone: authData.user.phone || "",
+            avatar: authData.user.avatar || "",
             role: authData.user.role || "admin",
             workspaceName: authData.workspace?.name || "My Workspace",
           });
@@ -44,8 +46,16 @@ export default function ProfilePage() {
     loadData();
   }, []);
 
-  const handleProfileUpdated = (newName: string) => {
-    setProfileData((prev) => (prev ? { ...prev, name: newName } : null));
+  const handleProfileUpdated = (newName: string, newAvatar?: string) => {
+    setProfileData((prev) =>
+      prev
+        ? {
+            ...prev,
+            name: newName,
+            ...(newAvatar !== undefined ? { avatar: newAvatar } : {}),
+          }
+        : null
+    );
   };
 
   if (isLoading) {
@@ -78,6 +88,7 @@ export default function ProfilePage() {
         initialName={profileData.name}
         email={profileData.email}
         initialPhone={profileData.phone}
+        initialAvatar={profileData.avatar}
         role={profileData.role}
         onProfileUpdated={handleProfileUpdated}
       />

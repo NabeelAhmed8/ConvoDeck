@@ -13,6 +13,7 @@ interface DashboardNavWrapperProps {
   userRole: string;
   workspaceName: string;
   whatsappNumber: string;
+  userAvatar?: string;
 }
 
 export function DashboardNavWrapper({
@@ -21,6 +22,7 @@ export function DashboardNavWrapper({
   userRole,
   workspaceName,
   whatsappNumber,
+  userAvatar,
 }: DashboardNavWrapperProps) {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
@@ -102,6 +104,7 @@ export function DashboardNavWrapper({
         workspaceName={workspaceName}
         whatsappNumber={whatsappNumber}
         initials={initials}
+        userAvatar={userAvatar}
         isAgent={isAgent}
         onOpenDrawer={() => setIsMobileDrawerOpen(true)}
       />
@@ -116,6 +119,7 @@ export function DashboardNavWrapper({
         workspaceName={workspaceName}
         whatsappNumber={whatsappNumber}
         initials={initials}
+        userAvatar={userAvatar}
         isAgent={isAgent}
         onOpenAddLead={() => setIsAddModalOpen(true)}
       />
@@ -130,6 +134,7 @@ export function DashboardNavWrapper({
         workspaceName={workspaceName}
         whatsappNumber={whatsappNumber}
         initials={initials}
+        userAvatar={userAvatar}
         isAgent={isAgent}
         onOpenAddLead={() => setIsAddModalOpen(true)}
       />

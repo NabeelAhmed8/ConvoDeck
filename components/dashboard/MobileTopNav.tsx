@@ -10,6 +10,7 @@ interface MobileTopNavProps {
   workspaceName: string;
   whatsappNumber: string;
   initials: string;
+  userAvatar?: string;
   isAgent: boolean;
   onOpenDrawer: () => void;
 }
@@ -20,6 +21,7 @@ export function MobileTopNav({
   workspaceName,
   whatsappNumber,
   initials,
+  userAvatar,
   isAgent,
   onOpenDrawer,
 }: MobileTopNavProps) {
@@ -74,13 +76,23 @@ export function MobileTopNav({
             </span>
           </Link>
 
-          <div
-            aria-label={`Signed in as ${userName}`}
-            title={`Signed in as ${userName} (${userEmail})`}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full neu-convex flex items-center justify-center text-xs font-bold text-slate-900 shadow-xs cursor-default shrink-0"
+          <Link
+            href={isAgent ? "/agent/profile" : "/profile"}
+            aria-label={`Signed in as ${userName} — View Profile`}
+            title={`Signed in as ${userName} (${userEmail}) — View Profile`}
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full neu-convex flex items-center justify-center text-xs font-bold text-slate-900 shadow-xs cursor-pointer shrink-0 overflow-hidden border border-slate-300/40 hover:scale-105 transition-transform"
           >
-            {initials}
-          </div>
+            {userAvatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={userAvatar}
+                alt={userName}
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              initials
+            )}
+          </Link>
         </div>
       </div>
     </header>

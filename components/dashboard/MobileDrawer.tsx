@@ -17,6 +17,7 @@ interface MobileDrawerProps {
   workspaceName: string;
   whatsappNumber: string;
   initials: string;
+  userAvatar?: string;
   isAgent: boolean;
   onOpenAddLead: () => void;
 }
@@ -30,6 +31,7 @@ export function MobileDrawer({
   workspaceName,
   whatsappNumber,
   initials,
+  userAvatar,
   isAgent,
   onOpenAddLead,
 }: MobileDrawerProps) {
@@ -156,6 +158,8 @@ export function MobileDrawer({
             userName={userName}
             userEmail={userEmail}
             initials={initials}
+            userAvatar={userAvatar}
+            isAgent={isAgent}
             isCollapsed={false}
             onNavigate={onClose}
           />

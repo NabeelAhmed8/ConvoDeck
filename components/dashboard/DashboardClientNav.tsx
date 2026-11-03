@@ -12,6 +12,7 @@ import {
   CreditCard,
   Plus,
   Headphones,
+  User,
 } from "lucide-react";
 import { AddLeadModal } from "@/components/kanban/AddLeadModal";
 
@@ -53,6 +54,11 @@ export function DashboardClientNav({
               name: "Sales Pipeline",
               href: "/pipeline",
               icon: Kanban,
+            },
+            {
+              name: "Agent Profile",
+              href: "/agent/profile",
+              icon: User,
             },
           ],
         },
@@ -107,6 +113,11 @@ export function DashboardClientNav({
               name: "API & Settings",
               href: "/settings",
               icon: Settings,
+            },
+            {
+              name: "Admin Profile",
+              href: "/profile",
+              icon: User,
             },
           ],
         },

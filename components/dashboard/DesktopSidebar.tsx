@@ -21,6 +21,7 @@ interface DesktopSidebarProps {
   workspaceName: string;
   whatsappNumber: string;
   initials: string;
+  userAvatar?: string;
   isAgent: boolean;
   onOpenAddLead: () => void;
 }
@@ -34,6 +35,7 @@ export function DesktopSidebar({
   workspaceName,
   whatsappNumber,
   initials,
+  userAvatar,
   isAgent,
   onOpenAddLead,
 }: DesktopSidebarProps) {
@@ -187,6 +189,8 @@ export function DesktopSidebar({
         userName={userName}
         userEmail={userEmail}
         initials={initials}
+        userAvatar={userAvatar}
+        isAgent={isAgent}
         isCollapsed={isCollapsed}
       />
     </aside>

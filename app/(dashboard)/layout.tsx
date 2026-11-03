@@ -23,6 +23,7 @@ export default async function DashboardLayout({
   const workspaceName = authData.workspace?.name || "My Workspace";
   const whatsappNumber = authData.workspace?.whatsappPhoneNumber || "";
   const userRole = authData.user.role || "agent";
+  const userAvatar = authData.user.avatar || "";
 
   return (
     <div className="fixed inset-0 h-[100dvh] max-h-[100dvh] bg-[#ebf0f7] text-slate-900 flex flex-col lg:flex-row overflow-hidden selection:bg-[#ff6422]/20 selection:text-slate-900 w-full max-w-full">
@@ -38,6 +39,7 @@ export default async function DashboardLayout({
         userRole={userRole}
         workspaceName={workspaceName}
         whatsappNumber={whatsappNumber}
+        userAvatar={userAvatar}
       />
 
       {/* Main Content Area: Fixed padding-top on mobile (< lg) offsets the fixed header exactly */}
