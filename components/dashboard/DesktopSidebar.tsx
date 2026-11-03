@@ -4,14 +4,13 @@ import React from "react";
 import Link from "next/link";
 import {
   ShieldCheck,
-  LogOut,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { SidebarWhatsAppCard } from "@/components/dashboard/SidebarWhatsAppCard";
-import { logoutUser } from "@/actions/authActions";
+import { SidebarUserProfile } from "@/components/dashboard/SidebarUserProfile";
 
 interface DesktopSidebarProps {
   isCollapsed: boolean;
@@ -184,64 +183,12 @@ export function DesktopSidebar({
       </div>
 
       {/* User Profile & Logout */}
-      <div
-        className={
-          isCollapsed
-            ? "p-2 flex flex-col items-center gap-2"
-            : "p-3 sm:p-4 flex items-center justify-between"
-        }
-      >
-        {isCollapsed ? (
-          <>
-            <div className="neu-dribbble-divider my-1 w-full" aria-hidden="true" />
-            <div
-              aria-label={`Signed in as ${userName}`}
-              title={`Signed in as ${userName} (${userEmail})`}
-              className="w-10 h-10 rounded-full neu-pressed flex items-center justify-center font-bold text-xs text-slate-900 cursor-default"
-            >
-              {initials}
-            </div>
-            <form action={logoutUser}>
-              <button
-                type="submit"
-                id="tour-btn-logout"
-                aria-label="Sign out of your account"
-                title="Sign Out"
-                className="w-10 h-10 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer"
-              >
-                <LogOut className="w-4 h-4 text-slate-900" aria-hidden="true" />
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <div className="flex items-center gap-3 min-w-0">
-              <div
-                aria-hidden="true"
-                className="w-10 h-10 rounded-full neu-pressed flex items-center justify-center font-bold text-xs text-slate-900 shrink-0"
-              >
-                {initials}
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-slate-900 truncate">{userName}</p>
-                <p className="text-[10px] text-slate-500 truncate">{userEmail}</p>
-              </div>
-            </div>
-
-            <form action={logoutUser}>
-              <button
-                type="submit"
-                id="tour-btn-logout"
-                aria-label="Sign out of your account"
-                title="Sign Out"
-                className="w-9 h-9 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer shrink-0"
-              >
-                <LogOut className="w-4 h-4 text-slate-900" aria-hidden="true" />
-              </button>
-            </form>
-          </>
-        )}
-      </div>
+      <SidebarUserProfile
+        userName={userName}
+        userEmail={userEmail}
+        initials={initials}
+        isCollapsed={isCollapsed}
+      />
     </aside>
   );
 }

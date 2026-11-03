@@ -125,8 +125,8 @@ export async function changeUserPassword(params: ChangePasswordParams) {
     await dbConnect();
     // Retrieve user with password field explicitly selected
     const user = await User.findById(session.userId).select("+password");
-    if (!user) {
-      return { success: false, error: "User account not found." };
+    if (!user || !user.password) {
+      return { success: false, error: "User account or password not found." };
     }
 
     const isCurrentValid = verifyPassword(currentPassword, user.password);

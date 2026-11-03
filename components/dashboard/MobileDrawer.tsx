@@ -2,11 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
-import { X, ShieldCheck, LogOut } from "lucide-react";
+import { X, ShieldCheck } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { SidebarWhatsAppCard } from "@/components/dashboard/SidebarWhatsAppCard";
-import { logoutUser } from "@/actions/authActions";
+import { SidebarUserProfile } from "@/components/dashboard/SidebarUserProfile";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -151,31 +151,14 @@ export function MobileDrawer({
         </div>
 
         {/* User Profile & Logout */}
-        <div className="p-3 sm:p-4 flex items-center justify-between shrink-0 border-t border-slate-200/50">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div
-              aria-hidden="true"
-              className="w-9 h-9 rounded-full neu-pressed flex items-center justify-center font-bold text-xs text-slate-900 shrink-0"
-            >
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-slate-900 truncate">{userName}</p>
-              <p className="text-[10px] text-slate-500 truncate">{userEmail}</p>
-            </div>
-          </div>
-
-          <form action={logoutUser}>
-            <button
-              type="submit"
-              id="tour-btn-logout"
-              aria-label="Sign out of your account"
-              title="Sign Out"
-              className="w-9 h-9 neu-btn rounded-full flex items-center justify-center text-slate-900 hover:text-rose-600 transition-colors cursor-pointer shrink-0"
-            >
-              <LogOut className="w-4 h-4 text-slate-900" aria-hidden="true" />
-            </button>
-          </form>
+        <div className="border-t border-slate-200/50">
+          <SidebarUserProfile
+            userName={userName}
+            userEmail={userEmail}
+            initials={initials}
+            isCollapsed={false}
+            onNavigate={onClose}
+          />
         </div>
       </div>
     </>

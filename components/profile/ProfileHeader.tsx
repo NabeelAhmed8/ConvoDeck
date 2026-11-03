@@ -48,3 +48,4 @@ export function ProfileHeader({ role, workspaceName }: ProfileHeaderProps) {
     </div>
   );
 }
+
