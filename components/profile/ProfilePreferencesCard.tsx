@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { Bell, Volume2, BellRing, CheckCircle2 } from "lucide-react";
 import { toast } from "@/store/useToastStore";
+import { playNotificationChime } from "@/lib/audioChime";
 
 export function ProfilePreferencesCard() {
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [isPlayingChime, setIsPlayingChime] = useState(false);
   const [notificationPermission, setNotificationPermission] =
     useState<NotificationPermission>("default");
 
@@ -22,6 +24,14 @@ export function ProfilePreferencesCard() {
     }
   }, []);
 
+  const playTestChime = () => {
+    setIsPlayingChime(true);
+    playNotificationChime();
+    setTimeout(() => {
+      setIsPlayingChime(false);
+    }, 350);
+  };
+
   const toggleSound = () => {
     const next = !soundEnabled;
     setSoundEnabled(next);
@@ -31,32 +41,6 @@ export function ProfilePreferencesCard() {
       toast.success("Sound Alerts", "Audio chimes enabled for new WhatsApp messages.");
     } else {
       toast.info("Sound Alerts", "Audio chimes muted.");
-    }
-  };
-
-  const playTestChime = () => {
-    if (typeof window === "undefined") return;
-    try {
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12); // A5
-
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-    } catch {
-      // Audio playback fallback
     }
   };
 
@@ -124,9 +108,12 @@ export function ProfilePreferencesCard() {
             <button
               type="button"
               onClick={playTestChime}
-              className="px-3 py-1.5 neu-btn rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer transition-colors"
+              disabled={isPlayingChime}
+              aria-label="Play test chime"
+              className="px-3 py-1.5 neu-btn rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900 cursor-pointer transition-colors flex items-center gap-1.5 disabled:opacity-75"
             >
-              Test Chime
+              <Volume2 className={`w-3.5 h-3.5 text-[#ff6422] ${isPlayingChime ? "animate-pulse" : ""}`} />
+              <span>{isPlayingChime ? "Playing..." : "Test Chime"}</span>
             </button>
             <button
               type="button"

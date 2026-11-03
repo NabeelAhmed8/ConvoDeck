@@ -1,33 +1,13 @@
 // Audio tone & Cross-Tab BroadcastChannel utilities for ConvoDeck Live Real-Time Sync
+import { playNotificationChime } from "@/lib/audioChime";
 
 export function playIncomingMessageSound() {
-  try {
-    const AudioContextClass =
-      window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-
-    const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "sine";
-    // Gentle WhatsApp-like notification double chime (587Hz -> 880Hz)
-    osc.frequency.setValueAtTime(587.33, now);
-    osc.frequency.setValueAtTime(880, now + 0.08);
-
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.18, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.26);
-  } catch {
-    // Gracefully handle browser autoplay policies
-  }
+  playNotificationChime({
+    volume: 0.18,
+    duration: 0.26,
+    frequencyStart: 587.33,
+    frequencyEnd: 880,
+  });
 }
 
 export function getChatBroadcastChannel(): BroadcastChannel | null {
