@@ -50,7 +50,7 @@ export const GUIDE_STEPS: IGuideStep[] = [
     id: "pipeline",
     number: 3,
     badge: "Sales Funnel",
-    title: "Visual Kanban Deal Board",
+    title: "Sales Pipeline",
     subtitle: "Drag-and-Drop Revenue Funnel",
     description:
       "Move deals smoothly across stages from New Inquiry to Won. Set expected deal sizes in USD, assign ownership to reps, and prevent hot opportunities from slipping through.",
