@@ -17,7 +17,8 @@ interface AgentFormFieldsProps {
 
 /**
  * AgentFormFields
- * Single-responsibility component for rendering agent creation form inputs.
+ * Single-responsibility component for rendering agent creation form inputs
+ * in a compact, responsive 2-column grid layout.
  */
 export function AgentFormFields({
   name,
@@ -31,7 +32,8 @@ export function AgentFormFields({
   onRoleChange,
 }: AgentFormFieldsProps) {
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {/* Full Name */}
       <div>
         <label
           htmlFor="agent-full-name"
@@ -47,10 +49,11 @@ export function AgentFormFields({
           placeholder="e.g. Asad Ali"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
-          className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full px-3.5 py-2 text-xs neu-input rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
         />
       </div>
 
+      {/* Work Email */}
       <div>
         <label
           htmlFor="agent-work-email"
@@ -67,10 +70,11 @@ export function AgentFormFields({
           placeholder="asad@agency.com"
           value={email}
           onChange={(e) => onEmailChange(e.target.value)}
-          className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full px-3.5 py-2 text-xs neu-input rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
         />
       </div>
 
+      {/* Temporary Password */}
       <div>
         <label
           htmlFor="agent-initial-password"
@@ -86,16 +90,17 @@ export function AgentFormFields({
           disabled={disabled}
           value={password}
           onChange={(e) => onPasswordChange(e.target.value)}
-          className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full px-3.5 py-2 text-xs neu-input rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
         />
       </div>
 
+      {/* Role & Permissions */}
       <div>
         <label
           htmlFor="agent-role-select"
           className="block text-xs font-semibold text-slate-700 mb-1"
         >
-          Agent Role &amp; Permissions (RBAC) <span className="text-rose-500" aria-hidden="true">*</span>
+          Role (RBAC) <span className="text-rose-500" aria-hidden="true">*</span>
         </label>
         <select
           id="agent-role-select"
@@ -104,14 +109,13 @@ export function AgentFormFields({
           disabled={disabled}
           value={role}
           onChange={(e) => onRoleChange(e.target.value as UserRole)}
-          className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 font-semibold focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full px-3.5 py-2 text-xs neu-input rounded-xl text-slate-900 font-semibold focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <option value="agent">Sales Agent (Chat &amp; Pipeline access only)</option>
-          <option value="manager">Team Manager (Pipeline, Analytics &amp; Reports)</option>
-          <option value="admin">Administrator / Co-Owner (Full access)</option>
+          <option value="agent">Sales Agent</option>
+          <option value="manager">Team Manager</option>
+          <option value="admin">Administrator</option>
         </select>
       </div>
     </div>
   );
 }
-

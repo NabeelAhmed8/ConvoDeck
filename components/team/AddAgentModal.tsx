@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { UserPlus, AlertCircle, CheckCircle2, ExternalLink } from "lucide-react";
+import { UserPlus, AlertCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { createTeamAgent } from "@/actions/teamActions";
 import { IUser, UserRole } from "@/types";
 import { AgentFormFields } from "@/components/team/AgentFormFields";
+import { AgentCreationSuccessView } from "@/components/team/AgentCreationSuccessView";
 
 interface AddAgentModalProps {
   isOpen: boolean;
@@ -15,8 +16,9 @@ interface AddAgentModalProps {
 
 /**
  * AddAgentModal
- * Modal dialog for onboarding a new team agent, sending credentials,
- * and transitioning to a 'Done' confirmation state that closes on click.
+ * Modal dialog for onboarding a new team agent.
+ * Automatically transitions to a compact, non-scrollable confirmation view
+ * upon success with an immediately visible 'Done' button.
  */
 export function AddAgentModal({
   isOpen,
@@ -29,8 +31,8 @@ export function AddAgentModal({
   const [role, setRole] = useState<UserRole>("agent");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [createdMember, setCreatedMember] = useState<IUser | null>(null);
   const [isDone, setIsDone] = useState(false);
 
   if (!isOpen) return null;
@@ -38,8 +40,8 @@ export function AddAgentModal({
   const handleClose = () => {
     setIsDone(false);
     setError("");
-    setSuccessMsg("");
     setPreviewUrl(null);
+    setCreatedMember(null);
     setName("");
     setEmail("");
     setPassword("Agent@2026!");
@@ -50,15 +52,8 @@ export function AddAgentModal({
   const handleCreateAgent = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // If already completed, clicking Done immediately closes the modal
-    if (isDone) {
-      handleClose();
-      return;
-    }
-
     setLoading(true);
     setError("");
-    setSuccessMsg("");
 
     const res = await createTeamAgent({
       name,
@@ -71,7 +66,7 @@ export function AddAgentModal({
 
     if (res.success && res.member) {
       onAgentCreated(res.member);
-      setSuccessMsg(`Agent account created successfully for ${res.member.name}`);
+      setCreatedMember(res.member);
       if (res.previewUrl) setPreviewUrl(res.previewUrl);
       setIsDone(true);
     } else {
@@ -83,90 +78,83 @@ export function AddAgentModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in"
     >
-      <div className="neu-card rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 bg-white border border-slate-200/80 relative space-y-5 animate-in zoom-in-95 duration-150 text-slate-900">
-        <div>
-          <div className="w-10 h-10 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center mb-3">
-            <UserPlus className="w-5 h-5" />
-          </div>
-          <h3 className="text-lg font-black text-slate-900 tracking-tight">
-            Add New Team Agent
-          </h3>
-          <p className="text-xs text-slate-500 mt-1">
-            Generate a unique login for your sales representative. Credentials will be emailed automatically.
-          </p>
-        </div>
+      <div className="neu-card rounded-3xl max-w-lg w-full p-5 sm:p-6 bg-white border border-slate-200/80 relative space-y-4 animate-in zoom-in-95 duration-150 text-slate-900 shadow-2xl">
+        {/* Close Icon Top-Right */}
+        <button
+          type="button"
+          onClick={handleClose}
+          aria-label="Close dialog"
+          className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1 rounded-xl neu-btn transition-colors cursor-pointer"
+        >
+          <X className="w-4 h-4" />
+        </button>
 
-        {error && (
-          <div className="p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        {successMsg && (
-          <div className="p-3.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-2xl text-xs space-y-1.5 shadow-xs">
-            <div className="flex items-center gap-2 font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>{successMsg}</span>
-            </div>
-            {previewUrl && (
-              <a
-                href={previewUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[#ea5414] underline pt-0.5 font-semibold flex items-center gap-1 hover:text-[#ff6422] transition-colors"
-              >
-                View Dispatched Email Preview <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-          </div>
-        )}
-
-        <form onSubmit={handleCreateAgent} className="space-y-4">
-          <AgentFormFields
-            name={name}
-            email={email}
-            password={password}
-            role={role}
-            disabled={loading || isDone}
-            onNameChange={setName}
-            onEmailChange={setEmail}
-            onPasswordChange={setPassword}
-            onRoleChange={setRole}
+        {isDone && createdMember ? (
+          /* 1. Compact Success View: Directly visible, ZERO scrolling needed */
+          <AgentCreationSuccessView
+            agentName={createdMember.name}
+            agentEmail={createdMember.email}
+            agentRole={createdMember.role}
+            previewUrl={previewUrl}
+            onDone={handleClose}
           />
+        ) : (
+          /* 2. Compact Creation Form View */
+          <>
+            <div>
+              <div className="w-9 h-9 rounded-2xl neu-pressed text-[#ff6422] flex items-center justify-center mb-2">
+                <UserPlus className="w-4 h-4" />
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+                Add New Team Agent
+              </h3>
+              <p className="text-xs text-slate-500">
+                Credentials will be generated and dispatched automatically via email.
+              </p>
+            </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
-            {isDone ? (
-              <Button
-                type="button"
-                onClick={handleClose}
-                className="neu-btn-primary cursor-pointer border-none px-8 py-2.5 text-xs font-bold shadow-md hover:scale-102 transition-transform"
-              >
-                Done
-              </Button>
-            ) : (
-              <>
+            {error && (
+              <div className="p-3 bg-rose-50 border border-rose-300 text-rose-800 rounded-2xl text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleCreateAgent} className="space-y-4">
+              <AgentFormFields
+                name={name}
+                email={email}
+                password={password}
+                role={role}
+                disabled={loading}
+                onNameChange={setName}
+                onEmailChange={setEmail}
+                onPasswordChange={setPassword}
+                onRoleChange={setRole}
+              />
+
+              <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-200">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleClose}
-                  className="neu-btn text-slate-700 border-none cursor-pointer"
+                  className="neu-btn text-slate-700 border-none cursor-pointer text-xs"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="neu-btn-primary cursor-pointer border-none"
+                  className="neu-btn-primary cursor-pointer border-none text-xs font-bold px-4 py-2"
                 >
                   {loading ? "Creating..." : "Create & Send Credentials"}
                 </Button>
-              </>
-            )}
-          </div>
-        </form>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
