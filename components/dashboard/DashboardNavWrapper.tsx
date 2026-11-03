@@ -141,11 +141,7 @@ export function DashboardNavWrapper({
       />
 
       {/* Interactive Onboarding Tour Guide */}
-      <TourGuide
-        onExpandMobileDrawer={() => setIsMobileDrawerOpen(true)}
-        onCollapseMobileDrawer={() => setIsMobileDrawerOpen(false)}
-        onExpandDesktopSidebar={() => setIsDesktopCollapsed(false)}
-      />
+      <TourGuide />
     </>
   );
 }

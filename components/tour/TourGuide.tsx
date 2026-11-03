@@ -1,66 +1,50 @@
 "use client";
 
 import React from "react";
-import { useNeumorphicTour } from "./useNeumorphicTour";
-import { TourSpotlightRing } from "./TourSpotlightRing";
-import { TourCard } from "./TourCard";
+import { useTourPopup } from "./useTourPopup";
+import { TourGuidePopup } from "./TourGuidePopup";
 import { ButtonsDirectoryModal } from "./ButtonsDirectoryModal";
-import { TourGuideProps } from "./tourTypes";
 
-export function TourGuide({
-  onExpandMobileDrawer,
-  onCollapseMobileDrawer,
-  onExpandDesktopSidebar,
-}: TourGuideProps = {}) {
+export function TourGuide() {
   const {
     isOpen,
     isDirectoryOpen,
     currentStep,
-    currentStepIndex,
+    stepIndex,
     totalSteps,
     isFirstStep,
     isLastStep,
-    targetRect,
-    startTour,
-    skipTour,
+    openTour,
+    closeTour,
     nextStep,
     prevStep,
     goToStep,
     openDirectory,
     closeDirectory,
-  } = useNeumorphicTour({
-    onExpandMobileDrawer,
-    onCollapseMobileDrawer,
-    onExpandDesktopSidebar,
-  });
+  } = useTourPopup();
 
   return (
     <>
-      {/* 1. Neumorphic Spotlight Overlay & Floating Card */}
-      {isOpen && (
-        <aside aria-label="Interactive Website Tour">
-          <TourSpotlightRing targetRect={targetRect} onClose={skipTour} />
-          <TourCard
-            step={currentStep}
-            currentStepIndex={currentStepIndex}
-            totalSteps={totalSteps}
-            isFirstStep={isFirstStep}
-            isLastStep={isLastStep}
-            targetRect={targetRect}
-            onNext={nextStep}
-            onPrev={prevStep}
-            onSkip={skipTour}
-            onGoToStep={goToStep}
-            onOpenDirectory={openDirectory}
-          />
-        </aside>
-      )}
+      {/* 1. Centered Tactile Neumorphic Guide Popup */}
+      <TourGuidePopup
+        isOpen={isOpen}
+        step={currentStep}
+        stepIndex={stepIndex}
+        totalSteps={totalSteps}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
+        onNext={nextStep}
+        onPrev={prevStep}
+        onClose={closeTour}
+        onGoToStep={goToStep}
+        onOpenDirectory={openDirectory}
+      />
 
-      {/* 2. Full Buttons Directory Modal */}
+      {/* 2. Full Buttons Directory Reference Modal */}
       <ButtonsDirectoryModal
         isOpen={isDirectoryOpen}
         onClose={closeDirectory}
-        onStartStepTour={startTour}
+        onStartStepTour={openTour}
       />
     </>
   );
