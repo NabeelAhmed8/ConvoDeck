@@ -29,35 +29,16 @@ export default function SettingsPage() {
   const [webhookToken, setWebhookToken] = useState("");
   const [savingName, setSavingName] = useState(false);
   const [checkingUpdate, setCheckingUpdate] = useState(false);
-  const [isDesktopApp, setIsDesktopApp] = useState(false);
-  const [desktopVersion, setDesktopVersion] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.electronAPI?.isDesktop) {
-      setIsDesktopApp(true);
-      if (window.electronAPI.getAppVersion) {
-        window.electronAPI.getAppVersion().then((ver) => setDesktopVersion(ver));
-      }
-    }
-  }, []);
 
   const handleCheckForUpdates = async () => {
     setCheckingUpdate(true);
     try {
-      if (typeof window !== "undefined" && window.electronAPI?.checkForUpdates) {
-        const res = await window.electronAPI.checkForUpdates();
-        if (res?.updateAvailable) {
-          toast.info("Update Available", `A new version (v${res.latestVersion}) is ready.`);
-        } else if (res?.success) {
-          toast.success("Up to Date", `ConvoDeck Desktop v${res.currentVersion || "0.2.0"} is up to date.`);
-        } else if (res?.error) {
-          toast.error("Check Failed", res.error);
-        }
-      } else {
-        const res = await fetch("/api/version");
-        const data = await res.json();
-        toast.success("Latest Cloud Version", `ConvoDeck is running version v${data.latestVersion || "0.2.0"}.`);
-      }
+      const res = await fetch("/api/version");
+      const data = await res.json();
+      toast.success(
+        "Platform Version",
+        `ConvoDeck SaaS is running v${data.latestVersion || "0.2.0"}.`
+      );
     } catch {
       toast.error("Update Check Failed", "Unable to reach update server.");
     } finally {
@@ -210,7 +191,7 @@ export default function SettingsPage() {
         <WebhookCard webhookToken={webhookToken} />
       </div>
 
-      {/* 3. Platform & Desktop Version Control */}
+      {/* 3. Platform Version Control */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
           <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">
@@ -219,13 +200,13 @@ export default function SettingsPage() {
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h3 className="text-sm sm:text-base font-semibold text-slate-900">
-                {isDesktopApp ? "ConvoDeck Desktop Client" : "ConvoDeck SaaS Platform"}
+                ConvoDeck SaaS Platform
               </h3>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                v{desktopVersion || "0.2.0"}
+                v0.2.0
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">Automatic startup version check and live cloud updates.</p>
+            <p className="text-xs text-slate-500 mt-1">Live cloud deployment with automatic platform updates.</p>
           </div>
         </div>
 

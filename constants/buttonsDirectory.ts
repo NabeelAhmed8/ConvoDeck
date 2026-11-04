@@ -230,7 +230,7 @@ export const BUTTONS_DIRECTORY: IButtonGuideItem[] = [
     category: "Settings & Billing",
     location: "Settings Version Card",
     iconName: "RefreshCw",
-    description: "Queries server API to verify if a new platform or desktop build is available.",
+    description: "Queries server API to verify current platform version and cloud status.",
     actionDetails: "Displays current version number and release notification prompt.",
   },
   {
