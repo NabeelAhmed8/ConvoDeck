@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, AlertCircle } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { loginUser } from "@/actions/authActions";
 import { TwoFactorVerifyForm } from "@/components/auth/TwoFactorVerifyForm";
+import { AuthAlertBanner } from "@/components/auth/AuthAlertBanner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,13 +22,11 @@ export default function LoginPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isAgentRedirect, setIsAgentRedirect] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setIsAgentRedirect(false);
 
     const res = await loginUser({ email, password, portal: "workspace" });
 
@@ -37,9 +36,6 @@ export default function LoginPage() {
       if (res.previewUrl) setPreviewUrl(res.previewUrl);
     } else {
       setError(res.error || "Invalid email or password");
-      if (res.suggestedPortal === "agent" || res.error?.includes("Agent Portal")) {
-        setIsAgentRedirect(true);
-      }
       setLoading(false);
     }
   };
@@ -73,23 +69,7 @@ export default function LoginPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 w-full">
         <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-[#edf1f7]">
           {error && step === "credentials" && (
-            <div
-              role="alert"
-              className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-            >
-              <div className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" aria-hidden="true" />
-                <span className="font-medium">{error}</span>
-              </div>
-              {isAgentRedirect && (
-                <Link
-                  href={`/agent/login?email=${encodeURIComponent(email)}`}
-                  className="font-bold underline text-[#ff6422] hover:text-[#d44810] shrink-0 self-end sm:self-auto"
-                >
-                  Agent Portal &rarr;
-                </Link>
-              )}
-            </div>
+            <AuthAlertBanner message={error} />
           )}
 
           {step === "credentials" ? (

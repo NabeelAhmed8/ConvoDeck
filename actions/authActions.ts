@@ -203,12 +203,14 @@ export async function verifySignupCode(params: {
 
 // Helper: Dynamic & Concise Portal Mismatch Notice
 function getPortalMismatchError(role: "agent" | "admin", name?: string, email?: string): string {
-  const identifier = name || email;
+  const cleanName = name?.trim();
+  const cleanEmail = email?.trim();
+  const identifier = cleanName || cleanEmail;
   const label = identifier ? ` (${identifier})` : "";
   if (role === "agent") {
-    return `Sales Agent${label} — please use Agent Portal.`;
+    return `Sales Agent${label} — Please use the Agent Portal.`;
   }
-  return `Admin account${label} — please use Workspace Login.`;
+  return `Admin account${label} — Please use Workspace Login.`;
 }
 
 // 3. User Login (Initiates 2FA Verification Code to Email)

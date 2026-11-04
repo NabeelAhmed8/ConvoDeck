@@ -3,11 +3,12 @@
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Mail, AlertCircle, Headphones } from "lucide-react";
+import { Mail, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { loginUser } from "@/actions/authActions";
 import { TwoFactorVerifyForm } from "@/components/auth/TwoFactorVerifyForm";
+import { AuthAlertBanner } from "@/components/auth/AuthAlertBanner";
 
 function AgentLoginForm() {
   const router = useRouter();
@@ -23,7 +24,6 @@ function AgentLoginForm() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isAdminRedirect, setIsAdminRedirect] = useState(false);
 
   // Sync email from URL query if provided
   useEffect(() => {
@@ -36,7 +36,6 @@ function AgentLoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setIsAdminRedirect(false);
 
     const res = await loginUser({ email, password, portal: "agent" });
 
@@ -49,9 +48,6 @@ function AgentLoginForm() {
       router.refresh();
     } else {
       setError(res.error || "Invalid agent credentials");
-      if (res.suggestedPortal === "workspace" || res.error?.includes("Workspace Login")) {
-        setIsAdminRedirect(true);
-      }
       setLoading(false);
     }
   };
@@ -89,23 +85,7 @@ function AgentLoginForm() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 w-full">
         <div className="neu-card py-7 px-5 sm:py-8 sm:px-8 rounded-3xl text-slate-800 bg-[#edf1f7]">
           {error && step === "credentials" && (
-            <div
-              role="alert"
-              className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-            >
-              <div className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" aria-hidden="true" />
-                <span className="font-medium">{error}</span>
-              </div>
-              {isAdminRedirect && (
-                <Link
-                  href="/login"
-                  className="font-bold underline text-[#ff6422] hover:text-[#d44810] shrink-0 self-end sm:self-auto"
-                >
-                  Workspace Login &rarr;
-                </Link>
-              )}
-            </div>
+            <AuthAlertBanner message={error} />
           )}
 
           {step === "credentials" ? (

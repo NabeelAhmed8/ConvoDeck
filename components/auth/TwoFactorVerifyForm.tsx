@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Lock,
-  AlertCircle,
   ShieldCheck,
   ArrowLeft,
   RefreshCw,
@@ -11,6 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { verifyLoginCode, resendVerificationCode } from "@/actions/authActions";
+import { AuthAlertBanner } from "@/components/auth/AuthAlertBanner";
 
 interface TwoFactorVerifyFormProps {
   email: string;
@@ -95,24 +95,13 @@ export function TwoFactorVerifyForm({
 
   return (
     <div>
-      {error && (
-        <div
-          role="alert"
-          className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex items-center gap-2"
-        >
-          <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span>{error}</span>
-        </div>
-      )}
+      {error && <AuthAlertBanner message={error} />}
 
       {resendSuccess && (
-        <div
-          role="status"
-          className="mb-4 p-3 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-2xl text-xs flex items-center gap-2"
-        >
-          <ShieldCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
-          <span>A fresh login verification code has been dispatched.</span>
-        </div>
+        <AuthAlertBanner
+          type="success"
+          message="A fresh login verification code has been dispatched."
+        />
       )}
 
       <form
