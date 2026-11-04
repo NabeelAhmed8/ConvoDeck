@@ -49,7 +49,7 @@ function AgentLoginForm() {
       router.refresh();
     } else {
       setError(res.error || "Invalid agent credentials");
-      if (res.suggestedPortal === "workspace") {
+      if (res.suggestedPortal === "workspace" || res.error?.includes("Workspace Login")) {
         setIsAdminRedirect(true);
       }
       setLoading(false);

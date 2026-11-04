@@ -37,7 +37,7 @@ export default function LoginPage() {
       if (res.previewUrl) setPreviewUrl(res.previewUrl);
     } else {
       setError(res.error || "Invalid email or password");
-      if (res.error === "Invalid login to agent portal" || res.suggestedPortal === "agent") {
+      if (res.suggestedPortal === "agent" || res.error?.includes("Agent Portal")) {
         setIsAgentRedirect(true);
       }
       setLoading(false);

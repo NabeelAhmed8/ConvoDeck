@@ -201,6 +201,16 @@ export async function verifySignupCode(params: {
   }
 }
 
+// Helper: Dynamic & Concise Portal Mismatch Notice
+function getPortalMismatchError(role: "agent" | "admin", name?: string, email?: string): string {
+  const identifier = name || email;
+  const label = identifier ? ` (${identifier})` : "";
+  if (role === "agent") {
+    return `Sales Agent${label} — please use Agent Portal.`;
+  }
+  return `Admin account${label} — please use Workspace Login.`;
+}
+
 // 3. User Login (Initiates 2FA Verification Code to Email)
 export async function loginUser(formData: {
   email: string;
@@ -244,7 +254,7 @@ export async function loginUser(formData: {
     if (portal === "workspace" && user.role === "agent") {
       return {
         success: false,
-        error: "Invalid login to agent portal",
+        error: getPortalMismatchError("agent", user.name, user.email),
         suggestedPortal: "agent",
       };
     }
@@ -253,7 +263,7 @@ export async function loginUser(formData: {
     if (portal === "agent" && user.role === "admin") {
       return {
         success: false,
-        error: "Invalid agent account. Workspace admins must sign in through Workspace Login.",
+        error: getPortalMismatchError("admin", user.name, user.email),
         suggestedPortal: "workspace",
       };
     }
@@ -362,14 +372,16 @@ export async function verifyLoginCode(params: {
     if (portal === "workspace" && user.role === "agent") {
       return {
         success: false,
-        error: "Invalid login to agent portal",
+        error: getPortalMismatchError("agent", user.name, user.email),
+        suggestedPortal: "agent",
       };
     }
 
     if (portal === "agent" && user.role === "admin") {
       return {
         success: false,
-        error: "Invalid agent account. Workspace admins must sign in through Workspace Login.",
+        error: getPortalMismatchError("admin", user.name, user.email),
+        suggestedPortal: "workspace",
       };
     }
 
