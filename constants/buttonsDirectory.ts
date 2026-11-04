@@ -225,15 +225,6 @@ export const BUTTONS_DIRECTORY: IButtonGuideItem[] = [
     actionDetails: "Paste into Meta Developer App Dashboard for WhatsApp Webhook event delivery.",
   },
   {
-    id: "btn-check-updates",
-    name: "Check for Updates",
-    category: "Settings & Billing",
-    location: "Settings Version Card",
-    iconName: "RefreshCw",
-    description: "Queries server API to verify current platform version and cloud status.",
-    actionDetails: "Displays current version number and release notification prompt.",
-  },
-  {
     id: "btn-stripe-checkout",
     name: "Upgrade / Stripe Checkout",
     category: "Settings & Billing",

@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Laptop,
-  RefreshCw,
   Sparkles,
   Building2,
   Save,
@@ -28,23 +26,6 @@ export default function SettingsPage() {
   const [accessToken, setAccessToken] = useState("");
   const [webhookToken, setWebhookToken] = useState("");
   const [savingName, setSavingName] = useState(false);
-  const [checkingUpdate, setCheckingUpdate] = useState(false);
-
-  const handleCheckForUpdates = async () => {
-    setCheckingUpdate(true);
-    try {
-      const res = await fetch("/api/version");
-      const data = await res.json();
-      toast.success(
-        "Platform Version",
-        `ConvoDeck SaaS is running v${data.latestVersion || "0.2.0"}.`
-      );
-    } catch {
-      toast.error("Update Check Failed", "Unable to reach update server.");
-    } finally {
-      setCheckingUpdate(false);
-    }
-  };
 
   useEffect(() => {
     async function load() {
@@ -191,37 +172,7 @@ export default function SettingsPage() {
         <WebhookCard webhookToken={webhookToken} />
       </div>
 
-      {/* 3. Platform Version Control */}
-      <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">
-            <Laptop className="w-5 h-5" aria-hidden="true" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm sm:text-base font-semibold text-slate-900">
-                ConvoDeck SaaS Platform
-              </h3>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                v0.2.0
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 mt-1">Live cloud deployment with automatic platform updates.</p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleCheckForUpdates}
-          disabled={checkingUpdate}
-          className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-all shrink-0 cursor-pointer disabled:opacity-50"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${checkingUpdate ? "animate-spin" : ""}`} />
-          {checkingUpdate ? "Checking..." : "Check for Updates"}
-        </button>
-      </div>
-
-      {/* 4. Onboarding & Tour Guide */}
+      {/* 3. Onboarding & Tour Guide */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
           <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">
