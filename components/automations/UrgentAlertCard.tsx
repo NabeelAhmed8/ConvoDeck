@@ -29,23 +29,23 @@ export function UrgentAlertCard({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-[4px_4px_16px_rgba(160,178,204,0.15)] transition-all">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
-            <AlertTriangle className="w-5 h-5" />
+    <div className="bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-[4px_4px_16px_rgba(160,178,204,0.15)] transition-all">
+      <div className="flex items-start justify-between gap-3 sm:gap-4">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              Urgent Priority & Sentiment Tagging
+          <div className="min-w-0">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5 flex-wrap">
+              <span>Urgent Priority & Sentiment</span>
               {enabled && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">
                   Active
                 </span>
               )}
             </h3>
-            <p className="text-xs text-slate-500">
-              Flags angry, critical, or urgent customer messages with an <strong>#Urgent</strong> badge in your inbox.
+            <p className="text-[11px] sm:text-xs text-slate-500 line-clamp-2 mt-0.5">
+              Flags critical or angry messages with an <strong>#Urgent</strong> tag in the chat inbox.
             </p>
           </div>
         </div>
@@ -69,17 +69,18 @@ export function UrgentAlertCard({
 
       {enabled && (
         <div className="mt-4 pt-4 border-t border-slate-100">
-          <div className="flex flex-wrap gap-1.5 mb-2">
+          <div className="flex flex-wrap gap-1.5 mb-2.5 max-h-32 overflow-y-auto">
             {urgentKeywords.map((kw) => (
               <span
                 key={kw}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200/60"
+                className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200/60"
               >
                 {kw}
                 <button
                   type="button"
                   onClick={() => onUpdateUrgentKeywords(urgentKeywords.filter((k) => k !== kw))}
-                  className="hover:text-rose-900"
+                  className="w-4 h-4 rounded-full hover:bg-rose-200/70 text-rose-500 hover:text-rose-900 flex items-center justify-center transition-colors"
+                  aria-label={`Remove keyword ${kw}`}
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -89,16 +90,16 @@ export function UrgentAlertCard({
           <form onSubmit={handleAdd} className="flex gap-2">
             <input
               type="text"
-              placeholder="Add trigger keyword (e.g., complaint, broken)..."
+              placeholder="Add trigger keyword (e.g., complaint, refund)..."
               value={newKw}
               onChange={(e) => setNewKw(e.target.value)}
-              className="flex-1 text-xs px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-rose-500"
+              className="flex-1 min-w-0 text-xs px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-rose-500"
             />
             <button
               type="submit"
-              className="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 flex items-center gap-1"
+              className="px-3 py-2 rounded-xl bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 flex items-center gap-1 shrink-0 transition-colors"
             >
-              <Plus className="w-3 h-3" /> Add
+              <Plus className="w-3.5 h-3.5" /> Add
             </button>
           </form>
         </div>
