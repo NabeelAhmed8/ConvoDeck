@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Laptop, Smartphone, LogOut, ShieldCheck } from "lucide-react";
 import { logoutUser } from "@/actions/authActions";
 
-export function ProfileSessionsCard() {
+export function ProfileSessionsCard({ portal }: { portal?: "workspace" | "agent" } = {}) {
   const [deviceInfo, setDeviceInfo] = useState("Web Browser Session");
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
@@ -89,6 +89,7 @@ export function ProfileSessionsCard() {
 
         {/* Sign Out Action Button */}
         <form action={logoutUser} className="shrink-0 w-full sm:w-auto">
+          {portal && <input type="hidden" name="portal" value={portal} />}
           <button
             type="submit"
             className="w-full sm:w-auto px-4 py-2 neu-btn rounded-xl text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50/60 flex items-center justify-center gap-1.5 cursor-pointer transition-colors shadow-xs"

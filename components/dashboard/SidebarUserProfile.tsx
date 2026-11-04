@@ -55,6 +55,7 @@ export function SidebarUserProfile({
           )}
         </Link>
         <form action={logoutUser}>
+          {isAgent && <input type="hidden" name="portal" value="agent" />}
           <button
             type="submit"
             id="tour-btn-logout"
@@ -103,6 +104,7 @@ export function SidebarUserProfile({
       </Link>
 
       <form action={logoutUser}>
+        {isAgent && <input type="hidden" name="portal" value="agent" />}
         <button
           type="submit"
           id="tour-btn-logout"

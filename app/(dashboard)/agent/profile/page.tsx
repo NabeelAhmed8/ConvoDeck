@@ -142,7 +142,7 @@ export default function AgentProfilePage() {
       <ProfilePreferencesCard />
 
       {/* 4. Active Device & Workstation Session */}
-      <ProfileSessionsCard />
+      <ProfileSessionsCard portal="agent" />
     </div>
   );
 }

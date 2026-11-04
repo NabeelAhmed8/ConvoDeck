@@ -1,5 +1,6 @@
 import React from "react";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { getCurrentUser } from "@/actions/authActions";
 import { DashboardNavWrapper } from "@/components/dashboard/DashboardNavWrapper";
 import { DashboardMainContent } from "@/components/dashboard/DashboardMainContent";
@@ -13,9 +14,11 @@ export default async function DashboardLayout({
 }) {
   const authData = await getCurrentUser();
 
-  // Strict session enforcement: If user is not logged in or has logged out, redirect to /login
+  // Strict session enforcement: If user is not logged in or has logged out, redirect to role-appropriate portal
   if (!authData || !authData.user) {
-    redirect("/login");
+    const headerList = await headers();
+    const referer = headerList.get("referer") || "";
+    redirect(referer.includes("/agent") ? "/agent/login" : "/login");
   }
 
   const userName = authData.user.name || "Agent";

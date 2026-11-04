@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
+import { NeumorphicCheckbox } from "@/components/ui/NeumorphicCheckbox";
 import { loginUser } from "@/actions/authActions";
 import { TwoFactorVerifyForm } from "@/components/auth/TwoFactorVerifyForm";
 import { AuthAlertBanner } from "@/components/auth/AuthAlertBanner";
@@ -16,6 +17,7 @@ export default function LoginPage() {
   // Step 1: Login credentials
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
 
   // Step 2: 2FA Verification code state
   const [step, setStep] = useState<"credentials" | "verify">("credentials");
@@ -23,10 +25,30 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Restore remembered workspace email on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedEmail = localStorage.getItem("convodeck_remembered_admin_email");
+      if (savedEmail) {
+        setEmail(savedEmail);
+        setRememberMe(true);
+      }
+    }
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Dynamic Remember Me storage
+    if (typeof window !== "undefined") {
+      if (rememberMe && email) {
+        localStorage.setItem("convodeck_remembered_admin_email", email.trim());
+      } else {
+        localStorage.removeItem("convodeck_remembered_admin_email");
+      }
+    }
 
     const res = await loginUser({ email, password, portal: "workspace" });
 
@@ -110,20 +132,17 @@ export default function LoginPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <label htmlFor="login-remember-me" className="flex items-center gap-2 cursor-pointer text-slate-600">
-                  <input
-                    id="login-remember-me"
-                    name="rememberMe"
-                    type="checkbox"
-                    defaultChecked
-                    className="rounded border-slate-300 text-[#ff6422] focus:ring-[#ff6422]"
-                  />
-                  <span>Remember this device</span>
-                </label>
+              <div className="flex items-center justify-between text-xs py-0.5">
+                <NeumorphicCheckbox
+                  id="login-remember-me"
+                  name="rememberMe"
+                  label="Remember this device"
+                  checked={rememberMe}
+                  onChange={setRememberMe}
+                />
                 <Link
                   href="/forgot-password"
-                  className="font-medium text-[#ea5414] hover:text-[#c2410c]"
+                  className="font-medium text-[#ea5414] hover:text-[#c2410c] transition-colors"
                 >
                   Forgot password?
                 </Link>

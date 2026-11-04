@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Mail, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
+import { NeumorphicCheckbox } from "@/components/ui/NeumorphicCheckbox";
 import { loginUser } from "@/actions/authActions";
 import { TwoFactorVerifyForm } from "@/components/auth/TwoFactorVerifyForm";
 import { AuthAlertBanner } from "@/components/auth/AuthAlertBanner";
@@ -18,6 +19,7 @@ function AgentLoginForm() {
   // Step 1: Login credentials
   const [email, setEmail] = useState(emailParam);
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
 
   // Step 2: 2FA Verification code state
   const [step, setStep] = useState<"credentials" | "verify">("credentials");
@@ -25,10 +27,16 @@ function AgentLoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Sync email from URL query if provided
+  // Sync email from URL query or localStorage if Remember Me was previously set
   useEffect(() => {
     if (emailParam) {
       setEmail(emailParam);
+    } else if (typeof window !== "undefined") {
+      const savedEmail = localStorage.getItem("convodeck_remembered_agent_email");
+      if (savedEmail) {
+        setEmail(savedEmail);
+        setRememberMe(true);
+      }
     }
   }, [emailParam]);
 
@@ -36,6 +44,15 @@ function AgentLoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Dynamic Remember Me storage
+    if (typeof window !== "undefined") {
+      if (rememberMe && email) {
+        localStorage.setItem("convodeck_remembered_agent_email", email.trim());
+      } else {
+        localStorage.removeItem("convodeck_remembered_agent_email");
+      }
+    }
 
     const res = await loginUser({ email, password, portal: "agent" });
 
@@ -124,6 +141,22 @@ function AgentLoginForm() {
                   autoComplete="current-password"
                   required
                 />
+              </div>
+
+              <div className="flex items-center justify-between text-xs py-0.5">
+                <NeumorphicCheckbox
+                  id="agent-remember-me"
+                  name="rememberMe"
+                  label="Remember this workstation"
+                  checked={rememberMe}
+                  onChange={setRememberMe}
+                />
+                <Link
+                  href="/forgot-password"
+                  className="font-medium text-[#ea5414] hover:text-[#c2410c] transition-colors"
+                >
+                  Forgot password?
+                </Link>
               </div>
 
               <Button

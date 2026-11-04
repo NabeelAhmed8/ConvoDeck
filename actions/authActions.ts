@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { dbConnect } from "@/lib/dbConnect";
 import { User } from "@/models/User";
 import { Workspace } from "@/models/Workspace";
@@ -491,15 +492,32 @@ export async function resendVerificationCode(params: {
 }
 
 // 6. User Logout (Session End & JWT Token Invalidation)
-export async function logoutUser() {
+export async function logoutUser(formData?: FormData) {
+  let isAgent = false;
   try {
     const session = await getSession();
-    if (session?.userId) {
-      await dbConnect();
-      // Increment tokenVersion on the user document to invalidate any existing JWT tokens
-      await User.findByIdAndUpdate(session.userId, {
-        $inc: { tokenVersion: 1 },
-      });
+    if (session) {
+      if (session.role === "agent") {
+        isAgent = true;
+      }
+      if (session.userId) {
+        await dbConnect();
+        // Increment tokenVersion on the user document to invalidate any existing JWT tokens
+        await User.findByIdAndUpdate(session.userId, {
+          $inc: { tokenVersion: 1 },
+        });
+      }
+    }
+
+    const portalField = formData?.get("portal");
+    if (portalField === "agent") {
+      isAgent = true;
+    }
+
+    const headerList = await headers();
+    const referer = headerList.get("referer") || "";
+    if (referer.includes("/agent")) {
+      isAgent = true;
     }
   } catch (err) {
     console.error("Error revoking session on logout:", err);
@@ -508,8 +526,10 @@ export async function logoutUser() {
   // Clear HTTP-only JWT session cookie
   await clearSessionCookie();
 
-  // Redirect to login page
-  redirect("/login");
+  // Role-based post-logout redirection:
+  // Sales Agents are redirected to their dedicated Agent Login portal (/agent/login),
+  // Workspace Admins are redirected to the Workspace Login (/login).
+  redirect(isAgent ? "/agent/login" : "/login");
 }
 
 // 7. Get Current Logged-in User & Workspace (Enforces RBAC & Active Status)

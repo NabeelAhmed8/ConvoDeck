@@ -7,6 +7,7 @@ import { NAV_ITEMS } from "./navbar/navConfig";
 import { useScrollSpy } from "./navbar/useScrollSpy";
 import { NavLinksDesktop } from "./navbar/NavLinksDesktop";
 import { NavLinksMobile } from "./navbar/NavLinksMobile";
+import { NavbarBrandLogo } from "./navbar/NavbarBrandLogo";
 import { NavbarQuickSearch } from "./search/NavbarQuickSearch";
 
 export function LandingNavbar() {
@@ -37,25 +38,8 @@ export function LandingNavbar() {
   return (
     <header className="fixed top-2 sm:top-5 inset-x-2.5 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
       <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
-        {/* Brand Logo with Tactile Squircle Icon */}
-        <Link
-          href="/"
-          onClick={() => setMobileMenuOpen(false)}
-          className="flex items-center gap-2 sm:gap-3 group min-w-0"
-          aria-label="ConvoDeck Home"
-        >
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl neu-convex flex items-center justify-center font-black text-slate-900 text-base sm:text-xl shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-            C
-          </div>
-          <div className="min-w-0">
-            <span className="font-extrabold text-sm sm:text-lg tracking-tight text-slate-900 block leading-none truncate">
-              ConvoDeck
-            </span>
-            <span className="text-[8.5px] sm:text-[10px] text-[#ff6422] font-semibold tracking-wider uppercase block mt-0.5 truncate">
-              WhatsApp Sales CRM
-            </span>
-          </div>
-        </Link>
+        {/* Brand Logo with Tactile Squircle Icon & Homepage Scroll-to-Top */}
+        <NavbarBrandLogo onNavigate={() => setMobileMenuOpen(false)} />
 
         {/* Dynamic Neumorphic Segmented Navigation Bar */}
         <NavLinksDesktop
