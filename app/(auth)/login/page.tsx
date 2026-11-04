@@ -63,8 +63,7 @@ export default function LoginPage() {
   };
 
   const handleVerifySuccess = (targetPath?: string) => {
-    router.push(targetPath || "/dashboard");
-    router.refresh();
+    window.location.href = targetPath || "/dashboard";
   };
 
   return (

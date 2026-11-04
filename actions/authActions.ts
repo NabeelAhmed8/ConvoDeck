@@ -402,6 +402,32 @@ export async function verifyLoginCode(params: {
 
     // Update last login timestamp
     user.lastLoginAt = new Date();
+
+    // Self-Healing: Verify user.workspaceId actively exists in DB.
+    // If user deleted the workspace from backend, heal to their existing workspace or create a fresh one!
+    let activeWorkspace = user.workspaceId ? await Workspace.findById(user.workspaceId).lean() : null;
+
+    if (!activeWorkspace) {
+      // Find any workspace owned by this user
+      const ownedWs = await Workspace.findOne({ ownerEmail: cleanEmail }).sort({ createdAt: 1 }).lean();
+      if (ownedWs) {
+        activeWorkspace = ownedWs;
+        user.workspaceId = ownedWs._id.toString();
+      } else {
+        // Create fresh workspace if none exist
+        const fresh = await Workspace.create({
+          name: `${user.name}'s Workspace`,
+          ownerEmail: cleanEmail,
+          contactEmail: cleanEmail,
+          plan: "trial",
+          planStatus: "trial",
+          webhookVerifyToken: `cd_${Math.random().toString(36).substring(2, 12)}`,
+        });
+        activeWorkspace = JSON.parse(JSON.stringify(fresh));
+        user.workspaceId = fresh._id.toString();
+      }
+    }
+
     await user.save();
 
     // Set secure session cookie with tokenVersion for instant revocation support

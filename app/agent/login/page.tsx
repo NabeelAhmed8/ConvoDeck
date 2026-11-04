@@ -70,8 +70,7 @@ function AgentLoginForm() {
   };
 
   const handleVerifySuccess = (targetPath?: string) => {
-    router.push(targetPath || "/agent/dashboard");
-    router.refresh();
+    window.location.href = targetPath || "/agent/dashboard";
   };
 
   return (
