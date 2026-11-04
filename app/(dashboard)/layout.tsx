@@ -2,6 +2,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { getCurrentUser } from "@/actions/authActions";
+import { getUserWorkspaces } from "@/actions/workspaceActions";
 import { DashboardNavWrapper } from "@/components/dashboard/DashboardNavWrapper";
 import { DashboardMainContent } from "@/components/dashboard/DashboardMainContent";
 
@@ -20,6 +21,10 @@ export default async function DashboardLayout({
     const referer = headerList.get("referer") || "";
     redirect(referer.includes("/agent") ? "/agent/login" : "/login");
   }
+
+  const userWorkspaces = await getUserWorkspaces();
+  const currentWorkspaceId =
+    authData.workspace?._id?.toString() || authData.user.workspaceId || "";
 
   const userName = authData.user.name || "Agent";
   const userEmail = authData.user.email || "";
@@ -43,6 +48,8 @@ export default async function DashboardLayout({
         workspaceName={workspaceName}
         whatsappNumber={whatsappNumber}
         userAvatar={userAvatar}
+        currentWorkspaceId={currentWorkspaceId}
+        userWorkspaces={userWorkspaces}
       />
 
       {/* Main Content Area: Fixed padding-top on mobile (< lg) offsets the fixed header exactly */}

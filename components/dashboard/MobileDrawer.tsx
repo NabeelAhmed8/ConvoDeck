@@ -2,11 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { X, ShieldCheck } from "lucide-react";
+import { X } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { SidebarWhatsAppCard } from "@/components/dashboard/SidebarWhatsAppCard";
 import { SidebarUserProfile } from "@/components/dashboard/SidebarUserProfile";
+import { WorkspaceSwitcher } from "@/components/dashboard/WorkspaceSwitcher";
+import { WorkspaceSummary } from "@/types";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -19,6 +21,8 @@ interface MobileDrawerProps {
   initials: string;
   userAvatar?: string;
   isAgent: boolean;
+  currentWorkspaceId?: string;
+  userWorkspaces?: WorkspaceSummary[];
   onOpenAddLead: () => void;
 }
 
@@ -33,6 +37,8 @@ export function MobileDrawer({
   initials,
   userAvatar,
   isAgent,
+  currentWorkspaceId,
+  userWorkspaces = [],
   onOpenAddLead,
 }: MobileDrawerProps) {
   return (
@@ -74,7 +80,7 @@ export function MobileDrawer({
                 C
               </div>
               <div className="min-w-0">
-                <span className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight block truncate">
+                <span className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight block truncate group-hover:text-[#ff6422] transition-colors">
                   ConvoDeck
                 </span>
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block truncate">
@@ -96,30 +102,16 @@ export function MobileDrawer({
           <div className="neu-dribbble-divider-full my-1" aria-hidden="true" />
         </div>
 
-        {/* Workspace Indicator */}
+        {/* Dynamic Multi-Workspace Switcher */}
         <div className="px-4 py-1 shrink-0">
-          <Link
-            href={isAgent ? "/agent/dashboard" : "/settings"}
-            aria-label={`Workspace: ${workspaceName}. Click to open Settings.`}
-            onClick={onClose}
-            className="p-2.5 neu-convex rounded-2xl flex items-center justify-between text-xs sm:text-sm transition-all group"
-          >
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div
-                aria-hidden="true"
-                className="w-7 h-7 rounded-full bg-slate-900/10 text-slate-900 font-bold flex items-center justify-center text-xs shadow-inner"
-              >
-                {workspaceName.substring(0, 1).toUpperCase()}
-              </div>
-              <span className="font-bold text-slate-900 truncate">
-                {workspaceName}
-              </span>
-            </div>
-            <ShieldCheck
-              className="w-4 h-4 text-slate-900 shrink-0 group-hover:scale-110 transition-transform"
-              aria-hidden="true"
-            />
-          </Link>
+          <WorkspaceSwitcher
+            currentWorkspaceId={currentWorkspaceId}
+            currentWorkspaceName={workspaceName}
+            workspaces={userWorkspaces}
+            isCollapsed={false}
+            isAgent={isAgent}
+            onNavigate={onClose}
+          />
           <div className="neu-dribbble-divider-full my-2" aria-hidden="true" />
         </div>
 

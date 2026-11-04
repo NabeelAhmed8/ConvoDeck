@@ -4,28 +4,28 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Sparkles,
-  Building2,
-  Save,
   MessageSquare,
   ShieldCheck,
 } from "lucide-react";
-import { getWorkspaceSettings, updateWorkspaceSettings } from "@/actions/workspaceActions";
+import { getWorkspaceSettings } from "@/actions/workspaceActions";
 import { getCurrentUser } from "@/actions/authActions";
-import { toast } from "@/store/useToastStore";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { ConnectedLineCard } from "@/components/settings/ConnectedLineCard";
 import { MetaApiConnectionForm } from "@/components/settings/MetaApiConnectionForm";
 import { WebhookCard } from "@/components/settings/WebhookCard";
+import { WorkspaceProfileCard } from "@/components/settings/WorkspaceProfileCard";
+import { TransferWorkspaceOwnershipCard } from "@/components/settings/TransferWorkspaceOwnershipCard";
 
 export default function SettingsPage() {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [ownerEmail, setOwnerEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberId, setPhoneNumberId] = useState("");
   const [wabaId, setWabaId] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [webhookToken, setWebhookToken] = useState("");
-  const [savingName, setSavingName] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -38,6 +38,8 @@ export default function SettingsPage() {
       const data = await getWorkspaceSettings();
       if (data) {
         setName(data.name || "");
+        setContactEmail(data.contactEmail || "");
+        setOwnerEmail(data.ownerEmail || "");
         setPhoneNumber(data.whatsappPhoneNumber || "");
         setPhoneNumberId(data.whatsappPhoneNumberId || "");
         setWabaId(data.whatsappBusinessAccountId || "");
@@ -48,75 +50,28 @@ export default function SettingsPage() {
     load();
   }, [router]);
 
-  const handleSaveName = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSavingName(true);
-    const res = await updateWorkspaceSettings({
-      name,
-      whatsappPhoneNumber: phoneNumber,
-      whatsappPhoneNumberId: phoneNumberId,
-      whatsappBusinessAccountId: wabaId,
-      whatsappAccessToken: accessToken,
-      webhookVerifyToken: webhookToken,
-    });
-    setSavingName(false);
-    if (res.success) {
-      toast.success("Updated", "Workspace name updated.");
-    } else {
-      toast.error("Error", res.error || "Failed to update workspace name.");
-    }
-  };
-
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-12 text-slate-800">
       {/* Page Title */}
       <div>
         <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Settings &amp; Meta WhatsApp Cloud API
+          Workspace Settings &amp; WhatsApp Integration
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-          Official Meta WhatsApp Cloud API integration for multi-agent messaging and live webhook synchronization.
+          Manage workspace identity, dedicated contact routing, ownership transfer, and Meta WhatsApp Cloud API credentials.
         </p>
       </div>
 
-      {/* 1. Workspace Profile Card */}
-      <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-4">
-        <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
-          <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50">
-            <Building2 className="w-4 h-4" />
-          </div>
-          <div>
-            <h2 className="font-bold text-sm text-slate-900">Workspace Profile</h2>
-            <p className="text-xs text-slate-500">Your organization name shown on reports and agent seats.</p>
-          </div>
-        </div>
-
-        <form onSubmit={handleSaveName} className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
-          <div className="flex-1">
-            <label htmlFor="settings-company-name" className="block text-xs font-semibold text-slate-700 mb-1">
-              Company / Workspace Name
-            </label>
-            <input
-              id="settings-company-name"
-              name="companyName"
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Acme Agency"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={savingName}
-            className="px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-          >
-            <Save className="w-3.5 h-3.5" />
-            {savingName ? "Saving..." : "Save Name"}
-          </button>
-        </form>
-      </div>
+      {/* 1. Workspace Profile & Dedicated Contact Email Card */}
+      <WorkspaceProfileCard
+        initialName={name}
+        initialContactEmail={contactEmail}
+        ownerEmail={ownerEmail}
+        onSaved={({ name: newName, contactEmail: newEmail }) => {
+          setName(newName);
+          setContactEmail(newEmail);
+        }}
+      />
 
       {/* 2. Official Meta WhatsApp Cloud API Card */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5">
@@ -172,7 +127,14 @@ export default function SettingsPage() {
         <WebhookCard webhookToken={webhookToken} />
       </div>
 
-      {/* 3. Onboarding & Tour Guide */}
+      {/* 3. Transfer Workspace Ownership Card */}
+      <TransferWorkspaceOwnershipCard
+        currentOwnerEmail={ownerEmail}
+        workspaceName={name}
+        onTransferred={(newOwner) => setOwnerEmail(newOwner)}
+      />
+
+      {/* 4. Onboarding & Tour Guide */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
           <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">

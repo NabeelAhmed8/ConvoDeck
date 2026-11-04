@@ -16,6 +16,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { AddLeadModal } from "@/components/kanban/AddLeadModal";
+import { VisitWebsiteLink } from "./VisitWebsiteLink";
 
 export function DashboardClientNav({
   userRole = "admin",
@@ -278,6 +279,24 @@ export function DashboardClientNav({
             <Plus className="w-5 h-5 text-white" aria-hidden="true" />
             {!isCollapsed && <span>Add New Lead</span>}
           </button>
+        </div>
+
+        {/* Divider before Visit Website */}
+        <div
+          className={
+            isCollapsed
+              ? "neu-dribbble-divider my-2"
+              : "neu-dribbble-divider-full my-2.5"
+          }
+          aria-hidden="true"
+        />
+
+        {/* Public Homepage Link */}
+        <div className={isCollapsed ? "pt-0.5 flex justify-center w-full" : "pt-0.5 px-1"}>
+          <VisitWebsiteLink
+            isCollapsed={isCollapsed}
+            onNavigate={onNavigate}
+          />
         </div>
       </nav>
 

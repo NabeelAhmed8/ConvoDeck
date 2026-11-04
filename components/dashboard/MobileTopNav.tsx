@@ -52,7 +52,7 @@ export function MobileTopNav({
               C
             </div>
             <div className="min-w-0">
-              <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 block leading-tight truncate">
+              <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 block leading-tight truncate group-hover:text-[#ff6422] transition-colors">
                 ConvoDeck
               </span>
               <span className="text-[9px] sm:text-[10px] text-[#ff6422] font-bold uppercase tracking-wider block truncate">

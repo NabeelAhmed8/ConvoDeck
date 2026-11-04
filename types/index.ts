@@ -27,6 +27,7 @@ export interface IWorkspace {
   _id?: string;
   name: string;
   ownerEmail: string;
+  contactEmail?: string;
   whatsappPhoneNumber?: string;
   whatsappPhoneNumberId?: string;
   whatsappBusinessAccountId?: string;
@@ -128,4 +129,14 @@ export interface KanbanColumnDef {
   title: string;
   color: string;
   badgeBg: string;
+}
+
+export interface WorkspaceSummary {
+  id: string;
+  name: string;
+  plan: string;
+  planStatus: string;
+  isCurrent: boolean;
+  role: string;
+  ownerEmail?: string;
 }

@@ -6,6 +6,7 @@ import { MobileTopNav } from "@/components/dashboard/MobileTopNav";
 import { MobileDrawer } from "@/components/dashboard/MobileDrawer";
 import { DesktopSidebar } from "@/components/dashboard/DesktopSidebar";
 import { TourGuide } from "@/components/tour/TourGuide";
+import { WorkspaceSummary } from "@/types";
 
 interface DashboardNavWrapperProps {
   userName: string;
@@ -14,6 +15,8 @@ interface DashboardNavWrapperProps {
   workspaceName: string;
   whatsappNumber: string;
   userAvatar?: string;
+  currentWorkspaceId?: string;
+  userWorkspaces?: WorkspaceSummary[];
 }
 
 export function DashboardNavWrapper({
@@ -23,6 +26,8 @@ export function DashboardNavWrapper({
   workspaceName,
   whatsappNumber,
   userAvatar,
+  currentWorkspaceId,
+  userWorkspaces = [],
 }: DashboardNavWrapperProps) {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
@@ -121,6 +126,8 @@ export function DashboardNavWrapper({
         initials={initials}
         userAvatar={userAvatar}
         isAgent={isAgent}
+        currentWorkspaceId={currentWorkspaceId}
+        userWorkspaces={userWorkspaces}
         onOpenAddLead={() => setIsAddModalOpen(true)}
       />
 
@@ -136,6 +143,8 @@ export function DashboardNavWrapper({
         initials={initials}
         userAvatar={userAvatar}
         isAgent={isAgent}
+        currentWorkspaceId={currentWorkspaceId}
+        userWorkspaces={userWorkspaces}
         onOpenAddLead={() => setIsAddModalOpen(true)}
       />
 

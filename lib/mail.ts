@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from "nodemailer";
 import { renderVerificationEmailHtml } from "./email/verificationEmailTemplate";
 import { renderAgentWelcomeEmailHtml } from "./email/agentWelcomeEmailTemplate";
+import { renderOwnershipTransferEmailHtml } from "./email/ownershipTransferEmailTemplate";
 
 export interface SendVerificationEmailParams {
   to: string;
@@ -158,6 +159,47 @@ export async function sendAgentWelcomeEmail(params: {
   } catch (error: unknown) {
     const errorMsg =
       error instanceof Error ? error.message : "Failed to send welcome email";
+    return { success: false, error: errorMsg };
+  }
+}
+
+/**
+ * Dispatches workspace ownership transfer notification or 1-click password setup invite.
+ */
+export async function sendOwnershipTransferEmail(params: {
+  to: string;
+  workspaceName: string;
+  senderName: string;
+  actionUrl: string;
+  hasExistingAccount: boolean;
+}): Promise<{ success: boolean; previewUrl?: string | false; error?: string }> {
+  try {
+    const { transporter, fromAddress, isMock } = await getMailTransporter();
+    const { subject, html } = renderOwnershipTransferEmailHtml({
+      ...params,
+      recipientEmail: params.to,
+    });
+
+    const info = await transporter.sendMail({
+      from: fromAddress,
+      to: params.to,
+      subject,
+      text: `${subject}\n\nWorkspace: ${params.workspaceName}\nTransferred by: ${params.senderName}\nAccess: ${params.actionUrl}`,
+      html,
+    });
+
+    const previewUrl = isMock ? nodemailer.getTestMessageUrl(info) : false;
+
+    console.log("--------------------------------------------------");
+    console.log(`[ConvoDeck Nodemailer] Ownership Transfer Email Sent to: ${params.to}`);
+    if (previewUrl) console.log(`Preview: ${previewUrl}`);
+    console.log("--------------------------------------------------");
+
+    return { success: true, previewUrl };
+  } catch (error: unknown) {
+    const errorMsg =
+      error instanceof Error ? error.message : "Failed to send ownership transfer email";
+    console.error("sendOwnershipTransferEmail error:", error);
     return { success: false, error: errorMsg };
   }
 }

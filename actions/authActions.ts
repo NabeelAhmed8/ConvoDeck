@@ -164,12 +164,17 @@ export async function verifySignupCode(params: {
       return { success: false, error: "Signup session expired. Please try again." };
     }
 
-    // Create real Workspace
-    const workspace = await Workspace.create({
-      name: companyName,
-      ownerEmail: cleanEmail,
-      webhookVerifyToken: `cd_${Math.random().toString(36).substring(2, 12)}`,
-    });
+    // Check if a workspace was already assigned or transferred to this email
+    let workspace = await Workspace.findOne({ ownerEmail: cleanEmail });
+
+    if (!workspace) {
+      // Create real Workspace
+      workspace = await Workspace.create({
+        name: companyName,
+        ownerEmail: cleanEmail,
+        webhookVerifyToken: `cd_${Math.random().toString(36).substring(2, 12)}`,
+      });
+    }
 
     // Create User
     const user = await User.create({
@@ -562,7 +567,43 @@ export async function getCurrentUser() {
       return null;
     }
 
-    const workspace = await Workspace.findById(session.workspaceId).lean();
+    let workspace = await Workspace.findById(session.workspaceId).lean();
+
+    // Self-Healing: If active workspace was deleted from the backend, auto-heal to user's remaining workspace
+    if (!workspace) {
+      const cleanEmail = (user.email || "").toLowerCase().trim();
+      const fallbackWorkspace = await Workspace.findOne({ ownerEmail: cleanEmail })
+        .sort({ createdAt: -1 })
+        .lean();
+
+      if (fallbackWorkspace) {
+        workspace = fallbackWorkspace;
+        await setSessionCookie({
+          ...session,
+          workspaceId: fallbackWorkspace._id.toString(),
+        });
+        await User.findByIdAndUpdate(user._id, {
+          workspaceId: fallbackWorkspace._id.toString(),
+        });
+      } else {
+        const fresh = await Workspace.create({
+          name: `${user.name}'s Workspace`,
+          ownerEmail: cleanEmail,
+          contactEmail: cleanEmail,
+          plan: "trial",
+          planStatus: "trial",
+          webhookVerifyToken: `cd_${Math.random().toString(36).substring(2, 12)}`,
+        });
+        workspace = JSON.parse(JSON.stringify(fresh));
+        await setSessionCookie({
+          ...session,
+          workspaceId: fresh._id.toString(),
+        });
+        await User.findByIdAndUpdate(user._id, {
+          workspaceId: fresh._id.toString(),
+        });
+      }
+    }
 
     return {
       user: JSON.parse(JSON.stringify(user)),

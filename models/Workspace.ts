@@ -16,6 +16,12 @@ const WorkspaceSchema = new Schema<IWorkspaceDocument>(
       lowercase: true,
       trim: true,
     },
+    contactEmail: {
+      type: String,
+      default: "",
+      lowercase: true,
+      trim: true,
+    },
     whatsappPhoneNumber: {
       type: String,
       default: "",
