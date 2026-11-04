@@ -3,6 +3,7 @@ import { dbConnect } from "@/lib/dbConnect";
 import { Lead } from "@/models/Lead";
 import { Message } from "@/models/Message";
 import { Workspace } from "@/models/Workspace";
+import { processSmartAutomation } from "@/lib/automation/automationEngine";
 
 const VERIFY_TOKEN =
   process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || "convodeck_secure_token";
@@ -153,6 +154,15 @@ export async function POST(req: NextRequest) {
 
             console.log(
               `[ConvoDeck Live] Incoming message from +${fromPhone} (${lead.name}): ${messageText}`
+            );
+
+            // Execute Smart Automations (Auto-reply, Pipeline move, Round-Robin agent routing, Priority tagging)
+            processSmartAutomation({
+              lead: typeof lead.toObject === "function" ? lead.toObject() : lead,
+              messageText,
+              workspaceId: targetWorkspaceId,
+            }).catch((err) =>
+              console.error("[Smart Automation Webhook Trigger Error]:", err)
             );
           }
         }

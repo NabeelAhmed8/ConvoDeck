@@ -13,6 +13,7 @@ import {
   Plus,
   Headphones,
   User,
+  Sparkles,
 } from "lucide-react";
 import { AddLeadModal } from "@/components/kanban/AddLeadModal";
 
@@ -83,6 +84,13 @@ export function DashboardClientNav({
               icon: MessageSquare,
               badge: "Live",
               badgeColor: "bg-emerald-500 text-white",
+            },
+            {
+              name: "Smart Automations",
+              href: "/automations",
+              icon: Sparkles,
+              badge: "AI",
+              badgeColor: "bg-gradient-to-r from-orange-500 to-[#ff6422] text-white",
             },
           ],
         },

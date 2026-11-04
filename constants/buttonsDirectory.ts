@@ -61,6 +61,16 @@ export const BUTTONS_DIRECTORY: IButtonGuideItem[] = [
     actionDetails: "Drag and drop lead cards across New, Contacted, Demo, Won, and Lost stages.",
   },
   {
+    id: "btn-nav-automations",
+    name: "Smart Automations",
+    category: "Navigation",
+    location: "Sidebar Menu",
+    iconName: "Sparkles",
+    badge: "AI Engine",
+    description: "Automated WhatsApp greetings, lead qualification, agent routing, and urgent priority alerts.",
+    actionDetails: "Configure and simulate automated CRM rules, keyword triggers, and live execution history.",
+  },
+  {
     id: "btn-nav-team",
     name: "Team & Security",
     category: "Navigation",
