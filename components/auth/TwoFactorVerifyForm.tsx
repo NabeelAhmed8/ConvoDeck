@@ -17,6 +17,7 @@ interface TwoFactorVerifyFormProps {
   onSuccess: (redirectPath?: string) => void;
   onBack: () => void;
   initialPreviewUrl?: string | null;
+  portal?: "workspace" | "agent";
 }
 
 export function TwoFactorVerifyForm({
@@ -24,6 +25,7 @@ export function TwoFactorVerifyForm({
   onSuccess,
   onBack,
   initialPreviewUrl,
+  portal = "workspace",
 }: TwoFactorVerifyFormProps) {
   const [otpCode, setOtpCode] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(
@@ -57,6 +59,7 @@ export function TwoFactorVerifyForm({
     const res = await verifyLoginCode({
       email,
       code: otpCode.trim(),
+      portal,
     });
 
     if (res.success) {

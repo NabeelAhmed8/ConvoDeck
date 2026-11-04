@@ -205,9 +205,10 @@ export async function verifySignupCode(params: {
 export async function loginUser(formData: {
   email: string;
   password: string;
+  portal?: "workspace" | "agent";
 }) {
   try {
-    const { email, password } = formData;
+    const { email, password, portal = "workspace" } = formData;
 
     if (!email || !password) {
       return { success: false, error: "Please provide both email and password" };
@@ -236,6 +237,25 @@ export async function loginUser(formData: {
     const isMatch = verifyPassword(password, user.password);
     if (!isMatch) {
       return { success: false, error: "Invalid email or password" };
+    }
+
+    // Role-based Portal Enforcement:
+    // 1. Workspace Login is strictly for Admins. Sales Agents MUST sign in through the Agent Portal.
+    if (portal === "workspace" && user.role === "agent") {
+      return {
+        success: false,
+        error: "Invalid login to agent portal",
+        suggestedPortal: "agent",
+      };
+    }
+
+    // 2. Agent Portal is strictly for Sales Agents. Admins MUST sign in through Workspace Login.
+    if (portal === "agent" && user.role === "admin") {
+      return {
+        success: false,
+        error: "Invalid agent account. Workspace admins must sign in through Workspace Login.",
+        suggestedPortal: "workspace",
+      };
     }
 
     // Credentials are correct! Generate 6-digit login verification code
@@ -282,9 +302,10 @@ export async function loginUser(formData: {
 export async function verifyLoginCode(params: {
   email: string;
   code: string;
+  portal?: "workspace" | "agent";
 }) {
   try {
-    const { email, code } = params;
+    const { email, code, portal = "workspace" } = params;
     const cleanEmail = email.toLowerCase().trim();
     const cleanCode = code.trim();
 
@@ -335,6 +356,21 @@ export async function verifyLoginCode(params: {
     const user = await User.findOne({ email: cleanEmail });
     if (!user) {
       return { success: false, error: "User account not found" };
+    }
+
+    // Role-based Portal Enforcement on 2FA
+    if (portal === "workspace" && user.role === "agent") {
+      return {
+        success: false,
+        error: "Invalid login to agent portal",
+      };
+    }
+
+    if (portal === "agent" && user.role === "admin") {
+      return {
+        success: false,
+        error: "Invalid agent account. Workspace admins must sign in through Workspace Login.",
+      };
     }
 
     if (user.status === "suspended" || user.status === "deactivated") {

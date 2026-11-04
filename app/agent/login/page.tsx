@@ -23,6 +23,7 @@ function AgentLoginForm() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isAdminRedirect, setIsAdminRedirect] = useState(false);
 
   // Sync email from URL query if provided
   useEffect(() => {
@@ -35,8 +36,9 @@ function AgentLoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setIsAdminRedirect(false);
 
-    const res = await loginUser({ email, password });
+    const res = await loginUser({ email, password, portal: "agent" });
 
     if (res.success && res.requiresVerification) {
       setStep("verify");
@@ -47,6 +49,9 @@ function AgentLoginForm() {
       router.refresh();
     } else {
       setError(res.error || "Invalid agent credentials");
+      if (res.suggestedPortal === "workspace") {
+        setIsAdminRedirect(true);
+      }
       setLoading(false);
     }
   };
@@ -86,10 +91,20 @@ function AgentLoginForm() {
           {error && step === "credentials" && (
             <div
               role="alert"
-              className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex items-center gap-2"
+              className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
             >
-              <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>{error}</span>
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" aria-hidden="true" />
+                <span className="font-medium">{error}</span>
+              </div>
+              {isAdminRedirect && (
+                <Link
+                  href="/login"
+                  className="font-bold underline text-[#ff6422] hover:text-[#d44810] shrink-0 self-end sm:self-auto"
+                >
+                  Workspace Login &rarr;
+                </Link>
+              )}
             </div>
           )}
 
@@ -142,6 +157,7 @@ function AgentLoginForm() {
           ) : (
             <TwoFactorVerifyForm
               email={email}
+              portal="agent"
               initialPreviewUrl={previewUrl}
               onSuccess={handleVerifySuccess}
               onBack={() => setStep("credentials")}

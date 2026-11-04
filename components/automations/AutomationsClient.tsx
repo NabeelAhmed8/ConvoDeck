@@ -53,78 +53,60 @@ export function AutomationsClient({
   };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col p-3 sm:p-5 lg:p-8 space-y-4 sm:space-y-6 max-w-full overflow-x-hidden overflow-y-auto">
-      {/* Header */}
+    <div className="space-y-6 max-w-5xl mx-auto w-full text-slate-800">
+      {/* 1. Header & 4 KPI Metric Cards */}
       <AutomationsHeader
         activeRulesCount={activeRulesCount}
         totalLogsCount={initialLogs.length}
+        autoReplyEnabled={config.autoReplyEnabled}
+        roundRobinEnabled={config.roundRobinEnabled}
       />
 
-      {/* Tabs & Actions Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-2 sm:pb-0">
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 sm:pb-0 w-full sm:w-auto -mx-1 px-1">
+      {/* 2. Neumorphic Segmented Tab Navigation & Save Action */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="neu-tab-container p-1 rounded-2xl sm:rounded-full w-full sm:w-auto grid grid-cols-3 sm:flex items-center gap-1 sm:gap-1.5">
           <button
             type="button"
             onClick={() => setActiveTab("rules")}
-            className={`px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
-              activeTab === "rules"
-                ? "border-[#ff6422] text-[#ff6422]"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+            className={`px-3 sm:px-5 py-2 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
+              activeTab === "rules" ? "neu-tab-active" : "neu-tab"
             }`}
           >
-            <Sparkles className="w-4 h-4 shrink-0" />
-            <span>Rules</span>
-            {isDirty && (
-              <span className="w-2 h-2 rounded-full bg-[#ff6422] animate-pulse" title="Unsaved changes" />
-            )}
+            Rules &amp; Triggers
           </button>
-
           <button
             type="button"
             onClick={() => setActiveTab("simulator")}
-            className={`px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
-              activeTab === "simulator"
-                ? "border-[#ff6422] text-[#ff6422]"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+            className={`px-3 sm:px-5 py-2 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
+              activeTab === "simulator" ? "neu-tab-active" : "neu-tab"
             }`}
           >
-            <Play className="w-4 h-4 fill-current shrink-0" />
-            <span>Live Simulator</span>
+            Live Simulator
           </button>
-
           <button
             type="button"
             onClick={() => setActiveTab("logs")}
-            className={`px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold border-b-2 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
-              activeTab === "logs"
-                ? "border-[#ff6422] text-[#ff6422]"
-                : "border-transparent text-slate-500 hover:text-slate-800"
+            className={`px-3 sm:px-5 py-2 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
+              activeTab === "logs" ? "neu-tab-active" : "neu-tab"
             }`}
           >
-            <History className="w-4 h-4 shrink-0" />
-            <span>Logs</span>
-            <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-600 font-bold">
-              {initialLogs.length}
-            </span>
+            Audit Trail ({initialLogs.length})
           </button>
         </div>
 
         {activeTab === "rules" && (
-          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 self-end sm:self-auto shrink-0 w-full sm:w-auto justify-end">
             {isDirty && (
-              <span className="text-[11px] text-amber-600 font-medium hidden xs:inline-block">
-                Unsaved changes
+              <span className="text-xs text-amber-600 font-semibold flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                Unsaved Changes
               </span>
             )}
             <button
               type="button"
               onClick={handleSave}
               disabled={isSaving || !isDirty}
-              className={`w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm ${
-                isDirty
-                  ? "bg-[#ff6422] text-white hover:bg-[#e0551a] cursor-pointer"
-                  : "bg-slate-200 text-slate-500 cursor-default opacity-80"
-              }`}
+              className="neu-btn-primary px-5 py-2.5 rounded-full text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all w-full sm:w-auto"
             >
               {isSaving ? <Check className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               <span>{isSaving ? "Saving..." : isDirty ? "Save Rules" : "Saved"}</span>
@@ -133,9 +115,9 @@ export function AutomationsClient({
         )}
       </div>
 
-      {/* Tab Panels */}
+      {/* 3. Tab Content Panels */}
       {activeTab === "rules" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <GreetingBotCard
             enabled={config.autoReplyEnabled}
             message={config.greetingMessage}

@@ -21,13 +21,15 @@ export default function LoginPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isAgentRedirect, setIsAgentRedirect] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setIsAgentRedirect(false);
 
-    const res = await loginUser({ email, password });
+    const res = await loginUser({ email, password, portal: "workspace" });
 
     if (res.success && res.requiresVerification) {
       setStep("verify");
@@ -35,6 +37,9 @@ export default function LoginPage() {
       if (res.previewUrl) setPreviewUrl(res.previewUrl);
     } else {
       setError(res.error || "Invalid email or password");
+      if (res.error === "Invalid login to agent portal" || res.suggestedPortal === "agent") {
+        setIsAgentRedirect(true);
+      }
       setLoading(false);
     }
   };
@@ -70,10 +75,20 @@ export default function LoginPage() {
           {error && step === "credentials" && (
             <div
               role="alert"
-              className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex items-center gap-2"
+              className="mb-4 p-3 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2"
             >
-              <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>{error}</span>
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" aria-hidden="true" />
+                <span className="font-medium">{error}</span>
+              </div>
+              {isAgentRedirect && (
+                <Link
+                  href={`/agent/login?email=${encodeURIComponent(email)}`}
+                  className="font-bold underline text-[#ff6422] hover:text-[#d44810] shrink-0 self-end sm:self-auto"
+                >
+                  Agent Portal &rarr;
+                </Link>
+              )}
             </div>
           )}
 
@@ -145,6 +160,7 @@ export default function LoginPage() {
           ) : (
             <TwoFactorVerifyForm
               email={email}
+              portal="workspace"
               initialPreviewUrl={previewUrl}
               onSuccess={handleVerifySuccess}
               onBack={() => setStep("credentials")}
