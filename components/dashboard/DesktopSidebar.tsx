@@ -47,11 +47,10 @@ export function DesktopSidebar({
   return (
     <aside
       aria-label="Main navigation sidebar"
-      className={`hidden lg:flex flex-col neu-dribbble-rail text-slate-900 shrink-0 overflow-hidden transition-all duration-300 ease-in-out ${
-        isCollapsed
+      className={`hidden lg:flex flex-col neu-dribbble-rail text-slate-900 shrink-0 overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed
           ? "w-24 h-[calc(100vh-1.75rem)] my-3.5 ml-3.5 rounded-[36px] z-30"
           : "w-72 lg:w-80 h-[calc(100vh-1.75rem)] my-3.5 ml-3.5 rounded-[36px] shadow-[10px_10px_24px_rgba(166,180,200,0.45),-10px_-10px_24px_#ffffff] z-30"
-      }`}
+        }`}
     >
       {/* Brand Header */}
       {isCollapsed ? (

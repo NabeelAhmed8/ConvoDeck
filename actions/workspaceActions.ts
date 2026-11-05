@@ -7,6 +7,11 @@ import { dbConnect } from "@/lib/dbConnect";
 import { Workspace } from "@/models/Workspace";
 import { User } from "@/models/User";
 import { VerificationCode } from "@/models/VerificationCode";
+import { Lead } from "@/models/Lead";
+import { Message } from "@/models/Message";
+import { AutomationConfig } from "@/models/AutomationConfig";
+import { AutomationLog } from "@/models/AutomationLog";
+import { AuditLog } from "@/models/AuditLog";
 import { getSession, setSessionCookie, hashPassword } from "@/lib/auth";
 import { sendOwnershipTransferEmail } from "@/lib/mail";
 import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
@@ -565,6 +570,127 @@ export async function createNewWorkspace(workspaceName: string) {
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to create workspace";
     console.error("createNewWorkspace error:", error);
+    return { success: false, error: msg };
+  }
+}
+
+/**
+ * Permanently deletes a workspace and all its scoped data (leads, messages, automations, logs, agent accounts).
+ * Requires the authenticated user to be the workspace owner.
+ * If the user has multiple workspaces, switches active session to a remaining workspace.
+ * Prevents deletion if the user has only 1 workspace.
+ */
+export async function deleteWorkspace(workspaceIdToDelete?: string) {
+  try {
+    await dbConnect();
+    const session = await getSession();
+    if (!session || !session.userId) {
+      return { success: false, error: "Authentication required." };
+    }
+
+    if (session.role === "agent") {
+      return {
+        success: false,
+        error: "Only workspace administrators can delete a workspace.",
+      };
+    }
+
+    const cleanEmail = session.email.toLowerCase().trim();
+    const targetWorkspaceId = workspaceIdToDelete || session.workspaceId;
+
+    if (!targetWorkspaceId) {
+      return { success: false, error: "Workspace ID is required." };
+    }
+
+    const targetWorkspace = await Workspace.findById(targetWorkspaceId).lean();
+    if (!targetWorkspace) {
+      return { success: false, error: "Workspace not found." };
+    }
+
+    // Verify ownership
+    const isOwner = (targetWorkspace.ownerEmail || "").toLowerCase() === cleanEmail;
+    if (!isOwner) {
+      return {
+        success: false,
+        error: "Permission denied: Only the workspace owner can delete this workspace.",
+      };
+    }
+
+    // Check how many workspaces the user has
+    const userWorkspaces = await Workspace.find({
+      $or: [{ ownerEmail: cleanEmail }, { _id: session.workspaceId }],
+    }).lean();
+
+    if (userWorkspaces.length <= 1) {
+      return {
+        success: false,
+        error: "You cannot delete your only workspace. Please create another workspace first before deleting this one.",
+      };
+    }
+
+    // Find a remaining workspace to switch into
+    const remainingWorkspace = userWorkspaces.find(
+      (ws) => ws._id.toString() !== targetWorkspaceId
+    );
+
+    if (!remainingWorkspace) {
+      return {
+        success: false,
+        error: "Could not find an alternative workspace to switch to.",
+      };
+    }
+
+    const nextWorkspaceId = remainingWorkspace._id.toString();
+
+    // 1. Delete all workspace-scoped leads & messages
+    await Lead.deleteMany({ workspaceId: targetWorkspaceId });
+    await Message.deleteMany({ workspaceId: targetWorkspaceId });
+
+    // 2. Delete all workspace automations and logs
+    await AutomationConfig.deleteMany({ workspaceId: targetWorkspaceId });
+    await AutomationLog.deleteMany({ workspaceId: targetWorkspaceId });
+    await AuditLog.deleteMany({ workspaceId: targetWorkspaceId });
+
+    // 3. Delete team agents belonging to this workspace (do not delete the owner!)
+    await User.deleteMany({ workspaceId: targetWorkspaceId, role: "agent" });
+
+    // 4. Delete the workspace document
+    await Workspace.findByIdAndDelete(targetWorkspaceId);
+
+    // 5. Update session cookie and user record to point to remaining workspace
+    const remainingIsOwner = (remainingWorkspace.ownerEmail || "").toLowerCase() === cleanEmail;
+    const nextRole = remainingIsOwner ? "admin" : "member";
+
+    await setSessionCookie({
+      ...session,
+      workspaceId: nextWorkspaceId,
+      role: nextRole,
+    });
+
+    await User.findByIdAndUpdate(session.userId, {
+      workspaceId: nextWorkspaceId,
+      role: nextRole,
+    });
+
+    // 6. Revalidate all workspace-scoped paths
+    revalidatePath("/dashboard");
+    revalidatePath("/chat");
+    revalidatePath("/pipeline");
+    revalidatePath("/automations");
+    revalidatePath("/team");
+    revalidatePath("/billing");
+    revalidatePath("/settings");
+    revalidatePath("/profile");
+
+    return {
+      success: true,
+      nextWorkspaceId,
+      nextWorkspaceName: remainingWorkspace.name,
+      message: `Workspace "${targetWorkspace.name}" was permanently deleted.`,
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to delete workspace";
+    console.error("deleteWorkspace error:", error);
     return { success: false, error: msg };
   }
 }

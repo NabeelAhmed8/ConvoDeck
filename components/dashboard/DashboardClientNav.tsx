@@ -23,11 +23,13 @@ export function DashboardClientNav({
   onNavigate,
   isCollapsed = false,
   onOpenAddLead,
+  disableScroll = false,
 }: {
   userRole?: string;
   onNavigate?: () => void;
   isCollapsed?: boolean;
   onOpenAddLead?: () => void;
+  disableScroll?: boolean;
 }) {
   const pathname = usePathname();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -136,7 +138,7 @@ export function DashboardClientNav({
     <>
       <nav
         aria-label="Main Application Menu"
-        className={`flex-1 overflow-y-auto ${
+        className={`flex-1 ${disableScroll ? "" : "overflow-y-auto chat-scrollbar"} ${
           isCollapsed
             ? "px-2 py-2 flex flex-col items-center space-y-1"
             : "px-3 sm:px-4 py-2 space-y-1"

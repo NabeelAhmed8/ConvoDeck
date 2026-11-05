@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { DashboardClientNav } from "@/components/dashboard/DashboardClientNav";
@@ -26,6 +26,12 @@ interface MobileDrawerProps {
   onOpenAddLead: () => void;
 }
 
+/**
+ * MobileDrawer
+ * Single Responsibility: Responsive slide-over navigation drawer for mobile and tablet devices.
+ * Uses a single unified scroll container (eliminating nested scroll contention),
+ * locks background body scrolling when open, and features hardware-accelerated touch momentum.
+ */
 export function MobileDrawer({
   isOpen,
   onClose,
@@ -41,6 +47,22 @@ export function MobileDrawer({
   userWorkspaces = [],
   onOpenAddLead,
 }: MobileDrawerProps) {
+  // Prevent background page scrolling and touch bleed-through while drawer is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalTouchAction = document.body.style.touchAction;
+
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+
+    return () => {
+      document.body.style.overflow = originalOverflow || "unset";
+      document.body.style.touchAction = originalTouchAction || "unset";
+    };
+  }, [isOpen]);
+
   return (
     <>
       {/* Backdrop Overlay */}
@@ -54,17 +76,17 @@ export function MobileDrawer({
         }`}
       />
 
-      {/* Slide-over Drawer */}
+      {/* Slide-over Drawer Panel */}
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Main Navigation Menu"
-        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 sm:w-80 max-w-[85vw] h-full neu-dribbble-rail bg-[#edf1f7] text-slate-900 flex flex-col shadow-2xl transition-transform duration-300 ease-out transform overflow-y-auto chat-scrollbar ${
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-72 sm:w-80 max-w-[85vw] h-full neu-dribbble-rail bg-[#edf1f7] text-slate-900 flex flex-col shadow-2xl transition-transform duration-300 ease-out transform overflow-hidden ${
           isOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
         }`}
       >
-        {/* Drawer Header: Brand + Close button */}
-        <div className="p-4 sm:p-5 flex flex-col gap-2 shrink-0">
+        {/* Pinned Top Header: Brand + Close button */}
+        <div className="p-4 sm:p-5 flex flex-col gap-2 shrink-0 bg-[#edf1f7] z-10 border-b border-slate-200/50">
           <div className="flex items-center justify-between gap-3">
             <Link
               id="tour-brand-header"
@@ -99,62 +121,66 @@ export function MobileDrawer({
               <X className="w-4 h-4 text-slate-900" aria-hidden="true" />
             </button>
           </div>
-          <div className="neu-dribbble-divider-full my-1" aria-hidden="true" />
         </div>
 
-        {/* Dynamic Multi-Workspace Switcher */}
-        <div className="px-4 py-1 shrink-0">
-          <WorkspaceSwitcher
-            currentWorkspaceId={currentWorkspaceId}
-            currentWorkspaceName={workspaceName}
-            workspaces={userWorkspaces}
-            isCollapsed={false}
-            isAgent={isAgent}
-            onNavigate={onClose}
-          />
-          <div className="neu-dribbble-divider-full my-2" aria-hidden="true" />
-        </div>
+        {/* Single Unified Scrollable Body: Eliminates all nested scroll contention */}
+        <div
+          className="flex-1 overflow-y-auto overscroll-contain chat-scrollbar touch-pan-y min-h-0"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {/* Dynamic Multi-Workspace Switcher */}
+          <div className="px-4 py-2 shrink-0">
+            <WorkspaceSwitcher
+              currentWorkspaceId={currentWorkspaceId}
+              currentWorkspaceName={workspaceName}
+              workspaces={userWorkspaces}
+              isCollapsed={false}
+              isAgent={isAgent}
+              onNavigate={onClose}
+            />
+            <div className="neu-dribbble-divider-full my-2" aria-hidden="true" />
+          </div>
 
-        {/* Navigation Links (Scrollable) */}
-        <div className="flex-1 overflow-y-auto min-h-0">
+          {/* Navigation Links (Scroll disabled internally to keep single unified drawer scroll) */}
           <DashboardClientNav
             userRole={userRole}
             isCollapsed={false}
             onNavigate={onClose}
             onOpenAddLead={onOpenAddLead}
+            disableScroll={true}
           />
-        </div>
 
-        {/* WhatsApp Business Live Card */}
-        <div className="p-3 sm:p-4 shrink-0">
-          <div className="neu-dribbble-divider-full my-1.5" aria-hidden="true" />
-          <SidebarWhatsAppCard
-            whatsappNumber={whatsappNumber}
-            isAgent={isAgent}
-            isCollapsed={false}
-            onNavigate={onClose}
-          />
-        </div>
+          {/* WhatsApp Business Live Card */}
+          <div className="p-3 sm:p-4 shrink-0">
+            <div className="neu-dribbble-divider-full my-1.5" aria-hidden="true" />
+            <SidebarWhatsAppCard
+              whatsappNumber={whatsappNumber}
+              isAgent={isAgent}
+              isCollapsed={false}
+              onNavigate={onClose}
+            />
+          </div>
 
-        {/* Interactive Tour Guide */}
-        <div className="px-3 sm:px-4 py-2 border-t border-slate-200/50">
-          <TourLauncherButton
-            variant="sidebar"
-            isCollapsed={false}
-          />
-        </div>
+          {/* Interactive Tour Guide */}
+          <div className="px-3 sm:px-4 py-2 border-t border-slate-200/50">
+            <TourLauncherButton
+              variant="sidebar"
+              isCollapsed={false}
+            />
+          </div>
 
-        {/* User Profile & Logout */}
-        <div className="border-t border-slate-200/50">
-          <SidebarUserProfile
-            userName={userName}
-            userEmail={userEmail}
-            initials={initials}
-            userAvatar={userAvatar}
-            isAgent={isAgent}
-            isCollapsed={false}
-            onNavigate={onClose}
-          />
+          {/* User Profile & Logout (with bottom safe-area margin) */}
+          <div className="border-t border-slate-200/50 pb-8 sm:pb-6">
+            <SidebarUserProfile
+              userName={userName}
+              userEmail={userEmail}
+              initials={initials}
+              userAvatar={userAvatar}
+              isAgent={isAgent}
+              isCollapsed={false}
+              onNavigate={onClose}
+            />
+          </div>
         </div>
       </div>
     </>

@@ -15,9 +15,11 @@ import { MetaApiConnectionForm } from "@/components/settings/MetaApiConnectionFo
 import { WebhookCard } from "@/components/settings/WebhookCard";
 import { WorkspaceProfileCard } from "@/components/settings/WorkspaceProfileCard";
 import { TransferWorkspaceOwnershipCard } from "@/components/settings/TransferWorkspaceOwnershipCard";
+import { DeleteWorkspaceCard } from "@/components/settings/DeleteWorkspaceCard";
 
 export default function SettingsPage() {
   const router = useRouter();
+  const [workspaceId, setWorkspaceId] = useState("");
   const [name, setName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [ownerEmail, setOwnerEmail] = useState("");
@@ -37,6 +39,7 @@ export default function SettingsPage() {
 
       const data = await getWorkspaceSettings();
       if (data) {
+        setWorkspaceId(data._id?.toString() || "");
         setName(data.name || "");
         setContactEmail(data.contactEmail || "");
         setOwnerEmail(data.ownerEmail || "");
@@ -134,7 +137,13 @@ export default function SettingsPage() {
         onTransferred={(newOwner) => setOwnerEmail(newOwner)}
       />
 
-      {/* 4. Onboarding & Tour Guide */}
+      {/* 4. Danger Zone: Delete Workspace */}
+      <DeleteWorkspaceCard
+        workspaceName={name}
+        workspaceId={workspaceId}
+      />
+
+      {/* 5. Onboarding & Tour Guide */}
       <div className="neu-card rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
           <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/50 flex items-center justify-center shrink-0 text-[#ff6422]">
