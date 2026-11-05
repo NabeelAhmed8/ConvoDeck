@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Phone, CheckCircle2, ShieldCheck, Unlink } from "lucide-react";
-import { disconnectWhatsAppLine } from "@/actions/embeddedSignupActions";
+import { disconnectWhatsAppLine } from "@/actions/metaCloudApiActions";
 import { toast } from "@/store/useToastStore";
 import { DisconnectLineModal } from "@/components/settings/DisconnectLineModal";
 

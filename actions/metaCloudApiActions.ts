@@ -124,3 +124,36 @@ export async function sendMetaTestMessage(params: {
 
   return res;
 }
+
+// 4. Disconnect WhatsApp Line from Workspace
+export async function disconnectWhatsAppLine(): Promise<{ success: boolean; error?: string }> {
+  try {
+    await dbConnect();
+    const session = await getSession();
+
+    if (session?.role === "agent") {
+      return { success: false, error: "Access Denied: Only administrators can disconnect WhatsApp." };
+    }
+
+    const workspaceId = session?.workspaceId || DEFAULT_WORKSPACE_ID;
+
+    await Workspace.findByIdAndUpdate(workspaceId, {
+      $set: {
+        whatsappPhoneNumber: "",
+        whatsappPhoneNumberId: "",
+        whatsappBusinessAccountId: "",
+        whatsappAccessToken: "",
+      },
+    });
+
+    revalidatePath("/settings");
+    revalidatePath("/dashboard");
+    revalidatePath("/chat");
+    revalidatePath("/billing");
+
+    return { success: true };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to disconnect line";
+    return { success: false, error: msg };
+  }
+}
