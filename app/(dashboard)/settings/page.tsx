@@ -7,7 +7,10 @@ import {
   MessageSquare,
   ShieldCheck,
 } from "lucide-react";
-import { getWorkspaceSettings } from "@/actions/workspaceActions";
+import {
+  getWorkspaceSettings,
+  getUserWorkspaces,
+} from "@/actions/workspaceActions";
 import { getCurrentUser } from "@/actions/authActions";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { ConnectedLineCard } from "@/components/settings/ConnectedLineCard";
@@ -20,6 +23,7 @@ import { DeleteWorkspaceCard } from "@/components/settings/DeleteWorkspaceCard";
 export default function SettingsPage() {
   const router = useRouter();
   const [workspaceId, setWorkspaceId] = useState("");
+  const [workspaceCount, setWorkspaceCount] = useState<number>(1);
   const [name, setName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [ownerEmail, setOwnerEmail] = useState("");
@@ -37,7 +41,15 @@ export default function SettingsPage() {
         return;
       }
 
-      const data = await getWorkspaceSettings();
+      const [data, workspaces] = await Promise.all([
+        getWorkspaceSettings(),
+        getUserWorkspaces(),
+      ]);
+
+      if (workspaces && workspaces.length > 0) {
+        setWorkspaceCount(workspaces.length);
+      }
+
       if (data) {
         setWorkspaceId(data._id?.toString() || "");
         setName(data.name || "");
@@ -141,6 +153,7 @@ export default function SettingsPage() {
       <DeleteWorkspaceCard
         workspaceName={name}
         workspaceId={workspaceId}
+        workspaceCount={workspaceCount}
       />
 
       {/* 5. Onboarding & Tour Guide */}
