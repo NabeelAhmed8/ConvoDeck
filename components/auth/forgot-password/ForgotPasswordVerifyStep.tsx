@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Lock,
   AlertCircle,
@@ -45,6 +45,20 @@ export function ForgotPasswordVerifyStep({
   const [resendSuccess, setResendSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus only on desktop on mount to avoid blocking mobile keypad gestures
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isTouch =
+        window.matchMedia("(pointer: coarse)").matches ||
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0;
+      if (!isTouch) {
+        inputRef.current?.focus();
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (resendCooldown > 0) {
@@ -136,25 +150,28 @@ export function ForgotPasswordVerifyStep({
             6-Digit Verification Code{" "}
             <span className="text-rose-500" aria-hidden="true">*</span>
           </label>
-          <div className="relative">
+          <div
+            className="relative cursor-text"
+            onClick={() => inputRef.current?.focus()}
+          >
             <Lock
-              className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
+              className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
               aria-hidden="true"
             />
             <input
+              ref={inputRef}
               id="forgot-password-code"
               name="otpCode"
-              type="text"
+              type="tel"
               inputMode="numeric"
               pattern="[0-9]*"
               maxLength={6}
               autoComplete="one-time-code"
               placeholder="123456"
               value={otpCode}
-              onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-              className="w-full pl-9 pr-3.5 py-2.5 text-center tracking-widest text-lg font-mono neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              className="w-full pl-9 pr-3.5 py-3 text-center tracking-[0.25em] text-xl font-mono font-bold neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none touch-manipulation select-text"
               required
-              autoFocus
             />
           </div>
           <p className="mt-1 text-[11px] text-slate-500">

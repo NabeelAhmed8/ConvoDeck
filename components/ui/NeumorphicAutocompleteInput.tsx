@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useId } from "react";
+import React, { useRef, useId } from "react";
 
 export interface NeumorphicAutocompleteInputProps {
   id?: string;
@@ -57,19 +57,6 @@ export function NeumorphicAutocompleteInput({
       : "on";
 
   const effectiveAutoComplete = customAutoComplete || defaultAutoComplete;
-
-  // Fix: When scrolling, dismiss Chrome's native floating autofill popup so it never floats or detaches awkwardly
-  useEffect(() => {
-    const handleScroll = () => {
-      if (document.activeElement === inputRef.current) {
-        inputRef.current?.blur();
-      }
-    };
-    window.addEventListener("scroll", handleScroll, true);
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-    };
-  }, []);
 
   return (
     <div className="w-full">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Lock,
   ShieldCheck,
@@ -35,6 +35,20 @@ export function TwoFactorVerifyForm({
   const [resendSuccess, setResendSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus only on desktop on mount to avoid blocking mobile keypad gestures
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isTouch =
+        window.matchMedia("(pointer: coarse)").matches ||
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0;
+      if (!isTouch) {
+        inputRef.current?.focus();
+      }
+    }
+  }, []);
 
   // Cooldown countdown timer for resend code
   useEffect(() => {
@@ -116,26 +130,29 @@ export function TwoFactorVerifyForm({
           >
             6-Digit Security Code <span className="text-rose-500" aria-hidden="true">*</span>
           </label>
-          <div className="relative">
+          <div
+            className="relative cursor-text"
+            onClick={() => inputRef.current?.focus()}
+          >
             <Lock
-              className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
+              className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
               aria-hidden="true"
             />
             <input
+              ref={inputRef}
               id="login-otp-code"
               name="otpCode"
-              type="text"
+              type="tel"
               inputMode="numeric"
               pattern="[0-9]*"
               maxLength={6}
               autoComplete="one-time-code"
               placeholder="123456"
               value={otpCode}
-              onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-              className="w-full pl-9 pr-3.5 py-2.5 text-center tracking-widest text-lg font-mono neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              className="w-full pl-9 pr-3.5 py-3 text-center tracking-[0.25em] text-xl font-mono font-bold neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none touch-manipulation select-text"
               required
               aria-required="true"
-              autoFocus
             />
           </div>
           <p className="mt-1 text-[11px] text-slate-500">

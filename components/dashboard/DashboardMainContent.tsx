@@ -11,21 +11,9 @@ export function DashboardMainContent({ children }: DashboardMainContentProps) {
   const pathname = usePathname();
   const isChat = pathname === "/chat" || pathname?.startsWith("/chat/");
 
-  const handleScroll = () => {
-    // When the user scrolls, gracefully dismiss active inputs & browser/custom floating popups
-    const activeEl = document.activeElement;
-    if (
-      activeEl &&
-      (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA")
-    ) {
-      (activeEl as HTMLElement).blur();
-    }
-  };
-
   return (
     <main
       aria-label="Main Content"
-      onScroll={handleScroll}
       className={
         isChat
           ? "flex-1 w-full max-w-full flex flex-col overflow-hidden min-w-0 min-h-0 p-1 sm:p-2 lg:p-4 pb-1 sm:pb-2"

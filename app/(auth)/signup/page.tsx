@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -43,6 +43,20 @@ export default function SignupPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const otpInputRef = useRef<HTMLInputElement>(null);
+
+  // Focus OTP input only on desktop to prevent suppressing mobile keypad
+  useEffect(() => {
+    if (step === "verify" && typeof window !== "undefined") {
+      const isTouch =
+        window.matchMedia("(pointer: coarse)").matches ||
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0;
+      if (!isTouch) {
+        otpInputRef.current?.focus();
+      }
+    }
+  }, [step]);
 
   // Cooldown countdown timer for resend button
   useEffect(() => {
@@ -272,7 +286,10 @@ export default function SignupPage() {
                 </p>
               </div>
 
-              <div>
+              <div
+                className="cursor-text"
+                onClick={() => otpInputRef.current?.focus()}
+              >
                 <label
                   htmlFor="signup-verification-code"
                   className="block text-xs font-semibold text-slate-700 text-center mb-2"
@@ -280,18 +297,18 @@ export default function SignupPage() {
                   6-Digit Verification Code
                 </label>
                 <input
+                  ref={otpInputRef}
                   id="signup-verification-code"
                   name="verificationCode"
-                  type="text"
+                  type="tel"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   maxLength={6}
                   autoComplete="one-time-code"
-                  autoFocus
                   placeholder="••••••"
                   value={otpCode}
-                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                  className="w-full py-3 text-center text-xl sm:text-2xl font-mono font-bold tracking-[0.3em] sm:tracking-[0.5em] neu-pressed rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  className="w-full py-3 text-center text-xl sm:text-2xl font-mono font-bold tracking-[0.3em] sm:tracking-[0.5em] neu-pressed rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none touch-manipulation select-text"
                   required
                   aria-required="true"
                 />

@@ -3,13 +3,31 @@
 import { useEffect } from "react";
 
 /**
- * Global scroll listener to dismiss Chrome native autofill overlay on scroll.
- * When the user scrolls any container, if an input or textarea is active, it blurs it,
- * preventing Chrome's native autofill popup from lingering or scrolling awkwardly.
+ * Global listener to dismiss floating desktop Chrome autofill overlays when the user scrolls with mouse wheel.
+ * Completely disabled on touch / mobile devices because mobile software keypads cause viewport scrolls
+ * and mobile browsers display autofill in the keyboard toolbar (never as floating detached windows).
  */
 export function AutofillScrollDismiss() {
   useEffect(() => {
-    const handleScroll = () => {
+    // Detect touch / mobile device
+    const isTouchDevice = () => {
+      if (typeof window === "undefined") return false;
+      return (
+        window.matchMedia("(pointer: coarse)").matches ||
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0
+      );
+    };
+
+    // On mobile devices, never blur inputs on scroll:
+    // Virtual keypads trigger automatic viewport adjustments when opening!
+    if (isTouchDevice()) {
+      return;
+    }
+
+    // On desktop, wheel scroll (mouse wheel / trackpad) can detach Chrome's native autofill dropdown.
+    // Blurring the active input on wheel event cleanly dismisses the floating dropdown.
+    const handleWheel = () => {
       const active = document.activeElement;
       if (
         active &&
@@ -18,12 +36,14 @@ export function AutofillScrollDismiss() {
         (active as HTMLElement).blur();
       }
     };
-    window.addEventListener("scroll", handleScroll, {
+
+    window.addEventListener("wheel", handleWheel, {
       capture: true,
       passive: true,
     });
+
     return () => {
-      window.removeEventListener("scroll", handleScroll, { capture: true });
+      window.removeEventListener("wheel", handleWheel, { capture: true });
     };
   }, []);
 

@@ -280,15 +280,16 @@ export function ChangeEmailModal({
               <input
                 id="email-change-code"
                 name="verificationCode"
-                type="text"
+                type="tel"
                 inputMode="numeric"
+                pattern="[0-9]*"
                 maxLength={6}
                 value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 placeholder="123456"
                 autoComplete="one-time-code"
                 required
-                className="w-full py-2 px-3 neu-input rounded-2xl text-center text-base sm:text-lg tracking-widest font-mono font-bold text-slate-900 placeholder-slate-300 focus:outline-none"
+                className="w-full py-2.5 px-3 neu-input rounded-2xl text-center text-lg sm:text-xl tracking-[0.25em] font-mono font-bold text-slate-900 placeholder-slate-300 focus:outline-none touch-manipulation select-text"
               />
             </div>
 
