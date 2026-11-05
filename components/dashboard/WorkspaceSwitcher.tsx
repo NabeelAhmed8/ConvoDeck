@@ -201,6 +201,7 @@ export function WorkspaceSwitcher({
                   type="button"
                   onClick={() => {
                     setIsOpen(false);
+                    if (onNavigate) onNavigate();
                     setIsModalOpen(true);
                   }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-2xl text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-200/50 transition-colors cursor-pointer"
@@ -232,7 +233,7 @@ export function WorkspaceSwitcher({
         onClose={() => setIsModalOpen(false)}
         onSuccess={() => {
           if (onNavigate) onNavigate();
-          window.location.reload();
+          window.location.href = "/dashboard";
         }}
       />
     </>
