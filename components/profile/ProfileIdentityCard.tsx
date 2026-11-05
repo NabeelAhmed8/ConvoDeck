@@ -7,7 +7,10 @@ import { toast } from "@/store/useToastStore";
 import { ProfileAvatarUploader } from "@/components/profile/ProfileAvatarUploader";
 import { PhoneInputField } from "@/components/ui/PhoneInputField";
 import { ChangeEmailModal } from "@/components/profile/ChangeEmailModal";
-import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
+import {
+  NeumorphicAutocompleteInput,
+  saveInputSuggestionHistory,
+} from "@/components/ui/NeumorphicAutocompleteInput";
 import { parsePhoneNumber } from "@/lib/countries";
 
 interface ProfileIdentityCardProps {
@@ -85,6 +88,12 @@ export function ProfileIdentityCard({
     try {
       const res = await updateUserProfile({ name, phone: fullPhone, avatar });
       if (res.success) {
+        if (name.trim()) {
+          saveInputSuggestionHistory("user_names", name.trim());
+        }
+        if (phoneNumber.trim()) {
+          saveInputSuggestionHistory("profile_phone_numbers", phoneNumber.trim());
+        }
         toast.success("Profile Updated", "Your personal details have been saved.");
         onProfileUpdated?.(name, avatar, fullPhone);
       } else {
@@ -187,7 +196,7 @@ export function ProfileIdentityCard({
           </div>
         </div>
 
-        {/* Contact Phone with Country Code Dynamic Dropdown */}
+        {/* Contact Phone with Country Code Dynamic Dropdown & Smart Suggestions */}
         <div>
           <PhoneInputField
             id="profile-phone"
@@ -198,6 +207,8 @@ export function ProfileIdentityCard({
             onDialCodeChange={setDialCode}
             onPhoneNumberChange={setPhoneNumber}
             placeholder="300 1234567"
+            storageKey="profile_phone_numbers"
+            suggestions={["300 1234567", "321 9876543", "333 4567890", "345 1122334"]}
           />
           <p className="text-[11px] text-slate-400 mt-1">
             Used for urgent system alerts and account recovery.

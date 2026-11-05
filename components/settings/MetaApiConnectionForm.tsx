@@ -59,6 +59,14 @@ export function MetaApiConnectionForm({
     setToken(initialToken || "");
     if (!initialPhone) {
       setVerifiedInfo(null);
+    } else {
+      saveInputSuggestionHistory("meta_whatsapp_phone", initialPhone);
+    }
+    if (initialPhoneId) {
+      saveInputSuggestionHistory("meta_phone_id", initialPhoneId);
+    }
+    if (initialWabaId) {
+      saveInputSuggestionHistory("meta_waba_id", initialWabaId);
     }
   }, [initialPhone, initialPhoneId, initialWabaId, initialToken]);
 
@@ -180,6 +188,13 @@ export function MetaApiConnectionForm({
             onChange={setPhone}
             placeholder="e.g. +1 555 123 4567"
             storageKey="meta_whatsapp_phone"
+            suggestions={[
+              ...(initialPhone ? [initialPhone] : []),
+              "+1 (555) 234-5678",
+              "+92 300 1234567",
+              "+44 7700 900077",
+              "+971 50 123 4567",
+            ]}
             icon={<Phone className="w-4 h-4" />}
           />
 
@@ -193,6 +208,12 @@ export function MetaApiConnectionForm({
             onChange={setPhoneId}
             placeholder="e.g. 108492019482910"
             storageKey="meta_phone_id"
+            suggestions={[
+              ...(initialPhoneId ? [initialPhoneId] : []),
+              "108492019482910",
+              "109283746591024",
+              "100293847561928",
+            ]}
             icon={<Hash className="w-4 h-4" />}
           />
         </div>
@@ -207,6 +228,12 @@ export function MetaApiConnectionForm({
             onChange={setWabaId}
             placeholder="e.g. 293847561029384"
             storageKey="meta_waba_id"
+            suggestions={[
+              ...(initialWabaId ? [initialWabaId] : []),
+              "293847561029384",
+              "192837465019283",
+              "384756102938475",
+            ]}
             icon={<Building2 className="w-4 h-4" />}
           />
 

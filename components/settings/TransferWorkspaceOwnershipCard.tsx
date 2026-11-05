@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserCheck, ArrowRightLeft, ShieldAlert, Loader2, Mail } from "lucide-react";
 import { transferWorkspaceOwnership } from "@/actions/workspaceActions";
+import { getTeamMembers } from "@/actions/teamActions";
 import { toast } from "@/store/useToastStore";
 import { NeumorphicCheckbox } from "@/components/ui/NeumorphicCheckbox";
-import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
+import {
+  NeumorphicAutocompleteInput,
+  saveInputSuggestionHistory,
+} from "@/components/ui/NeumorphicAutocompleteInput";
 
 export interface TransferWorkspaceOwnershipCardProps {
   currentOwnerEmail: string;
@@ -26,6 +30,28 @@ export function TransferWorkspaceOwnershipCard({
   const [confirmed, setConfirmed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [owner, setOwner] = useState(currentOwnerEmail);
+  const [teamSuggestions, setTeamSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function loadTeam() {
+      try {
+        const res = await getTeamMembers();
+        if (res?.success && res.members) {
+          const emails = res.members
+            .map((m) => m.email)
+            .filter(
+              (email): email is string =>
+                Boolean(email) &&
+                email.toLowerCase() !== currentOwnerEmail.toLowerCase()
+            );
+          setTeamSuggestions(emails);
+        }
+      } catch {
+        // Safe fallback
+      }
+    }
+    loadTeam();
+  }, [currentOwnerEmail]);
 
   const handleTransfer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +77,7 @@ export function TransferWorkspaceOwnershipCard({
     try {
       const res = await transferWorkspaceOwnership(cleanEmail);
       if (res.success && res.newOwnerEmail) {
+        saveInputSuggestionHistory("owner_transfer_emails", cleanEmail);
         setOwner(res.newOwnerEmail);
         setTargetEmail("");
         setConfirmed(false);
@@ -113,6 +140,12 @@ export function TransferWorkspaceOwnershipCard({
           placeholder="partner@example.com"
           disabled={loading}
           storageKey="owner_transfer_emails"
+          suggestions={[
+            ...teamSuggestions,
+            "partner@company.com",
+            "manager@agency.com",
+            "admin@domain.com",
+          ]}
           icon={<Mail className="w-4 h-4" />}
         />
 

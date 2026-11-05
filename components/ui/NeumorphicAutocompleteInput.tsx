@@ -81,11 +81,52 @@ export function NeumorphicAutocompleteInput({
   const getComputedSuggestions = (): { text: string; isHistory?: boolean }[] => {
     const query = (value || "").trim().toLowerCase();
 
+    // Intelligent default fallback suggestions by storageKey/type when history is empty
+    const defaultFallbacks: Record<string, string[]> = {
+      meta_whatsapp_phone: [
+        "+1 (555) 234-5678",
+        "+92 300 1234567",
+        "+44 7700 900077",
+        "+971 50 123 4567",
+      ],
+      meta_phone_id: ["108492019482910", "109283746591024", "100293847561928"],
+      meta_waba_id: ["293847561029384", "192837465019283", "384756102938475"],
+      owner_transfer_emails: [
+        "partner@company.com",
+        "manager@agency.com",
+        "admin@domain.com",
+      ],
+      workspace_names: ["Acme Agency", "Global Media", "ConvoDeck Solutions"],
+      profile_phone_numbers: ["300 1234567", "321 9876543", "333 4567890"],
+    };
+
+    const smartFallbacks = (storageKey && defaultFallbacks[storageKey]) || [];
+    const effectiveSuggestions =
+      customSuggestions.length > 0 ? customSuggestions : smartFallbacks;
+
     if (!query) {
       const combined = [
         ...historyItems.map((text) => ({ text, isHistory: true })),
-        ...customSuggestions.map((text) => ({ text })),
+        ...effectiveSuggestions.map((text) => ({ text })),
       ];
+
+      // Provide sensible fallbacks if empty on focus
+      if (combined.length === 0) {
+        if (type === "email") {
+          combined.push(
+            { text: "admin@company.com" },
+            { text: "partner@example.com" },
+            { text: "manager@domain.com" }
+          );
+        } else if (type === "tel") {
+          combined.push(
+            { text: "+1 (555) 234-5678" },
+            { text: "+92 300 1234567" },
+            { text: "+44 7700 900077" }
+          );
+        }
+      }
+
       const seen = new Set<string>();
       const result: { text: string; isHistory?: boolean }[] = [];
       for (const item of combined) {
@@ -101,21 +142,51 @@ export function NeumorphicAutocompleteInput({
       if (query.includes("@")) {
         const [username, domainPart] = query.split("@");
         if (!username) return [];
-        return COMMON_EMAIL_DOMAINS
+        const domainMatches = COMMON_EMAIL_DOMAINS
           .filter((d) => d.startsWith(`@${domainPart}`))
           .map((d) => ({ text: `${username}${d}` }));
+
+        const historyMatches = historyItems
+          .filter((item) => item.toLowerCase().includes(query))
+          .map((text) => ({ text, isHistory: true }));
+
+        const customMatches = effectiveSuggestions
+          .filter((item) => item.toLowerCase().includes(query))
+          .map((text) => ({ text }));
+
+        const seen = new Set<string>();
+        const combined: { text: string; isHistory?: boolean }[] = [];
+        for (const item of [
+          ...historyMatches,
+          ...customMatches,
+          ...domainMatches,
+        ]) {
+          if (!seen.has(item.text.toLowerCase())) {
+            seen.add(item.text.toLowerCase());
+            combined.push(item);
+          }
+        }
+        return combined.slice(0, 5);
       }
-      // User hasn't typed '@' yet: suggest domains + history matches
+
+      // User hasn't typed '@' yet: suggest domains + custom/history matches
       const domainMatches = COMMON_EMAIL_DOMAINS.map((d) => ({
         text: `${query}${d}`,
       }));
       const historyMatches = historyItems
         .filter((item) => item.toLowerCase().includes(query))
         .map((text) => ({ text, isHistory: true }));
+      const customMatches = effectiveSuggestions
+        .filter((item) => item.toLowerCase().includes(query))
+        .map((text) => ({ text }));
 
       const seen = new Set<string>();
       const combined: { text: string; isHistory?: boolean }[] = [];
-      for (const item of [...historyMatches, ...domainMatches]) {
+      for (const item of [
+        ...historyMatches,
+        ...customMatches,
+        ...domainMatches,
+      ]) {
         if (!seen.has(item.text.toLowerCase())) {
           seen.add(item.text.toLowerCase());
           combined.push(item);
@@ -129,7 +200,7 @@ export function NeumorphicAutocompleteInput({
       .filter((item) => item.toLowerCase().includes(query))
       .map((text) => ({ text, isHistory: true }));
 
-    const customMatches = customSuggestions
+    const customMatches = effectiveSuggestions
       .filter((item) => item.toLowerCase().includes(query))
       .map((text) => ({ text }));
 
@@ -141,6 +212,21 @@ export function NeumorphicAutocompleteInput({
         combined.push(item);
       }
     }
+
+    // If query matches current whole value or no direct partial matches found,
+    // also append available suggestions so choices are always available on focus
+    if (combined.length <= 1) {
+      for (const item of [
+        ...historyItems.map((text) => ({ text, isHistory: true })),
+        ...effectiveSuggestions.map((text) => ({ text })),
+      ]) {
+        if (!seen.has(item.text.toLowerCase())) {
+          seen.add(item.text.toLowerCase());
+          combined.push(item);
+        }
+      }
+    }
+
     return combined.slice(0, 5);
   };
 

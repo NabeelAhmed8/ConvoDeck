@@ -166,46 +166,54 @@ export function TeamManagementClient({
         )}
       </div>
 
-      {/* Metrics Row - Compact Horizontal Stat Cards to Elevate Content */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
-          <div className="min-w-0">
-            <span className="text-[11px] font-semibold text-slate-500 block truncate">Total Team</span>
-            <p className="text-lg sm:text-xl font-black text-slate-900 leading-tight mt-0.5">{members.length}</p>
+      {/* 4 Neumorphic KPI Cards (Standard App Size & Format Matching Automations & Dashboard) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {/* Total Team */}
+        <div className="neu-card neu-card-hover p-4 sm:p-5 rounded-2xl bg-white">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500">Total Team</span>
+            <div className="p-2 sm:p-2.5 rounded-xl neu-pressed text-[#ff6422] bg-[#f1f5f9]">
+              <Users className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2 rounded-xl neu-pressed text-[#ff6422] bg-[#f1f5f9] shrink-0 ml-2">
-            <Users className="w-4 h-4" />
-          </div>
+          <p className="text-xl sm:text-2xl font-black text-slate-900 mt-2">{members.length}</p>
+          <span className="text-[11px] text-slate-500">Registered members</span>
         </div>
 
-        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
-          <div className="min-w-0">
-            <span className="text-[11px] font-semibold text-slate-500 block truncate">Active Now</span>
-            <p className="text-lg sm:text-xl font-black text-emerald-600 leading-tight mt-0.5">{activeAgentsCount}</p>
+        {/* Active Now */}
+        <div className="neu-card neu-card-hover p-4 sm:p-5 rounded-2xl bg-white">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500">Active Now</span>
+            <div className="p-2 sm:p-2.5 rounded-xl neu-pressed text-emerald-600 bg-[#f1f5f9]">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse block" />
+            </div>
           </div>
-          <div className="p-2 rounded-xl neu-pressed text-emerald-600 bg-[#f1f5f9] shrink-0 ml-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse block" />
-          </div>
+          <p className="text-xl sm:text-2xl font-black text-emerald-600 mt-2">{activeAgentsCount}</p>
+          <span className="text-[11px] text-slate-500">Active online status</span>
         </div>
 
-        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
-          <div className="min-w-0">
-            <span className="text-[11px] font-semibold text-slate-500 block truncate">Deactivated</span>
-            <p className="text-lg sm:text-xl font-black text-rose-600 leading-tight mt-0.5">{suspendedCount}</p>
+        {/* Deactivated */}
+        <div className="neu-card neu-card-hover p-4 sm:p-5 rounded-2xl bg-white">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500">Deactivated</span>
+            <div className="p-2 sm:p-2.5 rounded-xl neu-pressed text-rose-600 bg-[#f1f5f9]">
+              <UserX className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2 rounded-xl neu-pressed text-rose-600 bg-[#f1f5f9] shrink-0 ml-2">
-            <UserX className="w-4 h-4" />
-          </div>
+          <p className="text-xl sm:text-2xl font-black text-rose-600 mt-2">{suspendedCount}</p>
+          <span className="text-[11px] text-slate-500">Access revoked</span>
         </div>
 
-        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
-          <div className="min-w-0">
-            <span className="text-[11px] font-semibold text-slate-500 block truncate">Audit Logs</span>
-            <p className="text-lg sm:text-xl font-black text-purple-600 leading-tight mt-0.5">{logs.length}</p>
+        {/* Audit Logs */}
+        <div className="neu-card neu-card-hover p-4 sm:p-5 rounded-2xl bg-white">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500">Audit Logs</span>
+            <div className="p-2 sm:p-2.5 rounded-xl neu-pressed text-purple-600 bg-[#f1f5f9]">
+              <Activity className="w-4 h-4" />
+            </div>
           </div>
-          <div className="p-2 rounded-xl neu-pressed text-purple-600 bg-[#f1f5f9] shrink-0 ml-2">
-            <Activity className="w-4 h-4" />
-          </div>
+          <p className="text-xl sm:text-2xl font-black text-purple-600 mt-2">{logs.length}</p>
+          <span className="text-[11px] text-slate-500">Security events</span>
         </div>
       </div>
 
