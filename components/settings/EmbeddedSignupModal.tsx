@@ -4,10 +4,7 @@ import React, { useState } from "react";
 import { MessageSquare, X, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 import { completeEmbeddedSignup } from "@/actions/embeddedSignupActions";
 import { toast } from "@/store/useToastStore";
-import {
-  NeumorphicAutocompleteInput,
-  saveInputSuggestionHistory,
-} from "@/components/ui/NeumorphicAutocompleteInput";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface EmbeddedSignupModalProps {
   isOpen: boolean;
@@ -45,9 +42,6 @@ export function EmbeddedSignupModal({
     setLoading(false);
 
     if (res.success) {
-      if (phone.trim()) saveInputSuggestionHistory("meta_whatsapp_phone", phone.trim());
-      if (phoneNumberId.trim()) saveInputSuggestionHistory("meta_phone_id", phoneNumberId.trim());
-
       toast.success("WhatsApp Connected 🎉", `Line ${phone} is now linked to your workspace.`);
       onSuccess(phone);
       onClose();
@@ -97,7 +91,7 @@ export function EmbeddedSignupModal({
               value={phone}
               onChange={setPhone}
               placeholder="e.g. +1 555 123 4567"
-              storageKey="meta_whatsapp_phone"
+              autoComplete="tel"
             />
             <p className="text-[11px] text-slate-400 mt-1">
               The phone number registered with your Meta WhatsApp account.
@@ -113,7 +107,6 @@ export function EmbeddedSignupModal({
               value={phoneNumberId}
               onChange={setPhoneNumberId}
               placeholder="e.g. 108492019482910"
-              storageKey="meta_phone_id"
             />
           </div>
 
@@ -123,13 +116,9 @@ export function EmbeddedSignupModal({
             </label>
             <input
               id="embedded-access-token"
-              name="cd_field_accessToken"
+              name="accessToken"
               type="password"
-              autoComplete="new-password"
-              data-lpignore="true"
-              data-1p-ignore="true"
-              data-bwignore="true"
-              data-form-type="other"
+              autoComplete="current-password"
               value={accessToken}
               onChange={(e) => setAccessToken(e.target.value)}
               placeholder="EAAGm0PX4ZC..."

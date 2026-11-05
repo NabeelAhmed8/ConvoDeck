@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Input } from "@/components/ui/Input";
+import { User, Building2, Mail, Phone } from "lucide-react";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface CustomerBillingFormProps {
   ownerName: string;
@@ -27,54 +28,60 @@ export function CustomerBillingForm({
   return (
     <div>
       <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">
-        1. Company & Owner Profile
+        1. Company &amp; Owner Profile
       </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        <Input
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-start">
+        <NeumorphicAutocompleteInput
           id="checkout-owner-name"
-          name="ownerName"
+          name="name"
+          type="text"
           label="Account Owner Name"
           required
-          autoComplete="off"
           placeholder="e.g. Alex Smith"
           value={ownerName}
-          onChange={(e) => setOwnerName(e.target.value)}
+          onChange={setOwnerName}
+          autoComplete="name"
+          icon={<User className="w-4 h-4" />}
         />
 
-        <Input
+        <NeumorphicAutocompleteInput
           id="checkout-company-name"
-          name="companyName"
+          name="organization"
+          type="text"
           label="Business / Company Name"
           required
-          autoComplete="off"
           placeholder="e.g. Acme Corporation"
           value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
+          onChange={setCompanyName}
+          autoComplete="organization"
+          icon={<Building2 className="w-4 h-4" />}
         />
 
-        <Input
+        <NeumorphicAutocompleteInput
           id="checkout-billing-email"
-          name="billingEmail"
-          label="Billing Email"
+          name="email"
           type="email"
+          label="Billing Email"
           required
-          autoComplete="off"
           placeholder="billing@acme.com"
           value={billingEmail}
-          onChange={(e) => setBillingEmail(e.target.value)}
+          onChange={setBillingEmail}
+          autoComplete="email"
+          icon={<Mail className="w-4 h-4" />}
         />
 
-        <Input
+        <NeumorphicAutocompleteInput
           id="checkout-whatsapp-phone"
-          name="whatsappPhone"
-          label="Primary WhatsApp Number"
+          name="tel"
           type="tel"
+          label="Primary WhatsApp Number"
           required
-          autoComplete="off"
           placeholder="e.g. +1 555 123 4567"
           value={whatsappPhone}
-          onChange={(e) => setWhatsappPhone(e.target.value)}
+          onChange={setWhatsappPhone}
+          autoComplete="tel"
+          icon={<Phone className="w-4 h-4" />}
         />
       </div>
     </div>

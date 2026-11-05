@@ -7,10 +7,7 @@ import { toast } from "@/store/useToastStore";
 import { ProfileAvatarUploader } from "@/components/profile/ProfileAvatarUploader";
 import { PhoneInputField } from "@/components/ui/PhoneInputField";
 import { ChangeEmailModal } from "@/components/profile/ChangeEmailModal";
-import {
-  NeumorphicAutocompleteInput,
-  saveInputSuggestionHistory,
-} from "@/components/ui/NeumorphicAutocompleteInput";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 import { parsePhoneNumber } from "@/lib/countries";
 
 interface ProfileIdentityCardProps {
@@ -88,12 +85,6 @@ export function ProfileIdentityCard({
     try {
       const res = await updateUserProfile({ name, phone: fullPhone, avatar });
       if (res.success) {
-        if (name.trim()) {
-          saveInputSuggestionHistory("user_names", name.trim());
-        }
-        if (phoneNumber.trim()) {
-          saveInputSuggestionHistory("profile_phone_numbers", phoneNumber.trim());
-        }
         toast.success("Profile Updated", "Your personal details have been saved.");
         onProfileUpdated?.(name, avatar, fullPhone);
       } else {
@@ -147,14 +138,14 @@ export function ProfileIdentityCard({
           {/* Full Name */}
           <NeumorphicAutocompleteInput
             id="profile-name"
-            name="fullName"
+            name="name"
             type="text"
             label="Full Name"
             required
             value={name}
             onChange={setName}
             placeholder="e.g. Nabeel Ahmed"
-            storageKey="user_names"
+            autoComplete="name"
             icon={<User className="w-4 h-4" />}
           />
 
@@ -196,7 +187,7 @@ export function ProfileIdentityCard({
           </div>
         </div>
 
-        {/* Contact Phone with Country Code Dynamic Dropdown & Smart Suggestions */}
+        {/* Contact Phone with Country Code Dynamic Dropdown */}
         <div>
           <PhoneInputField
             id="profile-phone"
@@ -207,8 +198,6 @@ export function ProfileIdentityCard({
             onDialCodeChange={setDialCode}
             onPhoneNumberChange={setPhoneNumber}
             placeholder="300 1234567"
-            storageKey="profile_phone_numbers"
-            suggestions={["300 1234567", "321 9876543", "333 4567890", "345 1122334"]}
           />
           <p className="text-[11px] text-slate-400 mt-1">
             Used for urgent system alerts and account recovery.

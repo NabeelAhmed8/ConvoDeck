@@ -6,10 +6,7 @@ import { transferWorkspaceOwnership } from "@/actions/workspaceActions";
 import { getTeamMembers } from "@/actions/teamActions";
 import { toast } from "@/store/useToastStore";
 import { NeumorphicCheckbox } from "@/components/ui/NeumorphicCheckbox";
-import {
-  NeumorphicAutocompleteInput,
-  saveInputSuggestionHistory,
-} from "@/components/ui/NeumorphicAutocompleteInput";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 export interface TransferWorkspaceOwnershipCardProps {
   currentOwnerEmail: string;
@@ -77,7 +74,6 @@ export function TransferWorkspaceOwnershipCard({
     try {
       const res = await transferWorkspaceOwnership(cleanEmail);
       if (res.success && res.newOwnerEmail) {
-        saveInputSuggestionHistory("owner_transfer_emails", cleanEmail);
         setOwner(res.newOwnerEmail);
         setTargetEmail("");
         setConfirmed(false);
@@ -139,13 +135,7 @@ export function TransferWorkspaceOwnershipCard({
           onChange={setTargetEmail}
           placeholder="partner@example.com"
           disabled={loading}
-          storageKey="owner_transfer_emails"
-          suggestions={[
-            ...teamSuggestions,
-            "partner@company.com",
-            "manager@agency.com",
-            "admin@domain.com",
-          ]}
+          autoComplete="email"
           icon={<Mail className="w-4 h-4" />}
         />
 

@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ShieldCheck, ArrowLeft, AlertCircle, Lock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { processSubscriptionCheckout } from "@/actions/subscriptionActions";
+import { getCurrentUser } from "@/actions/authActions";
+import { getWorkspaceSettings } from "@/actions/workspaceActions";
 import { BillingFrequency, CurrencyCode } from "@/types";
 import {
   PRICING_TABLE,
@@ -47,6 +49,28 @@ function CheckoutContent() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Auto-populate logged-in user profile & workspace data if available
+  useEffect(() => {
+    async function loadExistingInfo() {
+      try {
+        const userRes = await getCurrentUser();
+        if (userRes?.user) {
+          if (userRes.user.name) setOwnerName(userRes.user.name);
+          if (userRes.user.email) setBillingEmail(userRes.user.email);
+        }
+        const wsRes = await getWorkspaceSettings();
+        if (wsRes) {
+          if (wsRes.name) setCompanyName(wsRes.name);
+          if (wsRes.contactEmail) setBillingEmail(wsRes.contactEmail);
+          if (wsRes.whatsappPhoneNumber) setWhatsappPhone(wsRes.whatsappPhoneNumber);
+        }
+      } catch {
+        // Safe guest fallback
+      }
+    }
+    loadExistingInfo();
+  }, []);
 
   const activePlan = PRICING_TABLE[planKey] || PRICING_TABLE.growth;
   const unitPrice = activePlan.prices[currency][billingCycle];

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ToastContainer } from "@/components/ui/ToastContainer";
+import { AutofillScrollDismiss } from "@/components/common/AutofillScrollDismiss";
 
 export const metadata: Metadata = {
   title: "ConvoDeck | WhatsApp CRM & Visual Sales Pipeline",
@@ -42,6 +43,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ToastContainer />
+        <AutofillScrollDismiss />
         {children}
       </body>
     </html>

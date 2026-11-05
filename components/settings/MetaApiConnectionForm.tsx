@@ -19,10 +19,7 @@ import { verifyMetaCredentials, saveMetaApiConfig } from "@/actions/metaCloudApi
 import { toast } from "@/store/useToastStore";
 import { MetaSetupGuideModal } from "@/components/settings/MetaSetupGuideModal";
 import { MetaSendTestModal } from "@/components/settings/MetaSendTestModal";
-import {
-  NeumorphicAutocompleteInput,
-  saveInputSuggestionHistory,
-} from "@/components/ui/NeumorphicAutocompleteInput";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface MetaApiConnectionFormProps {
   initialPhone: string;
@@ -59,14 +56,6 @@ export function MetaApiConnectionForm({
     setToken(initialToken || "");
     if (!initialPhone) {
       setVerifiedInfo(null);
-    } else {
-      saveInputSuggestionHistory("meta_whatsapp_phone", initialPhone);
-    }
-    if (initialPhoneId) {
-      saveInputSuggestionHistory("meta_phone_id", initialPhoneId);
-    }
-    if (initialWabaId) {
-      saveInputSuggestionHistory("meta_waba_id", initialWabaId);
     }
   }, [initialPhone, initialPhoneId, initialWabaId, initialToken]);
 
@@ -99,9 +88,6 @@ export function MetaApiConnectionForm({
     setVerifying(false);
 
     if (res.success) {
-      if (phoneId.trim()) saveInputSuggestionHistory("meta_phone_id", phoneId.trim());
-      if (phone.trim()) saveInputSuggestionHistory("meta_whatsapp_phone", phone.trim());
-
       setVerifiedInfo({
         name: res.verifiedName || "Official WhatsApp Business",
         phone: res.displayPhoneNumber || phone,
@@ -109,7 +95,6 @@ export function MetaApiConnectionForm({
       });
       if (res.displayPhoneNumber && !phone) {
         setPhone(res.displayPhoneNumber);
-        saveInputSuggestionHistory("meta_whatsapp_phone", res.displayPhoneNumber);
       }
       toast.success("Meta Verified! 🎉", `Connected to ${res.verifiedName || "WhatsApp Business"}.`);
     } else {
@@ -132,10 +117,6 @@ export function MetaApiConnectionForm({
     setSaving(false);
 
     if (res.success) {
-      if (phone.trim()) saveInputSuggestionHistory("meta_whatsapp_phone", phone.trim());
-      if (phoneId.trim()) saveInputSuggestionHistory("meta_phone_id", phoneId.trim());
-      if (wabaId.trim()) saveInputSuggestionHistory("meta_waba_id", wabaId.trim());
-
       toast.success("Configuration Saved", "Meta Cloud API credentials are active.");
       onSaved({
         phoneNumber: phone.trim(),
@@ -187,14 +168,7 @@ export function MetaApiConnectionForm({
             value={phone}
             onChange={setPhone}
             placeholder="e.g. +1 555 123 4567"
-            storageKey="meta_whatsapp_phone"
-            suggestions={[
-              ...(initialPhone ? [initialPhone] : []),
-              "+1 (555) 234-5678",
-              "+92 300 1234567",
-              "+44 7700 900077",
-              "+971 50 123 4567",
-            ]}
+            autoComplete="tel"
             icon={<Phone className="w-4 h-4" />}
           />
 
@@ -207,13 +181,6 @@ export function MetaApiConnectionForm({
             value={phoneId}
             onChange={setPhoneId}
             placeholder="e.g. 108492019482910"
-            storageKey="meta_phone_id"
-            suggestions={[
-              ...(initialPhoneId ? [initialPhoneId] : []),
-              "108492019482910",
-              "109283746591024",
-              "100293847561928",
-            ]}
             icon={<Hash className="w-4 h-4" />}
           />
         </div>
@@ -227,13 +194,6 @@ export function MetaApiConnectionForm({
             value={wabaId}
             onChange={setWabaId}
             placeholder="e.g. 293847561029384"
-            storageKey="meta_waba_id"
-            suggestions={[
-              ...(initialWabaId ? [initialWabaId] : []),
-              "293847561029384",
-              "192837465019283",
-              "384756102938475",
-            ]}
             icon={<Building2 className="w-4 h-4" />}
           />
 
@@ -253,14 +213,10 @@ export function MetaApiConnectionForm({
             <div className="relative w-full">
               <input
                 id="meta-access-token"
-                name="cd_field_whatsappAccessToken"
+                name="whatsappAccessToken"
                 type={showToken ? "text" : "password"}
                 required
-                autoComplete="new-password"
-                data-lpignore="true"
-                data-1p-ignore="true"
-                data-bwignore="true"
-                data-form-type="other"
+                autoComplete="current-password"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
                 placeholder="EAAGm0PX4ZC..."

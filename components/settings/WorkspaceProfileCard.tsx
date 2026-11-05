@@ -4,10 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Building2, Mail, Save, Loader2 } from "lucide-react";
 import { updateWorkspaceSettings } from "@/actions/workspaceActions";
 import { toast } from "@/store/useToastStore";
-import {
-  NeumorphicAutocompleteInput,
-  saveInputSuggestionHistory,
-} from "@/components/ui/NeumorphicAutocompleteInput";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 export interface WorkspaceProfileCardProps {
   initialName: string;
@@ -49,12 +46,6 @@ export function WorkspaceProfileCard({
       });
 
       if (res.success) {
-        if (name.trim()) {
-          saveInputSuggestionHistory("workspace_names", name.trim());
-        }
-        if (contactEmail.trim()) {
-          saveInputSuggestionHistory("workspace_contact_emails", contactEmail.trim().toLowerCase());
-        }
         toast.success("Saved", "Workspace details updated successfully.");
         if (onSaved) {
           onSaved({ name, contactEmail: contactEmail.trim().toLowerCase() });
@@ -97,7 +88,7 @@ export function WorkspaceProfileCard({
             onChange={setName}
             placeholder="e.g. Acme Agency"
             disabled={saving}
-            storageKey="workspace_names"
+            autoComplete="organization"
             icon={<Building2 className="w-4 h-4" />}
           />
 
@@ -112,7 +103,7 @@ export function WorkspaceProfileCard({
               onChange={setContactEmail}
               placeholder={ownerEmail || "e.g. alerts@company.com"}
               disabled={saving}
-              storageKey="workspace_contact_emails"
+              autoComplete="email"
               icon={<Mail className="w-4 h-4" />}
             />
             <p className="text-[11px] text-slate-500 mt-1">
