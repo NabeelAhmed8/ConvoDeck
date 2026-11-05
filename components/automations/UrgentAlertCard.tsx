@@ -91,9 +91,13 @@ export function UrgentAlertCard({
             ))}
           </div>
 
-          <form onSubmit={handleAdd} className="flex gap-2">
+          <form onSubmit={handleAdd} className="flex gap-2" autoComplete="off">
             <input
               type="text"
+              name="alertKeyword"
+              autoComplete="off"
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="Add trigger keyword (e.g. refund, complaint)..."
               value={newKw}
               onChange={(e) => setNewKw(e.target.value)}

@@ -53,6 +53,9 @@ export function ChatSidebarHeader({
           id="chat-search-input"
           name="chatSearch"
           type="search"
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
           aria-label="Search chats by contact name or phone number"
           placeholder="Search leads or number..."
           value={searchQuery}

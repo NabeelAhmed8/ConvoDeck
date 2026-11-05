@@ -298,3 +298,74 @@ export async function getWorkspaceAuditLogs(limitCount = 60): Promise<{
     return { success: false, error: msg };
   }
 }
+
+// 7. Update Team Member Role (Admin Only)
+export async function updateTeamMemberRole(params: {
+  memberId: string;
+  newRole: UserRole;
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { memberId, newRole } = params;
+
+    if (!memberId || !newRole) {
+      return { success: false, error: "Member ID and new role are required" };
+    }
+
+    if (!["admin", "agent", "manager"].includes(newRole)) {
+      return { success: false, error: "Invalid role specified" };
+    }
+
+    await dbConnect();
+    const session = await getSession();
+
+    if (session?.role !== "admin") {
+      return { success: false, error: "Only administrators can change team member roles" };
+    }
+
+    // Safety check: prevent an admin from demoting themselves and locking themselves out
+    if (session.userId === memberId && newRole !== "admin") {
+      return { success: false, error: "You cannot demote your own administrator account" };
+    }
+
+    const user = await User.findById(memberId);
+    if (!user) {
+      return { success: false, error: "Team member not found" };
+    }
+
+    if (user.workspaceId !== session.workspaceId) {
+      return { success: false, error: "Unauthorized access to team member in another workspace" };
+    }
+
+    const previousRole = user.role;
+    if (previousRole === newRole) {
+      return { success: true };
+    }
+
+    user.role = newRole;
+    // Invalidate tokenVersion so updated permissions take effect immediately
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
+    await user.save();
+
+    // Audit Trail
+    await AuditLog.create({
+      workspaceId: session.workspaceId,
+      actorId: session.userId,
+      actorName: session.name,
+      actorEmail: session.email,
+      actorRole: session.role,
+      action: "UPDATED_AGENT",
+      targetType: "agent",
+      targetId: user._id.toString(),
+      targetName: user.name,
+      details: `Changed role for ${user.name} (${user.email}) from ${previousRole.toUpperCase()} to ${newRole.toUpperCase()}`,
+    });
+
+    revalidatePath("/team");
+    revalidatePath("/settings");
+
+    return { success: true };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to update team member role";
+    return { success: false, error: msg };
+  }
+}

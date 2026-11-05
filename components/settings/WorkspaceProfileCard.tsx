@@ -4,6 +4,10 @@ import React, { useState, useEffect } from "react";
 import { Building2, Mail, Save, Loader2 } from "lucide-react";
 import { updateWorkspaceSettings } from "@/actions/workspaceActions";
 import { toast } from "@/store/useToastStore";
+import {
+  NeumorphicAutocompleteInput,
+  saveInputSuggestionHistory,
+} from "@/components/ui/NeumorphicAutocompleteInput";
 
 export interface WorkspaceProfileCardProps {
   initialName: string;
@@ -45,6 +49,12 @@ export function WorkspaceProfileCard({
       });
 
       if (res.success) {
+        if (name.trim()) {
+          saveInputSuggestionHistory("workspace_names", name.trim());
+        }
+        if (contactEmail.trim()) {
+          saveInputSuggestionHistory("workspace_contact_emails", contactEmail.trim().toLowerCase());
+        }
         toast.success("Saved", "Workspace details updated successfully.");
         if (onSaved) {
           onSaved({ name, contactEmail: contactEmail.trim().toLowerCase() });
@@ -75,49 +85,36 @@ export function WorkspaceProfileCard({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
           {/* Workspace Name Input */}
-          <div>
-            <label
-              htmlFor="settings-company-name"
-              className="block text-xs font-semibold text-slate-700 mb-1.5"
-            >
-              Company / Workspace Name
-            </label>
-            <input
-              id="settings-company-name"
-              name="companyName"
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Acme Agency"
-              disabled={saving}
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-hidden"
-            />
-          </div>
+          <NeumorphicAutocompleteInput
+            id="settings-company-name"
+            name="companyName"
+            type="text"
+            label="Company / Workspace Name"
+            required
+            value={name}
+            onChange={setName}
+            placeholder="e.g. Acme Agency"
+            disabled={saving}
+            storageKey="workspace_names"
+            icon={<Building2 className="w-4 h-4" />}
+          />
 
           {/* Dedicated Contact Email Input */}
           <div>
-            <label
-              htmlFor="settings-contact-email"
-              className="block text-xs font-semibold text-slate-700 mb-1.5"
-            >
-              Workspace Contact / Notification Email
-            </label>
-            <div className="relative">
-              <input
-                id="settings-contact-email"
-                name="contactEmail"
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                placeholder={ownerEmail || "e.g. alerts@company.com"}
-                disabled={saving}
-                className="w-full pl-9 pr-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-hidden"
-              />
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+            <NeumorphicAutocompleteInput
+              id="settings-contact-email"
+              name="contactEmail"
+              type="email"
+              label="Workspace Contact / Notification Email"
+              value={contactEmail}
+              onChange={setContactEmail}
+              placeholder={ownerEmail || "e.g. alerts@company.com"}
+              disabled={saving}
+              storageKey="workspace_contact_emails"
+              icon={<Mail className="w-4 h-4" />}
+            />
             <p className="text-[11px] text-slate-500 mt-1">
               WhatsApp alerts, billing invoices, and lead digests for this workspace will be routed here. Defaults to owner email.
             </p>

@@ -9,11 +9,20 @@ import {
   BookOpen,
   Send,
   Sparkles,
+  Phone,
+  Hash,
+  Building2,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { verifyMetaCredentials, saveMetaApiConfig } from "@/actions/metaCloudApiActions";
 import { toast } from "@/store/useToastStore";
 import { MetaSetupGuideModal } from "@/components/settings/MetaSetupGuideModal";
 import { MetaSendTestModal } from "@/components/settings/MetaSendTestModal";
+import {
+  NeumorphicAutocompleteInput,
+  saveInputSuggestionHistory,
+} from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface MetaApiConnectionFormProps {
   initialPhone: string;
@@ -63,6 +72,7 @@ export function MetaApiConnectionForm({
 
   const [showGuide, setShowGuide] = useState(false);
   const [showTestModal, setShowTestModal] = useState(false);
+  const [showToken, setShowToken] = useState(false);
 
   const handleVerify = async () => {
     if (!phoneId.trim() || !token.trim()) {
@@ -81,6 +91,9 @@ export function MetaApiConnectionForm({
     setVerifying(false);
 
     if (res.success) {
+      if (phoneId.trim()) saveInputSuggestionHistory("meta_phone_id", phoneId.trim());
+      if (phone.trim()) saveInputSuggestionHistory("meta_whatsapp_phone", phone.trim());
+
       setVerifiedInfo({
         name: res.verifiedName || "Official WhatsApp Business",
         phone: res.displayPhoneNumber || phone,
@@ -88,6 +101,7 @@ export function MetaApiConnectionForm({
       });
       if (res.displayPhoneNumber && !phone) {
         setPhone(res.displayPhoneNumber);
+        saveInputSuggestionHistory("meta_whatsapp_phone", res.displayPhoneNumber);
       }
       toast.success("Meta Verified! 🎉", `Connected to ${res.verifiedName || "WhatsApp Business"}.`);
     } else {
@@ -110,6 +124,10 @@ export function MetaApiConnectionForm({
     setSaving(false);
 
     if (res.success) {
+      if (phone.trim()) saveInputSuggestionHistory("meta_whatsapp_phone", phone.trim());
+      if (phoneId.trim()) saveInputSuggestionHistory("meta_phone_id", phoneId.trim());
+      if (wabaId.trim()) saveInputSuggestionHistory("meta_waba_id", wabaId.trim());
+
       toast.success("Configuration Saved", "Meta Cloud API credentials are active.");
       onSaved({
         phoneNumber: phone.trim(),
@@ -124,7 +142,7 @@ export function MetaApiConnectionForm({
 
   return (
     <>
-      <form onSubmit={handleSave} className="space-y-4">
+      <form onSubmit={handleSave} className="space-y-4" autoComplete="off">
         {/* Verification Status Banner if verified */}
         {verifiedInfo && (
           <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-3 animate-in fade-in">
@@ -152,57 +170,48 @@ export function MetaApiConnectionForm({
         )}
 
         {/* Inputs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="meta-whatsapp-phone" className="block text-xs font-semibold text-slate-700 mb-1">
-              Connected WhatsApp Phone Number
-            </label>
-            <input
-              id="meta-whatsapp-phone"
-              name="whatsappPhoneNumber"
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="e.g. +1 555 123 4567"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900"
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <NeumorphicAutocompleteInput
+            id="meta-whatsapp-phone"
+            name="whatsappPhoneNumber"
+            type="tel"
+            label="Connected WhatsApp Phone Number"
+            value={phone}
+            onChange={setPhone}
+            placeholder="e.g. +1 555 123 4567"
+            storageKey="meta_whatsapp_phone"
+            icon={<Phone className="w-4 h-4" />}
+          />
 
-          <div>
-            <label htmlFor="meta-phone-id" className="block text-xs font-semibold text-slate-700 mb-1">
-              Meta Phone Number ID <span className="text-rose-500">*</span>
-            </label>
-            <input
-              id="meta-phone-id"
-              name="whatsappPhoneNumberId"
-              type="text"
-              required
-              value={phoneId}
-              onChange={(e) => setPhoneId(e.target.value)}
-              placeholder="e.g. 108492019482910"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900"
-            />
-          </div>
+          <NeumorphicAutocompleteInput
+            id="meta-phone-id"
+            name="whatsappPhoneNumberId"
+            type="text"
+            label="Meta Phone Number ID"
+            required
+            value={phoneId}
+            onChange={setPhoneId}
+            placeholder="e.g. 108492019482910"
+            storageKey="meta_phone_id"
+            icon={<Hash className="w-4 h-4" />}
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="meta-waba-id" className="block text-xs font-semibold text-slate-700 mb-1">
-              WhatsApp Business Account ID (WABA)
-            </label>
-            <input
-              id="meta-waba-id"
-              name="whatsappBusinessAccountId"
-              type="text"
-              value={wabaId}
-              onChange={(e) => setWabaId(e.target.value)}
-              placeholder="e.g. 293847561029384"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900"
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <NeumorphicAutocompleteInput
+            id="meta-waba-id"
+            name="whatsappBusinessAccountId"
+            type="text"
+            label="WhatsApp Business Account ID (WABA)"
+            value={wabaId}
+            onChange={setWabaId}
+            placeholder="e.g. 293847561029384"
+            storageKey="meta_waba_id"
+            icon={<Building2 className="w-4 h-4" />}
+          />
 
           <div>
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center justify-between mb-1.5">
               <label htmlFor="meta-access-token" className="text-xs font-semibold text-slate-700">
                 System User Access Token <span className="text-rose-500">*</span>
               </label>
@@ -214,16 +223,32 @@ export function MetaApiConnectionForm({
                 <BookOpen className="w-3 h-3" /> Setup Guide
               </button>
             </div>
-            <input
-              id="meta-access-token"
-              name="whatsappAccessToken"
-              type="password"
-              required
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              placeholder="EAAGm0PX4ZC..."
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 font-mono"
-            />
+            <div className="relative w-full">
+              <input
+                id="meta-access-token"
+                name="cd_field_whatsappAccessToken"
+                type={showToken ? "text" : "password"}
+                required
+                autoComplete="new-password"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                data-form-type="other"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="EAAGm0PX4ZC..."
+                className="w-full pl-3.5 pr-10 py-2.5 text-xs neu-input rounded-2xl text-slate-900 font-mono focus:outline-hidden"
+              />
+              <button
+                type="button"
+                onClick={() => setShowToken(!showToken)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+                title={showToken ? "Hide Access Token" : "Show Access Token"}
+                aria-label={showToken ? "Hide Access Token" : "Show Access Token"}
+              >
+                {showToken ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
+            </div>
           </div>
         </div>
 

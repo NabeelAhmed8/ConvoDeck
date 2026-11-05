@@ -113,6 +113,9 @@ export function KanbanBoard({ initialLeads }: KanbanBoardProps) {
                 id="pipeline-search-input"
                 name="pipelineSearch"
                 type="search"
+                autoComplete="off"
+                data-lpignore="true"
+                data-form-type="other"
                 aria-label="Search leads by name, company, or phone number"
                 placeholder="Search leads..."
                 value={search}

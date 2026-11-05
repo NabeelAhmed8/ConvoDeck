@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { UserCheck, ArrowRightLeft, ShieldAlert, Loader2 } from "lucide-react";
+import { UserCheck, ArrowRightLeft, ShieldAlert, Loader2, Mail } from "lucide-react";
 import { transferWorkspaceOwnership } from "@/actions/workspaceActions";
 import { toast } from "@/store/useToastStore";
 import { NeumorphicCheckbox } from "@/components/ui/NeumorphicCheckbox";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 export interface TransferWorkspaceOwnershipCardProps {
   currentOwnerEmail: string;
@@ -101,24 +102,19 @@ export function TransferWorkspaceOwnershipCard({
 
       {/* Form */}
       <form onSubmit={handleTransfer} className="space-y-4">
-        <div>
-          <label
-            htmlFor="transfer-target-email"
-            className="block text-xs font-semibold text-slate-700 mb-1.5"
-          >
-            New Owner Email Address
-          </label>
-          <input
-            id="transfer-target-email"
-            type="email"
-            required
-            value={targetEmail}
-            onChange={(e) => setTargetEmail(e.target.value)}
-            placeholder="partner@example.com"
-            disabled={loading}
-            className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-hidden"
-          />
-        </div>
+        <NeumorphicAutocompleteInput
+          id="transfer-target-email"
+          name="targetEmail"
+          type="email"
+          label="New Owner Email Address"
+          required
+          value={targetEmail}
+          onChange={setTargetEmail}
+          placeholder="partner@example.com"
+          disabled={loading}
+          storageKey="owner_transfer_emails"
+          icon={<Mail className="w-4 h-4" />}
+        />
 
         {/* Industry standard safeguard note */}
         <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-amber-900 text-[11px] leading-relaxed flex items-start gap-2.5">

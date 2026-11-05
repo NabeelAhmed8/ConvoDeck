@@ -101,7 +101,7 @@ export function PublicLeadForm() {
               type="text"
               required
               aria-required="true"
-              autoComplete="name"
+              autoComplete="off"
               placeholder="e.g. Alex Smith"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -122,7 +122,7 @@ export function PublicLeadForm() {
               type="tel"
               required
               aria-required="true"
-              autoComplete="tel"
+              autoComplete="off"
               placeholder="e.g. +1 555 123 4567"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -142,7 +142,7 @@ export function PublicLeadForm() {
             id="contact-email-address"
             name="email"
             type="email"
-            autoComplete="email"
+            autoComplete="off"
             placeholder="asad@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

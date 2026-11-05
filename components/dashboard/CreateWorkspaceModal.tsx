@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, Building2, Plus, Loader2 } from "lucide-react";
 import { createNewWorkspace } from "@/actions/workspaceActions";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 export interface CreateWorkspaceModalProps {
   isOpen: boolean;
@@ -107,25 +108,20 @@ export function CreateWorkspaceModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="workspace-name-input"
-              className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2"
-            >
-              Workspace / Company Name
-            </label>
-            <input
-              id="workspace-name-input"
-              type="text"
-              required
-              autoFocus
-              value={workspaceName}
-              onChange={(e) => setWorkspaceName(e.target.value)}
-              placeholder="e.g. Acme Corp, Beta Agency"
-              disabled={loading}
-              className="w-full px-4 py-3 rounded-2xl neu-pressed bg-[#edf1f7] text-slate-900 placeholder-slate-400 text-sm font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#ff6422]/50 transition-all border border-transparent"
-            />
-          </div>
+          <NeumorphicAutocompleteInput
+            id="workspace-name-input"
+            name="workspaceName"
+            type="text"
+            label="Workspace / Company Name"
+            required
+            autoFocus
+            value={workspaceName}
+            onChange={setWorkspaceName}
+            placeholder="e.g. Acme Corp, Beta Agency"
+            disabled={loading}
+            storageKey="workspace_names"
+            icon={<Building2 className="w-4 h-4" />}
+          />
 
           <div className="p-3 rounded-2xl bg-slate-200/50 text-[11px] text-slate-600 leading-relaxed font-medium">
             💡 <strong>Multi-Workspace Support:</strong> You will be able to switch between your workspaces instantly anytime from your sidebar without logging out or disturbing active chats.

@@ -36,7 +36,7 @@ export function CustomerBillingForm({
           name="ownerName"
           label="Account Owner Name"
           required
-          autoComplete="name"
+          autoComplete="off"
           placeholder="e.g. Alex Smith"
           value={ownerName}
           onChange={(e) => setOwnerName(e.target.value)}
@@ -47,7 +47,7 @@ export function CustomerBillingForm({
           name="companyName"
           label="Business / Company Name"
           required
-          autoComplete="organization"
+          autoComplete="off"
           placeholder="e.g. Acme Corporation"
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
@@ -59,7 +59,7 @@ export function CustomerBillingForm({
           label="Billing Email"
           type="email"
           required
-          autoComplete="email"
+          autoComplete="off"
           placeholder="billing@acme.com"
           value={billingEmail}
           onChange={(e) => setBillingEmail(e.target.value)}
@@ -71,7 +71,7 @@ export function CustomerBillingForm({
           label="Primary WhatsApp Number"
           type="tel"
           required
-          autoComplete="tel"
+          autoComplete="off"
           placeholder="e.g. +1 555 123 4567"
           value={whatsappPhone}
           onChange={(e) => setWhatsappPhone(e.target.value)}

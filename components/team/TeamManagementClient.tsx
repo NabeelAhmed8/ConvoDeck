@@ -13,13 +13,15 @@ import {
   toggleAgentStatus,
   revokeAgentSession,
   deleteTeamAgent,
+  updateTeamMemberRole,
 } from "@/actions/teamActions";
-import { IUser, IAuditLog } from "@/types";
+import { IUser, IAuditLog, UserRole } from "@/types";
 import { toast } from "@/store/useToastStore";
 import { TeamAgentsList } from "@/components/team/TeamAgentsList";
 import { TeamAuditLogs } from "@/components/team/TeamAuditLogs";
 import { AddAgentModal } from "@/components/team/AddAgentModal";
 import { DeleteAgentModal } from "@/components/team/DeleteAgentModal";
+import { ROLE_OPTIONS } from "@/components/team/AgentRoleSelect";
 
 interface TeamManagementClientProps {
   initialMembers: IUser[];
@@ -100,6 +102,26 @@ export function TeamManagementClient({
     }
   };
 
+  const handleRoleChange = async (memberId: string, newRole: UserRole) => {
+    setActionLoadingId(memberId);
+    const res = await updateTeamMemberRole({ memberId, newRole });
+    setActionLoadingId(null);
+
+    if (res.success) {
+      setMembers((prev) =>
+        prev.map((m) => (m._id === memberId ? { ...m, role: newRole } : m))
+      );
+      const roleTitle =
+        ROLE_OPTIONS.find((r) => r.id === newRole)?.title || newRole;
+      toast.success(
+        "Role Updated",
+        `Team member permissions updated to ${roleTitle}.`
+      );
+    } else {
+      toast.error("Role Update Failed", res.error || "Could not update role");
+    }
+  };
+
   const handleConfirmDelete = async () => {
     if (!agentToDelete?._id) return;
     setActionLoadingId(agentToDelete._id);
@@ -120,14 +142,14 @@ export function TeamManagementClient({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-3.5 sm:space-y-4 max-w-7xl mx-auto w-full pb-8">
+      {/* Top Banner Header - Sleek & Compact */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Team & Sales Agents
-          </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+            Team &amp; Sales Agents
+          </h1>
+          <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
             Manage unique agent logins, revoke access for offboarded staff, and inspect message audit trails.
           </p>
         </div>
@@ -136,70 +158,66 @@ export function TeamManagementClient({
           <Button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-1.5 sm:gap-2 neu-btn-primary cursor-pointer border-none rounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold shrink-0 self-start sm:self-auto"
+            className="flex items-center gap-1.5 neu-btn-primary cursor-pointer border-none rounded-full px-4 py-2 text-xs font-bold shrink-0 self-start sm:self-auto shadow-sm"
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-3.5 h-3.5" />
             <span>Add New Agent</span>
           </Button>
         )}
       </div>
 
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="neu-card neu-card-hover p-5 rounded-2xl bg-white">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Total Team</span>
-            <div className="p-2.5 rounded-xl neu-pressed text-[#ff6422] bg-[#f1f5f9]">
-              <Users className="w-4 h-4" />
-            </div>
+      {/* Metrics Row - Compact Horizontal Stat Cards to Elevate Content */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold text-slate-500 block truncate">Total Team</span>
+            <p className="text-lg sm:text-xl font-black text-slate-900 leading-tight mt-0.5">{members.length}</p>
           </div>
-          <p className="text-2xl font-black text-slate-900 mt-2">{members.length}</p>
-          <span className="text-[11px] text-slate-500">Registered agent logins</span>
+          <div className="p-2 rounded-xl neu-pressed text-[#ff6422] bg-[#f1f5f9] shrink-0 ml-2">
+            <Users className="w-4 h-4" />
+          </div>
         </div>
 
-        <div className="neu-card neu-card-hover p-5 rounded-2xl bg-white">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Active Now</span>
-            <div className="p-2.5 rounded-xl neu-pressed text-emerald-600 bg-[#f1f5f9]">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse block" />
-            </div>
+        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold text-slate-500 block truncate">Active Now</span>
+            <p className="text-lg sm:text-xl font-black text-emerald-600 leading-tight mt-0.5">{activeAgentsCount}</p>
           </div>
-          <p className="text-2xl font-black text-emerald-600 mt-2">{activeAgentsCount}</p>
-          <span className="text-[11px] text-slate-500">Authorized to chat</span>
+          <div className="p-2 rounded-xl neu-pressed text-emerald-600 bg-[#f1f5f9] shrink-0 ml-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse block" />
+          </div>
         </div>
 
-        <div className="neu-card neu-card-hover p-5 rounded-2xl bg-white">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Deactivated / Offboarded</span>
-            <div className="p-2.5 rounded-xl neu-pressed text-rose-600 bg-[#f1f5f9]">
-              <UserX className="w-4 h-4" />
-            </div>
+        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold text-slate-500 block truncate">Deactivated</span>
+            <p className="text-lg sm:text-xl font-black text-rose-600 leading-tight mt-0.5">{suspendedCount}</p>
           </div>
-          <p className="text-2xl font-black text-rose-600 mt-2">{suspendedCount}</p>
-          <span className="text-[11px] text-slate-500">Access revoked</span>
+          <div className="p-2 rounded-xl neu-pressed text-rose-600 bg-[#f1f5f9] shrink-0 ml-2">
+            <UserX className="w-4 h-4" />
+          </div>
         </div>
 
-        <div className="neu-card neu-card-hover p-5 rounded-2xl bg-white">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Audit Trail Events</span>
-            <div className="p-2.5 rounded-xl neu-pressed text-purple-600 bg-[#f1f5f9]">
-              <Activity className="w-4 h-4" />
-            </div>
+        <div className="neu-card p-3 sm:p-3.5 rounded-2xl bg-white flex items-center justify-between">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold text-slate-500 block truncate">Audit Logs</span>
+            <p className="text-lg sm:text-xl font-black text-purple-600 leading-tight mt-0.5">{logs.length}</p>
           </div>
-          <p className="text-2xl font-black text-purple-600 mt-2">{logs.length}</p>
-          <span className="text-[11px] text-slate-500">Logged actions</span>
+          <div className="p-2 rounded-xl neu-pressed text-purple-600 bg-[#f1f5f9] shrink-0 ml-2">
+            <Activity className="w-4 h-4" />
+          </div>
         </div>
       </div>
 
-      {/* Main Content Tabs */}
+      {/* Main Users Details Container - Moved Up Above The Fold */}
       <div className="neu-card rounded-3xl overflow-hidden text-slate-900 bg-white">
         {/* Tab Navigation & Search */}
-        <div className="p-3 sm:p-6 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="px-3.5 py-2.5 sm:px-6 sm:py-3 border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
           <div className="neu-tab-container p-1 rounded-2xl sm:rounded-full w-full sm:w-auto grid grid-cols-2 sm:flex items-center gap-1 sm:gap-1.5">
             <button
               type="button"
               onClick={() => setActiveTab("agents")}
-              className={`px-2.5 sm:px-4 py-2 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
+              className={`px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
                 activeTab === "agents" ? "neu-tab-active" : "neu-tab"
               }`}
             >
@@ -208,26 +226,29 @@ export function TeamManagementClient({
             <button
               type="button"
               onClick={() => setActiveTab("audit")}
-              className={`px-2.5 sm:px-4 py-2 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
+              className={`px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs font-bold rounded-full transition-all cursor-pointer text-center truncate ${
                 activeTab === "audit" ? "neu-tab-active" : "neu-tab"
               }`}
             >
-              Audit Trail<span className="hidden sm:inline"> & Logs</span> ({logs.length})
+              Audit Trail<span className="hidden sm:inline"> &amp; Logs</span> ({logs.length})
             </button>
           </div>
 
-          <div className="relative w-full sm:w-auto sm:min-w-[240px]">
+          <div className="relative w-full sm:w-auto sm:min-w-[220px]">
             <label htmlFor="team-search-input" className="sr-only">
               Search agents or audit events
             </label>
             <Search
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
               aria-hidden="true"
             />
             <input
               id="team-search-input"
               name="teamSearch"
               type="search"
+              autoComplete="off"
+              data-lpignore="true"
+              data-form-type="other"
               aria-label={
                 activeTab === "agents"
                   ? "Search agents by name or email"
@@ -240,7 +261,7 @@ export function TeamManagementClient({
               }
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 sm:pl-9 pr-3 py-2 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none"
+              className="w-full pl-8 sm:pl-9 pr-3 py-1.5 text-base sm:text-xs neu-input rounded-full text-slate-900 placeholder-slate-400 focus:outline-none"
             />
           </div>
         </div>
@@ -255,6 +276,7 @@ export function TeamManagementClient({
             onRevokeSession={handleRevokeSession}
             onToggleStatus={handleToggleStatus}
             onRequestDelete={(member) => setAgentToDelete(member)}
+            onRoleChange={handleRoleChange}
           />
         ) : (
           /* Tab 2: Audit Logs */

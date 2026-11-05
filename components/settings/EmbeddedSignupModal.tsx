@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import { MessageSquare, X, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
 import { completeEmbeddedSignup } from "@/actions/embeddedSignupActions";
 import { toast } from "@/store/useToastStore";
+import {
+  NeumorphicAutocompleteInput,
+  saveInputSuggestionHistory,
+} from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface EmbeddedSignupModalProps {
   isOpen: boolean;
@@ -41,6 +45,9 @@ export function EmbeddedSignupModal({
     setLoading(false);
 
     if (res.success) {
+      if (phone.trim()) saveInputSuggestionHistory("meta_whatsapp_phone", phone.trim());
+      if (phoneNumberId.trim()) saveInputSuggestionHistory("meta_phone_id", phoneNumberId.trim());
+
       toast.success("WhatsApp Connected 🎉", `Line ${phone} is now linked to your workspace.`);
       onSuccess(phone);
       onClose();
@@ -81,18 +88,16 @@ export function EmbeddedSignupModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="embedded-whatsapp-phone" className="block text-xs font-semibold text-slate-700 mb-1">
-              WhatsApp Business Phone Number <span className="text-rose-500">*</span>
-            </label>
-            <input
+            <NeumorphicAutocompleteInput
               id="embedded-whatsapp-phone"
               name="whatsappPhoneNumber"
-              type="text"
+              type="tel"
+              label="WhatsApp Business Phone Number"
               required
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={setPhone}
               placeholder="e.g. +1 555 123 4567"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              storageKey="meta_whatsapp_phone"
             />
             <p className="text-[11px] text-slate-400 mt-1">
               The phone number registered with your Meta WhatsApp account.
@@ -100,17 +105,15 @@ export function EmbeddedSignupModal({
           </div>
 
           <div>
-            <label htmlFor="embedded-phone-id" className="block text-xs font-semibold text-slate-700 mb-1">
-              Meta Phone Number ID <span className="text-slate-400 font-normal">(Optional for direct API)</span>
-            </label>
-            <input
+            <NeumorphicAutocompleteInput
               id="embedded-phone-id"
               name="phoneNumberId"
               type="text"
+              label="Meta Phone Number ID (Optional for direct API)"
               value={phoneNumberId}
-              onChange={(e) => setPhoneNumberId(e.target.value)}
+              onChange={setPhoneNumberId}
               placeholder="e.g. 108492019482910"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              storageKey="meta_phone_id"
             />
           </div>
 
@@ -120,8 +123,13 @@ export function EmbeddedSignupModal({
             </label>
             <input
               id="embedded-access-token"
-              name="accessToken"
+              name="cd_field_accessToken"
               type="password"
+              autoComplete="new-password"
+              data-lpignore="true"
+              data-1p-ignore="true"
+              data-bwignore="true"
+              data-form-type="other"
               value={accessToken}
               onChange={(e) => setAccessToken(e.target.value)}
               placeholder="EAAGm0PX4ZC..."

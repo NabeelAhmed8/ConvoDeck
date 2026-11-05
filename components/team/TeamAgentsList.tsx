@@ -2,7 +2,8 @@
 
 import React from "react";
 import { Lock, UserX, UserCheck, Trash2 } from "lucide-react";
-import { IUser } from "@/types";
+import { IUser, UserRole } from "@/types";
+import { MemberRoleDropdown } from "@/components/team/MemberRoleDropdown";
 
 interface TeamAgentsListProps {
   members: IUser[];
@@ -12,6 +13,7 @@ interface TeamAgentsListProps {
   onRevokeSession: (memberId: string) => void;
   onToggleStatus: (member: IUser) => void;
   onRequestDelete: (member: IUser) => void;
+  onRoleChange?: (memberId: string, newRole: UserRole) => void;
 }
 
 export function TeamAgentsList({
@@ -22,6 +24,7 @@ export function TeamAgentsList({
   onRevokeSession,
   onToggleStatus,
   onRequestDelete,
+  onRoleChange,
 }: TeamAgentsListProps) {
   if (members.length === 0) {
     return (
@@ -36,13 +39,13 @@ export function TeamAgentsList({
       <table className="w-full min-w-[700px] text-left text-xs text-slate-700">
         <thead className="bg-[#f8fafc] border-b border-slate-200 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
           <tr>
-            <th className="py-3 px-6 whitespace-nowrap">Agent Name</th>
-            <th className="py-3 px-6 whitespace-nowrap">Work Email</th>
-            <th className="py-3 px-6 whitespace-nowrap">Role (RBAC)</th>
-            <th className="py-3 px-6 whitespace-nowrap">Status</th>
-            <th className="py-3 px-6 whitespace-nowrap">Last Active</th>
+            <th className="py-2.5 pl-6 sm:pl-8 pr-4 whitespace-nowrap">Agent Name</th>
+            <th className="py-2.5 px-4 whitespace-nowrap">Work Email</th>
+            <th className="py-2.5 px-4 whitespace-nowrap">Role (RBAC)</th>
+            <th className="py-2.5 px-4 whitespace-nowrap">Status</th>
+            <th className="py-2.5 px-4 whitespace-nowrap">Last Active</th>
             {isAdmin && (
-              <th className="py-3 px-6 text-right whitespace-nowrap">
+              <th className="py-2.5 pl-4 pr-6 sm:pr-8 lg:pr-10 text-right whitespace-nowrap">
                 Access Controls
               </th>
             )}
@@ -59,9 +62,9 @@ export function TeamAgentsList({
                 key={member._id}
                 className="hover:bg-slate-200/40 transition-colors"
               >
-                <td className="py-4 px-6 whitespace-nowrap">
+                <td className="py-2.5 sm:py-3 pl-6 sm:pl-8 pr-4 whitespace-nowrap">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full neu-pressed text-slate-800 flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-8 h-8 rounded-full neu-pressed text-slate-800 flex items-center justify-center font-bold text-xs shrink-0">
                       {member.name.substring(0, 2).toUpperCase()}
                     </div>
                     <div>
@@ -87,25 +90,29 @@ export function TeamAgentsList({
                   </div>
                 </td>
 
-                <td className="py-4 px-6 font-mono text-slate-700 whitespace-nowrap">
+                <td className="py-2.5 sm:py-3 px-4 font-mono text-slate-700 whitespace-nowrap">
                   {member.email}
                 </td>
 
-                <td className="py-4 px-6 whitespace-nowrap">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold capitalize ${
-                      member.role === "admin"
-                        ? "bg-purple-100 text-purple-800 border border-purple-200"
-                        : "bg-[#ff6422]/10 text-[#ea5414] border border-[#ff6422]/20"
-                    }`}
-                  >
-                    {member.role === "admin" ? "Workspace Admin" : "Sales Agent"}
-                  </span>
+                <td className="py-2.5 sm:py-3 px-4 whitespace-nowrap">
+                  <MemberRoleDropdown
+                    memberId={member._id!}
+                    memberName={member.name}
+                    currentRole={member.role}
+                    isAdmin={isAdmin}
+                    isSelf={isSelf}
+                    isLoading={isLoading}
+                    onRoleChange={(newRole) => {
+                      if (onRoleChange && member._id) {
+                        onRoleChange(member._id, newRole);
+                      }
+                    }}
+                  />
                 </td>
 
-                <td className="py-4 px-6 whitespace-nowrap">
+                <td className="py-2.5 sm:py-3 px-4 whitespace-nowrap">
                   <span
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                       isSuspended
                         ? "bg-rose-100 text-rose-800 border border-rose-200"
                         : "bg-emerald-100 text-emerald-800 border border-emerald-200"
@@ -120,7 +127,7 @@ export function TeamAgentsList({
                   </span>
                 </td>
 
-                <td className="py-4 px-6 text-slate-500 whitespace-nowrap">
+                <td className="py-2.5 sm:py-3 px-4 text-slate-500 whitespace-nowrap">
                   {member.lastLoginAt
                     ? new Date(member.lastLoginAt).toLocaleDateString([], {
                         month: "short",
@@ -132,9 +139,9 @@ export function TeamAgentsList({
                 </td>
 
                 {isAdmin && (
-                  <td className="py-4 px-6 text-right whitespace-nowrap">
-                    {!isSelf && (
-                      <div className="flex items-center justify-end gap-2">
+                  <td className="py-2.5 sm:py-3 pl-4 pr-6 sm:pr-8 lg:pr-10 text-right whitespace-nowrap">
+                    {!isSelf ? (
+                      <div className="flex items-center justify-end gap-2 sm:gap-2.5">
                         {/* Revoke Session */}
                         <button
                           type="button"
@@ -142,7 +149,7 @@ export function TeamAgentsList({
                           onClick={() => onRevokeSession(member._id!)}
                           aria-label={`Revoke active sessions for ${member.name}`}
                           title="Instant offboarding: Terminate all active sessions"
-                          className="p-1.5 text-slate-500 hover:text-amber-700 neu-btn rounded-xl transition-colors cursor-pointer"
+                          className="w-7.5 h-7.5 flex items-center justify-center text-slate-500 hover:text-amber-700 neu-btn rounded-xl transition-all cursor-pointer"
                         >
                           <Lock className="w-3.5 h-3.5" />
                         </button>
@@ -160,7 +167,7 @@ export function TeamAgentsList({
                           title={
                             isSuspended ? "Reactivate Agent" : "Deactivate Agent"
                           }
-                          className={`p-1.5 neu-btn rounded-xl transition-colors cursor-pointer ${
+                          className={`w-7.5 h-7.5 flex items-center justify-center neu-btn rounded-xl transition-all cursor-pointer ${
                             isSuspended
                               ? "text-emerald-700 hover:bg-emerald-100"
                               : "text-amber-700 hover:bg-amber-100"
@@ -180,11 +187,15 @@ export function TeamAgentsList({
                           onClick={() => onRequestDelete(member)}
                           aria-label={`Permanently delete agent ${member.name}`}
                           title="Delete Agent"
-                          className="p-1.5 text-rose-600 hover:text-rose-700 neu-btn rounded-xl transition-colors cursor-pointer"
+                          className="w-7.5 h-7.5 flex items-center justify-center text-rose-600 hover:text-rose-700 neu-btn rounded-xl transition-all cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
+                    ) : (
+                      <span className="text-[11px] text-slate-400 font-medium italic pr-1">
+                        Workspace Owner
+                      </span>
                     )}
                   </td>
                 )}

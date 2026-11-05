@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { createLead } from "@/actions/leadActions";
 import { LeadStage } from "@/types";
 import { toast } from "@/store/useToastStore";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface AddLeadModalProps {
   isOpen: boolean;
@@ -90,23 +91,19 @@ export function AddLeadModal({
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <NeumorphicAutocompleteInput
+            id="lead-full-name"
+            name="name"
+            type="text"
+            label="Full Name"
+            required
+            placeholder="e.g. Bilal Khan"
+            value={name}
+            onChange={setName}
+            storageKey="lead_names"
+          />
           <div>
-            <label htmlFor="lead-full-name" className="block text-xs font-semibold text-slate-700 mb-1">
-              Full Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="lead-full-name"
-              name="name"
-              placeholder="e.g. Bilal Khan"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoComplete="name"
-              required
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="lead-phone-number" className="block text-xs font-semibold text-slate-700 mb-1">
+            <label htmlFor="lead-phone-number" className="block text-xs font-semibold text-slate-700 mb-1.5">
               WhatsApp Phone <span className="text-red-500">*</span>
             </label>
             <input
@@ -116,7 +113,7 @@ export function AddLeadModal({
               placeholder="e.g. 923001234567"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              autoComplete="tel"
+              autoComplete="off"
               required
               className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
             />
@@ -124,35 +121,26 @@ export function AddLeadModal({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label htmlFor="lead-company-name" className="block text-xs font-semibold text-slate-700 mb-1">
-              Company
-            </label>
-            <input
-              id="lead-company-name"
-              name="company"
-              placeholder="e.g. Acme Agency"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              autoComplete="organization"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="lead-email-address" className="block text-xs font-semibold text-slate-700 mb-1">
-              Email Address
-            </label>
-            <input
-              id="lead-email-address"
-              name="email"
-              type="email"
-              placeholder="bilal@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-            />
-          </div>
+          <NeumorphicAutocompleteInput
+            id="lead-company-name"
+            name="company"
+            type="text"
+            label="Company"
+            placeholder="e.g. Acme Agency"
+            value={company}
+            onChange={setCompany}
+            storageKey="lead_companies"
+          />
+          <NeumorphicAutocompleteInput
+            id="lead-email-address"
+            name="email"
+            type="email"
+            label="Email Address"
+            placeholder="bilal@example.com"
+            value={email}
+            onChange={setEmail}
+            storageKey="lead_emails"
+          />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

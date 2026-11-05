@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Send, X, Loader2, Sparkles } from "lucide-react";
 import { sendMetaTestMessage } from "@/actions/metaCloudApiActions";
 import { toast } from "@/store/useToastStore";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface MetaSendTestModalProps {
   isOpen: boolean;
@@ -80,20 +81,18 @@ export function MetaSendTestModal({
           </button>
         </div>
 
-        <form onSubmit={handleSend} className="space-y-4">
+        <form onSubmit={handleSend} className="space-y-4" autoComplete="off">
           <div>
-            <label htmlFor="test-recipient-phone" className="block text-xs font-semibold text-slate-700 mb-1">
-              Recipient Phone Number (with Country Code)
-            </label>
-            <input
+            <NeumorphicAutocompleteInput
               id="test-recipient-phone"
               name="recipientPhone"
-              type="text"
+              type="tel"
+              label="Recipient Phone Number (with Country Code)"
               required
               value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
+              onChange={setRecipient}
               placeholder="e.g. 923001234567"
-              className="w-full px-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
+              storageKey="meta_test_phones"
             />
             <p className="text-[11px] text-slate-400 mt-1">
               Enter your own personal WhatsApp number to receive the test message.

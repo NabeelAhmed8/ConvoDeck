@@ -33,6 +33,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-required={required}
           aria-invalid={!!error}
           aria-describedby={errorId}
+          autoComplete={props.autoComplete || "off"}
+          data-lpignore="true"
+          data-form-type="other"
           aria-label={props["aria-label"] || (typeof label === "string" ? label : undefined)}
           className={cn(
             "w-full px-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none transition-colors",

@@ -10,7 +10,7 @@ interface TeamAuditLogsProps {
 export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
   if (logs.length === 0) {
     return (
-      <div className="p-12 text-center text-xs text-slate-500">
+      <div className="p-8 text-center text-xs text-slate-500">
         No audit events recorded yet.
       </div>
     );
@@ -21,10 +21,10 @@ export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
       <table className="w-full min-w-[700px] text-left text-xs text-slate-700">
         <thead className="bg-[#f8fafc] border-b border-slate-200 text-[11px] font-bold text-slate-700 uppercase tracking-wider">
           <tr>
-            <th className="py-3 px-6 whitespace-nowrap">Timestamp</th>
-            <th className="py-3 px-6 whitespace-nowrap">Actor (Agent)</th>
-            <th className="py-3 px-6 whitespace-nowrap">Action Performed</th>
-            <th className="py-3 px-6 whitespace-nowrap">Activity Details</th>
+            <th className="py-2.5 pl-6 sm:pl-8 pr-4 whitespace-nowrap">Timestamp</th>
+            <th className="py-2.5 px-4 whitespace-nowrap">Actor (Agent)</th>
+            <th className="py-2.5 px-4 whitespace-nowrap">Action Performed</th>
+            <th className="py-2.5 pl-4 pr-6 sm:pr-8 lg:pr-10 whitespace-nowrap">Activity Details</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-200/80">
@@ -33,7 +33,7 @@ export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
               key={log._id}
               className="hover:bg-slate-200/40 transition-colors"
             >
-              <td className="py-3.5 px-6 whitespace-nowrap text-slate-500">
+              <td className="py-2.5 sm:py-3 pl-6 sm:pl-8 pr-4 whitespace-nowrap text-slate-500">
                 {new Date(log.createdAt || Date.now()).toLocaleDateString([], {
                   month: "short",
                   day: "numeric",
@@ -43,7 +43,7 @@ export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
                 })}
               </td>
 
-              <td className="py-3.5 px-6 whitespace-nowrap">
+              <td className="py-2.5 sm:py-3 px-4 whitespace-nowrap">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-900">{log.actorName}</span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full neu-pressed text-slate-700 font-semibold uppercase">
@@ -55,9 +55,9 @@ export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
                 </span>
               </td>
 
-              <td className="py-3.5 px-6 whitespace-nowrap">
+              <td className="py-2.5 sm:py-3 px-4 whitespace-nowrap">
                 <span
-                  className={`inline-flex items-center whitespace-nowrap px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
+                  className={`inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                     log.action === "SENT_MESSAGE"
                       ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
                       : log.action === "DEACTIVATED_AGENT" ||
@@ -72,7 +72,7 @@ export function TeamAuditLogs({ logs }: TeamAuditLogsProps) {
                 </span>
               </td>
 
-              <td className="py-3.5 px-6 text-slate-600 font-mono text-[11px] leading-relaxed">
+              <td className="py-2.5 sm:py-3 pl-4 pr-6 sm:pr-8 lg:pr-10 text-slate-600 font-mono text-[11px] leading-relaxed">
                 {log.details}
               </td>
             </tr>

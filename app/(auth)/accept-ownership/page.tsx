@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Building2, User, CheckCircle2, AlertCircle, Loader2, ArrowRight } from "lucide-react";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 import { getOwnershipInviteDetails, completeOwnershipInvite } from "@/actions/workspaceActions";
 
 function AcceptOwnershipContent() {
@@ -198,28 +199,20 @@ function AcceptOwnershipContent() {
         </div>
 
         {/* Full Name */}
-        <div>
-          <label
-            htmlFor="owner-full-name"
-            className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1"
-          >
-            Your Full Name
-          </label>
-          <div className="relative">
-            <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              id="owner-full-name"
-              type="text"
-              required
-              autoFocus
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. John Doe"
-              disabled={submitting}
-              className="w-full pl-9 pr-3.5 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-hidden"
-            />
-          </div>
-        </div>
+        <NeumorphicAutocompleteInput
+          id="owner-full-name"
+          name="name"
+          type="text"
+          label="Your Full Name"
+          required
+          autoFocus
+          value={name}
+          onChange={setName}
+          placeholder="e.g. John Doe"
+          disabled={submitting}
+          storageKey="owner_names"
+          icon={<User className="w-4 h-4" />}
+        />
 
         {/* New Password */}
         <div>

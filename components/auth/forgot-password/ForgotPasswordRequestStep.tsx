@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Mail, Phone, AlertCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 import { requestPasswordReset, ResetMethod } from "@/actions/forgotPasswordActions";
 
 interface ForgotPasswordRequestStepProps {
@@ -106,50 +107,35 @@ export function ForgotPasswordRequestStep({
         </div>
       )}
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label
-            htmlFor="forgot-password-identifier"
-            className="block text-xs font-semibold text-slate-700 mb-1"
-          >
-            {method === "email" ? "Registered Email" : "Phone Number (with Country Code)"}{" "}
-            <span className="text-rose-500" aria-hidden="true">*</span>
-          </label>
-          <div className="relative">
-            {method === "email" ? (
-              <Mail
-                className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
-                aria-hidden="true"
-              />
+      <form className="space-y-4" onSubmit={handleSubmit} autoComplete="off">
+        <NeumorphicAutocompleteInput
+          id="forgot-password-identifier"
+          name="identifier"
+          type={method === "email" ? "email" : "tel"}
+          label={method === "email" ? "Registered Email" : "Phone Number (with Country Code)"}
+          required
+          autoFocus
+          placeholder={
+            method === "email"
+              ? "name@company.com"
+              : "+92 300 1234567 or 15551234567"
+          }
+          value={identifier}
+          onChange={setIdentifier}
+          storageKey={method === "email" ? "forgot_pwd_emails" : "forgot_pwd_phones"}
+          icon={
+            method === "email" ? (
+              <Mail className="w-4 h-4 text-slate-500" aria-hidden="true" />
             ) : (
-              <Phone
-                className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
-                aria-hidden="true"
-              />
-            )}
-            <input
-              id="forgot-password-identifier"
-              name="identifier"
-              type={method === "email" ? "email" : "tel"}
-              autoComplete={method === "email" ? "email" : "tel"}
-              placeholder={
-                method === "email"
-                  ? "name@company.com"
-                  : "+92 300 1234567 or 15551234567"
-              }
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              className="w-full pl-9 pr-3.5 py-2.5 text-base sm:text-xs neu-input rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none"
-              required
-              autoFocus
-            />
-          </div>
-          <p className="mt-1 text-[11px] text-slate-500">
-            {method === "email"
-              ? "We'll send a 6-digit one-time code to your registered email."
-              : "We'll send a 6-digit one-time verification code via WhatsApp/SMS."}
-          </p>
-        </div>
+              <Phone className="w-4 h-4 text-slate-500" aria-hidden="true" />
+            )
+          }
+        />
+        <p className="mt-1 text-[11px] text-slate-500">
+          {method === "email"
+            ? "We'll send a 6-digit one-time code to your registered email."
+            : "We'll send a 6-digit one-time verification code via WhatsApp/SMS."}
+        </p>
 
         <Button
           type="submit"
