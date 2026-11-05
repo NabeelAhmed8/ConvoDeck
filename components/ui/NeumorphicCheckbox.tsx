@@ -33,13 +33,13 @@ export function NeumorphicCheckbox({
 
   return (
     <div
-      className={`relative inline-flex items-center gap-2.5 select-none group text-xs text-slate-600 hover:text-slate-900 transition-colors ${
+      className={`relative flex items-start gap-2.5 select-none group text-xs text-slate-600 hover:text-slate-900 transition-colors w-full min-w-0 ${
         disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
       } ${className}`}
     >
       {/* Visual Tactile Checkbox Box */}
       <div
-        className={`relative w-4 h-4 rounded-md flex items-center justify-center shrink-0 transition-all duration-200 ${
+        className={`relative w-4 h-4 rounded-md flex items-center justify-center shrink-0 mt-0.5 transition-all duration-200 ${
           checked
             ? "bg-gradient-to-br from-[#ff6a28] to-[#ea5414] text-white shadow-[0_2px_6px_rgba(255,100,34,0.38),inset_1px_1px_2px_rgba(255,255,255,0.4)] border border-[#ea5414]"
             : "bg-[#e9eff6] neu-pressed shadow-[inset_2px_2px_4px_#c4cedc,inset_-2px_-2px_4px_#ffffff] border border-slate-300/60 group-hover:border-slate-400/80"
@@ -72,7 +72,7 @@ export function NeumorphicCheckbox({
       {/* Label Text */}
       <label
         htmlFor={checkboxId}
-        className="font-medium text-slate-700 group-hover:text-slate-900 transition-colors cursor-pointer"
+        className="font-medium text-slate-700 group-hover:text-slate-900 transition-colors cursor-pointer min-w-0 flex-1 leading-snug"
       >
         {label}
       </label>

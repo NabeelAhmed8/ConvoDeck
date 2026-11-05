@@ -27,11 +27,11 @@ export function TourLauncherButton({
 
   if (variant === "settings") {
     return (
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
         <button
           type="button"
           onClick={triggerTour}
-          className="px-4 py-2 text-xs font-semibold rounded-2xl neu-btn-primary text-white transition-colors flex items-center gap-2 cursor-pointer shadow-xs active:scale-95"
+          className="flex-1 sm:flex-initial px-4 py-2.5 text-xs font-semibold rounded-2xl neu-btn-primary text-white transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-95 whitespace-nowrap"
         >
           <Compass className="w-4 h-4 text-white" aria-hidden="true" />
           Start Button Tour
@@ -39,7 +39,7 @@ export function TourLauncherButton({
         <button
           type="button"
           onClick={triggerDirectory}
-          className="px-4 py-2 text-xs font-semibold rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/60 transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
+          className="flex-1 sm:flex-initial px-4 py-2.5 text-xs font-semibold rounded-2xl bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/60 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs whitespace-nowrap"
         >
           <BookOpen className="w-4 h-4 text-slate-600" aria-hidden="true" />
           All Buttons Guide

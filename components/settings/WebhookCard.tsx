@@ -32,10 +32,10 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
   };
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3">
-      <div className="flex items-center gap-2">
-        <Globe className="w-4 h-4 text-[#ea5414]" />
-        <span className="text-xs font-bold text-slate-800">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3 min-w-0">
+      <div className="flex items-center gap-2 min-w-0">
+        <Globe className="w-4 h-4 text-[#ea5414] shrink-0" />
+        <span className="text-xs font-bold text-slate-800 truncate">
           Meta WhatsApp Webhook Configuration
         </span>
       </div>
@@ -44,14 +44,14 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
         Paste these two fields into your <strong>Meta for Developers &gt; WhatsApp &gt; Configuration</strong> to receive incoming messages in real-time.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 min-w-0">
         {/* Callback URL */}
-        <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-2 min-w-0">
+        <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-2 min-w-0 overflow-hidden">
           <div className="min-w-0 flex-1">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
               Callback URL
             </span>
-            <span className="text-xs font-mono text-slate-800 truncate block">
+            <span className="text-xs font-mono text-slate-800 truncate break-all block">
               {webhookUrl}
             </span>
           </div>
@@ -66,12 +66,12 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
         </div>
 
         {/* Verify Token */}
-        <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-2 min-w-0">
+        <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-2 min-w-0 overflow-hidden">
           <div className="min-w-0 flex-1">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
               Verify Token
             </span>
-            <span className="text-xs font-mono text-slate-800 truncate block">
+            <span className="text-xs font-mono text-slate-800 truncate break-all block">
               {webhookToken}
             </span>
           </div>

@@ -61,16 +61,16 @@ export function WorkspaceProfileCard({
   };
 
   return (
-    <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5">
+    <div className="neu-card rounded-3xl p-4 sm:p-7 space-y-5 min-w-0">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-slate-300/40 pb-3">
+      <div className="flex items-start sm:items-center gap-3 border-b border-slate-300/40 pb-3 min-w-0">
         <div className="w-9 h-9 rounded-2xl bg-orange-50 text-[#ff6422] flex items-center justify-center border border-orange-200/50 shrink-0">
           <Building2 className="w-4 h-4" />
         </div>
-        <div>
+        <div className="min-w-0 flex-1">
           <h2 className="font-bold text-sm text-slate-900">Workspace Profile &amp; Contact Email</h2>
-          <p className="text-xs text-slate-500">
-            Define this workspace's organization name and dedicated contact email for reports and alerts.
+          <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+            Define this workspace&apos;s organization name and dedicated contact email for reports and alerts.
           </p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export function WorkspaceProfileCard({
           <button
             type="submit"
             disabled={saving}
-            className="px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all hover:scale-102"
+            className="w-full sm:w-auto px-5 py-2.5 neu-btn-primary rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all hover:scale-102"
           >
             {saving ? (
               <>

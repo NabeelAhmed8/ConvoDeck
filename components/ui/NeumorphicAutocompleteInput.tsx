@@ -59,11 +59,11 @@ export function NeumorphicAutocompleteInput({
   const effectiveAutoComplete = customAutoComplete || defaultAutoComplete;
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-xs font-semibold text-slate-700 mb-1.5"
+          className="block text-xs font-semibold text-slate-700 mb-1.5 truncate"
         >
           {label}
           {required && (
@@ -75,7 +75,7 @@ export function NeumorphicAutocompleteInput({
       )}
 
       {/* Input Field Container */}
-      <div className="relative w-full">
+      <div className="relative w-full min-w-0">
         {icon && (
           <div className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none shrink-0 z-10 flex items-center justify-center">
             {icon}
@@ -94,7 +94,7 @@ export function NeumorphicAutocompleteInput({
           required={required}
           autoFocus={autoFocus}
           autoComplete={effectiveAutoComplete}
-          className={`w-full py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-hidden transition-all placeholder-slate-400 ${
+          className={`w-full min-w-0 py-2.5 text-xs neu-input rounded-2xl text-slate-900 focus:outline-hidden transition-all placeholder-slate-400 ${
             icon ? "pl-9 pr-3.5" : "px-3.5"
           } ${className}`}
         />

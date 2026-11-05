@@ -98,33 +98,33 @@ export function TransferWorkspaceOwnershipCard({
   };
 
   return (
-    <div className="neu-card rounded-3xl p-5 sm:p-7 space-y-5 border border-slate-200/80">
+    <div className="neu-card rounded-3xl p-4 sm:p-7 space-y-5 border border-slate-200/80 min-w-0">
       {/* Header */}
-      <div className="flex items-center justify-between gap-3 border-b border-slate-300/40 pb-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200/60 shrink-0">
-            <ArrowRightLeft className="w-4 h-4" />
-          </div>
-          <div>
-            <h2 className="font-bold text-sm text-slate-900">Transfer Workspace Ownership</h2>
-            <p className="text-xs text-slate-500">
-              Reassign primary ownership and billing administration of &ldquo;{workspaceName}&rdquo; to another account.
-            </p>
-          </div>
+      <div className="flex items-start sm:items-center gap-3 border-b border-slate-300/40 pb-3 min-w-0">
+        <div className="w-9 h-9 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200/60 shrink-0">
+          <ArrowRightLeft className="w-4 h-4" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="font-bold text-sm text-slate-900">Transfer Workspace Ownership</h2>
+          <p className="text-xs text-slate-500 leading-relaxed mt-0.5">
+            Reassign primary ownership and billing administration of &ldquo;{workspaceName}&rdquo; to another account.
+          </p>
         </div>
       </div>
 
       {/* Current Owner Info Pill */}
-      <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-200/50 text-xs text-slate-700">
-        <UserCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-        <span className="font-medium">Current Primary Owner:</span>
-        <span className="font-bold text-slate-900 bg-white/70 px-2 py-0.5 rounded-lg border border-slate-300/50">
+      <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-slate-200/50 text-xs text-slate-700 min-w-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <UserCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span className="font-medium">Current Primary Owner:</span>
+        </div>
+        <span className="font-bold text-slate-900 bg-white/70 px-2 py-0.5 rounded-lg border border-slate-300/50 break-all max-w-full">
           {owner || "Owner"}
         </span>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleTransfer} className="space-y-4">
+      <form onSubmit={handleTransfer} className="space-y-4 min-w-0">
         <NeumorphicAutocompleteInput
           id="transfer-target-email"
           name="targetEmail"
@@ -140,15 +140,15 @@ export function TransferWorkspaceOwnershipCard({
         />
 
         {/* Industry standard safeguard note */}
-        <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-amber-900 text-[11px] leading-relaxed flex items-start gap-2.5">
+        <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-amber-900 text-[11px] leading-relaxed flex items-start gap-2.5 min-w-0">
           <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-          <div>
+          <div className="min-w-0 flex-1">
             <strong>Important Notice:</strong> Once transferred, the new owner will hold primary administrative control of this workspace, its connected WhatsApp lines, and billing details.
           </div>
         </div>
 
         {/* Dynamic Neumorphic Confirmation Checkbox */}
-        <div className="pt-0.5">
+        <div className="pt-0.5 min-w-0">
           <NeumorphicCheckbox
             id="transfer-confirm-checkbox"
             name="transferConfirmed"
@@ -164,7 +164,7 @@ export function TransferWorkspaceOwnershipCard({
           <button
             type="submit"
             disabled={loading || !confirmed || !targetEmail}
-            className="px-5 py-2.5 neu-btn rounded-2xl text-xs font-bold text-slate-800 hover:text-amber-700 hover:border-amber-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            className="w-full sm:w-auto px-5 py-2.5 neu-btn rounded-2xl text-xs font-bold text-slate-800 hover:text-amber-700 hover:border-amber-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
             {loading ? (
               <>
