@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Search, MessageSquareDot } from "lucide-react";
+import { Search, MessageSquareDot, Plus } from "lucide-react";
 
 interface ChatSidebarHeaderProps {
   chatCount: number;
@@ -9,6 +9,7 @@ interface ChatSidebarHeaderProps {
   setSearchQuery: (query: string) => void;
   filter: "all" | "unread";
   setFilter: (filter: "all" | "unread") => void;
+  onNewChat?: () => void;
 }
 
 export function ChatSidebarHeader({
@@ -17,6 +18,7 @@ export function ChatSidebarHeader({
   setSearchQuery,
   filter,
   setFilter,
+  onNewChat,
 }: ChatSidebarHeaderProps) {
   return (
     <div className="p-3 sm:p-4 border-b border-slate-200/70 bg-white shadow-xs shrink-0">
@@ -32,12 +34,23 @@ export function ChatSidebarHeader({
             </p>
           </div>
         </div>
-        <span
-          aria-label={`${chatCount} chats available`}
-          className="text-[11px] sm:text-xs neu-pressed text-slate-600 px-2 sm:px-2.5 py-0.5 rounded-full font-medium bg-[#f1f5f9] shrink-0"
-        >
-          {chatCount} chats
-        </span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onNewChat}
+            className="w-8 h-8 rounded-full bg-[#25D366] hover:bg-[#1ebd5a] text-white flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0"
+            title="Start New Chat with Contact"
+            aria-label="Start New Chat with Contact"
+          >
+            <Plus className="w-4 h-4 stroke-[2.5]" />
+          </button>
+          <span
+            aria-label={`${chatCount} chats available`}
+            className="text-[11px] sm:text-xs neu-pressed text-slate-600 px-2 sm:px-2.5 py-0.5 rounded-full font-medium bg-[#f1f5f9] shrink-0"
+          >
+            {chatCount} chats
+          </span>
+        </div>
       </div>
 
       {/* Search */}

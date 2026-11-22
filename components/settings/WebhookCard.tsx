@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check, Globe, Shield } from "lucide-react";
+import { Copy, Check, Globe } from "lucide-react";
 import { toast } from "@/store/useToastStore";
 
 interface WebhookCardProps {
@@ -32,18 +32,24 @@ export function WebhookCard({ webhookToken }: WebhookCardProps) {
   };
 
   return (
-    <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3 min-w-0">
-      <div className="flex items-center gap-2 min-w-0">
-        <Globe className="w-4 h-4 text-[#ea5414] shrink-0" />
-        <span className="text-xs font-bold text-slate-800 truncate">
-          Meta WhatsApp Webhook Configuration
+    <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/90 space-y-4 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <Globe className="w-4 h-4 text-[#ea5414] shrink-0" />
+          <h4 className="text-xs font-bold text-slate-900 truncate">
+            Meta WhatsApp Webhook Configuration
+          </h4>
+        </div>
+        <span className="text-[10px] font-mono text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-200 shrink-0">
+          hub.mode = subscribe
         </span>
       </div>
 
       <p className="text-[11px] text-slate-500 leading-relaxed">
-        Paste these two fields into your <strong>Meta for Developers &gt; WhatsApp &gt; Configuration</strong> to receive incoming messages in real-time.
+        Paste these two fields into your <strong>Meta for Developers &gt; WhatsApp &gt; Configuration</strong> to receive incoming customer messages in real-time.
       </p>
 
+      {/* Webhook Fields Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 min-w-0">
         {/* Callback URL */}
         <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-2 min-w-0 overflow-hidden">

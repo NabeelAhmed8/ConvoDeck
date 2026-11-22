@@ -5,7 +5,6 @@ import { dbConnect } from "@/lib/dbConnect";
 import { Workspace } from "@/models/Workspace";
 import { getSession } from "@/lib/auth";
 import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
-import { sendWhatsAppMessage } from "@/lib/whatsapp";
 
 export interface IMetaVerificationResult {
   success: boolean;
@@ -20,6 +19,11 @@ export async function verifyMetaCredentials(params: {
   phoneNumberId: string;
   accessToken: string;
 }): Promise<IMetaVerificationResult> {
+  const session = await getSession();
+  if (!session || !session.userId) {
+    return { success: false, error: "Authentication required." };
+  }
+
   const { phoneNumberId, accessToken } = params;
 
   const cleanPhoneId = phoneNumberId.trim();
@@ -72,12 +76,15 @@ export async function saveMetaApiConfig(formData: {
   try {
     await dbConnect();
     const session = await getSession();
+    if (!session || !session.userId) {
+      return { success: false, error: "Authentication required." };
+    }
 
-    if (session?.role === "agent") {
+    if (session.role === "agent") {
       return { success: false, error: "Access Denied: Only administrators can modify API credentials." };
     }
 
-    const workspaceId = session?.workspaceId || DEFAULT_WORKSPACE_ID;
+    const workspaceId = session.workspaceId || DEFAULT_WORKSPACE_ID;
 
     await Workspace.findByIdAndUpdate(
       workspaceId,
@@ -96,7 +103,6 @@ export async function saveMetaApiConfig(formData: {
     revalidatePath("/settings");
     revalidatePath("/dashboard");
     revalidatePath("/chat");
-    revalidatePath("/billing");
 
     return { success: true };
   } catch (err: unknown) {
@@ -105,37 +111,20 @@ export async function saveMetaApiConfig(formData: {
   }
 }
 
-// 3. Send Instant WhatsApp Test Message to confirm live delivery
-export async function sendMetaTestMessage(params: {
-  recipientPhone: string;
-  phoneNumberId?: string;
-  accessToken?: string;
-}) {
-  const { recipientPhone, phoneNumberId, accessToken } = params;
-
-  const testText = `ConvoDeck WhatsApp Test: Your Meta WhatsApp Cloud API is connected and delivering live messages! Time: ${new Date().toLocaleTimeString()}`;
-
-  const res = await sendWhatsAppMessage({
-    to: recipientPhone,
-    text: testText,
-    phoneNumberId,
-    accessToken,
-  });
-
-  return res;
-}
-
-// 4. Disconnect WhatsApp Line from Workspace
+// 3. Disconnect WhatsApp Line from Workspace
 export async function disconnectWhatsAppLine(): Promise<{ success: boolean; error?: string }> {
   try {
     await dbConnect();
     const session = await getSession();
+    if (!session || !session.userId) {
+      return { success: false, error: "Authentication required." };
+    }
 
-    if (session?.role === "agent") {
+    if (session.role === "agent") {
       return { success: false, error: "Access Denied: Only administrators can disconnect WhatsApp." };
     }
 
-    const workspaceId = session?.workspaceId || DEFAULT_WORKSPACE_ID;
+    const workspaceId = session.workspaceId || DEFAULT_WORKSPACE_ID;
 
     await Workspace.findByIdAndUpdate(workspaceId, {
       $set: {
@@ -149,7 +138,6 @@ export async function disconnectWhatsAppLine(): Promise<{ success: boolean; erro
     revalidatePath("/settings");
     revalidatePath("/dashboard");
     revalidatePath("/chat");
-    revalidatePath("/billing");
 
     return { success: true };
   } catch (error: unknown) {

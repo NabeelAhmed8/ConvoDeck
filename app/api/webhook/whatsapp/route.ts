@@ -19,7 +19,10 @@ export async function GET(req: NextRequest) {
     // Check against global env verify token
     if (token === VERIFY_TOKEN) {
       console.log("[Meta WhatsApp Webhook Verified via Env Token]");
-      return new Response(challenge, { status: 200 });
+      return new Response(challenge, {
+        status: 200,
+        headers: { "Content-Type": "text/plain" },
+      });
     }
 
     // Check against per-workspace custom verify tokens stored in DB
@@ -28,7 +31,10 @@ export async function GET(req: NextRequest) {
       const workspace = await Workspace.findOne({ webhookVerifyToken: token });
       if (workspace) {
         console.log(`[Meta WhatsApp Webhook Verified for Workspace: ${workspace.name}]`);
-        return new Response(challenge, { status: 200 });
+        return new Response(challenge, {
+          status: 200,
+          headers: { "Content-Type": "text/plain" },
+        });
       }
     } catch (err) {
       console.error("[Webhook Verification DB Error]:", err);

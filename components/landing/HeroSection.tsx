@@ -1,13 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { MessageSquare, ArrowRight, Sparkles } from "lucide-react";
+import { MessageSquare, ArrowRight, Sparkles, LayoutDashboard } from "lucide-react";
+import { getCurrentUser } from "@/actions/authActions";
 import { HeroFeatureTiles } from "./HeroFeatureTiles";
 import { HeroShowcaseCard } from "./HeroShowcaseCard";
 import { HeroSegmentedInfoPill } from "./HeroSegmentedInfoPill";
 
 export function HeroSection() {
+  const [dashboardHref, setDashboardHref] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await getCurrentUser();
+        if (res?.user) {
+          setDashboardHref(res.user.role === "agent" ? "/agent/dashboard" : "/dashboard");
+        }
+      } catch {
+        // Safe fallback
+      }
+    }
+    checkAuth();
+  }, []);
+
   return (
     <section id="home" className="relative pt-28 sm:pt-36 lg:pt-40 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-6xl mx-auto">
@@ -36,10 +53,17 @@ export function HeroSection() {
             {/* CTA Button Group */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1 sm:pt-2">
               <Link
-                href="/signup"
+                href={dashboardHref || "/signup"}
                 className="w-full min-[480px]:w-auto justify-center neu-btn-primary px-6 sm:px-7 py-3 rounded-full text-xs sm:text-sm font-bold text-white flex items-center gap-2.5 transition-all shadow-md group cursor-pointer"
               >
-                <span>Start Workspace</span>
+                {dashboardHref ? (
+                  <>
+                    <LayoutDashboard className="w-4 h-4 text-white" />
+                    <span>Go to Dashboard</span>
+                  </>
+                ) : (
+                  <span>Start Workspace</span>
+                )}
                 <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0 group-hover:translate-x-0.5 transition-transform">
                   <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </span>

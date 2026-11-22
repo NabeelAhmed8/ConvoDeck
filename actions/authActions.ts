@@ -276,38 +276,60 @@ export async function loginUser(formData: {
       };
     }
 
-    // Credentials are correct! Generate 6-digit login verification code
-    const code = generateVerificationCode();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    // Credentials are correct! Update last login timestamp & establish session directly
+    user.lastLoginAt = new Date();
 
-    // Delete any old pending login code for this user
-    await VerificationCode.deleteMany({ email: cleanEmail, type: "login" });
+    // Self-Healing: Verify user.workspaceId actively exists in DB.
+    let activeWorkspace = user.workspaceId ? await Workspace.findById(user.workspaceId).lean() : null;
 
-    await VerificationCode.create({
-      email: cleanEmail,
-      code,
-      type: "login",
-      attempts: 0,
-      expiresAt,
-    });
-
-    // Send login verification code to user's registered email via Nodemailer
-    const emailResult = await sendVerificationEmail({
-      to: cleanEmail,
-      code,
-      type: "login",
-      recipientName: user.name,
-    });
-
-    if (!emailResult.success) {
-      console.warn("Login email sending warning:", emailResult.error);
+    if (!activeWorkspace) {
+      const ownedWs = await Workspace.findOne({ ownerEmail: cleanEmail }).sort({ createdAt: 1 }).lean();
+      if (ownedWs) {
+        activeWorkspace = ownedWs;
+        user.workspaceId = ownedWs._id.toString();
+      } else {
+        const fresh = await Workspace.create({
+          name: `${user.name}'s Workspace`,
+          ownerEmail: cleanEmail,
+          contactEmail: cleanEmail,
+          plan: "trial",
+          planStatus: "trial",
+          webhookVerifyToken: `cd_${Math.random().toString(36).substring(2, 12)}`,
+        });
+        activeWorkspace = JSON.parse(JSON.stringify(fresh));
+        user.workspaceId = fresh._id.toString();
+      }
     }
+
+    await user.save();
+
+    // Set secure session cookie
+    await setSessionCookie({
+      userId: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      workspaceId: user.workspaceId,
+      tokenVersion: user.tokenVersion || 0,
+    });
+
+    // Record login in Audit Trail
+    await AuditLog.create({
+      workspaceId: user.workspaceId,
+      actorId: user._id.toString(),
+      actorName: user.name,
+      actorEmail: user.email,
+      actorRole: user.role,
+      action: user.role === "agent" ? "AGENT_LOGIN" : "ADMIN_LOGIN",
+      targetType: "agent",
+      targetId: user._id.toString(),
+      targetName: user.name,
+      details: `${user.role === "agent" ? "Agent" : "Admin"} ${user.name} logged in successfully`,
+    });
 
     return {
       success: true,
-      requiresVerification: true,
-      email: cleanEmail,
-      previewUrl: emailResult.previewUrl || undefined,
+      role: user.role,
     };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Login failed";

@@ -16,6 +16,7 @@ import { toast } from "@/store/useToastStore";
 import { ChatSidebarHeader } from "@/components/chat/ChatSidebarHeader";
 import { ChatLeadItem } from "@/components/chat/ChatLeadItem";
 import { ChatModals } from "@/components/chat/ChatModals";
+import { NewChatModal } from "@/components/chat/NewChatModal";
 
 interface ChatSidebarProps {
   initialLeads: ILead[];
@@ -41,6 +42,7 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
   const [targetLead, setTargetLead] = useState<ILead | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showClearModal, setShowClearModal] = useState(false);
+  const [showNewChatModal, setShowNewChatModal] = useState(false);
   const [isProcessingAction, setIsProcessingAction] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -245,6 +247,7 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
           setSearchQuery={setSearchQuery}
           filter={filter}
           setFilter={setFilter}
+          onNewChat={() => setShowNewChatModal(true)}
         />
 
         {/* Leads List */}
@@ -300,6 +303,20 @@ export function ChatSidebar({ initialLeads }: ChatSidebarProps) {
         isProcessingAction={isProcessingAction}
         onConfirmDelete={handleConfirmDelete}
         onConfirmClear={handleConfirmClear}
+      />
+
+      {/* New Chat Contact Selector Modal */}
+      <NewChatModal
+        isOpen={showNewChatModal}
+        onClose={() => setShowNewChatModal(false)}
+        contacts={leads}
+        onSelectContact={(contact) => {
+          const exists = leads.some((l) => l._id === contact._id);
+          if (!exists) {
+            setLeads([contact, ...leads]);
+          }
+          handleSelectLead(contact);
+        }}
       />
     </>
   );

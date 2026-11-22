@@ -7,7 +7,6 @@ import {
   AlertCircle,
   Loader2,
   BookOpen,
-  Send,
   Sparkles,
   Phone,
   Hash,
@@ -18,7 +17,6 @@ import {
 import { verifyMetaCredentials, saveMetaApiConfig } from "@/actions/metaCloudApiActions";
 import { toast } from "@/store/useToastStore";
 import { MetaSetupGuideModal } from "@/components/settings/MetaSetupGuideModal";
-import { MetaSendTestModal } from "@/components/settings/MetaSendTestModal";
 import { NeumorphicAutocompleteInput } from "@/components/ui/NeumorphicAutocompleteInput";
 
 interface MetaApiConnectionFormProps {
@@ -48,7 +46,7 @@ export function MetaApiConnectionForm({
   const [wabaId, setWabaId] = useState(initialWabaId);
   const [token, setToken] = useState(initialToken);
 
-  // Sync internal state when parent loads or resets (e.g. 0-meter disconnect)
+  // Sync internal state when parent loads or resets
   useEffect(() => {
     setPhone(initialPhone || "");
     setPhoneId(initialPhoneId || "");
@@ -68,7 +66,6 @@ export function MetaApiConnectionForm({
   } | null>(null);
 
   const [showGuide, setShowGuide] = useState(false);
-  const [showTestModal, setShowTestModal] = useState(false);
   const [showToken, setShowToken] = useState(false);
 
   const handleVerify = async () => {
@@ -134,27 +131,16 @@ export function MetaApiConnectionForm({
       <form onSubmit={handleSave} className="space-y-4 min-w-0" autoComplete="off">
         {/* Verification Status Banner if verified */}
         {verifiedInfo && (
-          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in min-w-0">
-            <div className="flex items-start sm:items-center gap-2.5 min-w-0 flex-1">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5 sm:mt-0" />
-              <div className="min-w-0 flex-1">
-                <span className="text-xs font-bold text-emerald-900 block truncate">
-                  Meta Verified: {verifiedInfo.name}
-                </span>
-                <span className="text-[11px] text-emerald-700 block truncate">
-                  Number: {verifiedInfo.phone} • Quality: {verifiedInfo.rating}
-                </span>
-              </div>
+          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center gap-2.5 animate-in fade-in min-w-0">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <span className="text-xs font-bold text-emerald-900 block truncate">
+                Meta Verified: {verifiedInfo.name}
+              </span>
+              <span className="text-[11px] text-emerald-700 block truncate">
+                Number: {verifiedInfo.phone} • Quality: {verifiedInfo.rating}
+              </span>
             </div>
-
-            <button
-              type="button"
-              onClick={() => setShowTestModal(true)}
-              className="w-full sm:w-auto px-3 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs shrink-0"
-            >
-              <Send className="w-3.5 h-3.5" />
-              Send Test Message
-            </button>
           </div>
         )}
 
@@ -237,37 +223,24 @@ export function MetaApiConnectionForm({
 
         {/* Action Controls */}
         <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100 min-w-0">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={handleVerify}
-              disabled={verifying}
-              className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold rounded-xl bg-[#ff6422]/10 text-[#ea5414] hover:bg-[#ff6422]/20 border border-[#ff6422]/30 transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-            >
-              {verifying ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Verifying with Meta...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-3.5 h-3.5 text-[#ff6422]" />
-                  Test &amp; Verify Credentials
-                </>
-              )}
-            </button>
-
-            {phoneId && token && !verifying && (
-              <button
-                type="button"
-                onClick={() => setShowTestModal(true)}
-                className="w-full sm:w-auto px-3 py-2.5 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                Send Test
-              </button>
+          <button
+            type="button"
+            onClick={handleVerify}
+            disabled={verifying}
+            className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold rounded-xl bg-[#ff6422]/10 text-[#ea5414] hover:bg-[#ff6422]/20 border border-[#ff6422]/30 transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+          >
+            {verifying ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Verifying with Meta...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-[#ff6422]" />
+                Verify Credentials
+              </>
             )}
-          </div>
+          </button>
 
           <button
             type="submit"
@@ -284,14 +257,6 @@ export function MetaApiConnectionForm({
       <MetaSetupGuideModal
         isOpen={showGuide}
         onClose={() => setShowGuide(false)}
-      />
-
-      {/* Send Test Modal */}
-      <MetaSendTestModal
-        isOpen={showTestModal}
-        phoneNumberId={phoneId}
-        accessToken={token}
-        onClose={() => setShowTestModal(false)}
       />
     </>
   );

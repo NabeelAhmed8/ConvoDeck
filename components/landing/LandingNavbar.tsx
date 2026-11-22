@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X, MessageSquare } from "lucide-react";
+import { ArrowRight, Menu, X, MessageSquare, LayoutDashboard } from "lucide-react";
+import { getCurrentUser } from "@/actions/authActions";
 import { NAV_ITEMS } from "./navbar/navConfig";
 import { useScrollSpy } from "./navbar/useScrollSpy";
 import { NavLinksDesktop } from "./navbar/NavLinksDesktop";
@@ -12,8 +13,24 @@ import { NavbarQuickSearch } from "./search/NavbarQuickSearch";
 
 export function LandingNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dashboardHref, setDashboardHref] = useState<string | null>(null);
   const sectionIds = NAV_ITEMS.map((item) => item.id);
   const { activeId, scrollTo } = useScrollSpy(sectionIds, "");
+
+  // Dynamic user auth check
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await getCurrentUser();
+        if (res?.user) {
+          setDashboardHref(res.user.role === "agent" ? "/agent/dashboard" : "/dashboard");
+        }
+      } catch {
+        // Safe fallback for unauthenticated visitors
+      }
+    }
+    checkAuth();
+  }, []);
 
   // Close mobile menu on escape key
   useEffect(() => {
@@ -37,7 +54,7 @@ export function LandingNavbar() {
 
   return (
     <header className="fixed top-2 sm:top-5 inset-x-2.5 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
-      <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
+      <div className="relative z-50 neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
         {/* Brand Logo with Tactile Squircle Icon & Homepage Scroll-to-Top */}
         <NavbarBrandLogo onNavigate={() => setMobileMenuOpen(false)} />
 
@@ -53,29 +70,52 @@ export function LandingNavbar() {
 
         {/* Desktop Auth Action Buttons */}
         <div className="hidden sm:flex items-center gap-2.5 shrink-0">
-          <Link
-            href="/login"
-            className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-4 py-2 rounded-full transition-all cursor-pointer whitespace-nowrap shrink-0"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/signup"
-            className="px-5 py-2 neu-btn-primary text-white rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
-          >
-            <span>Get Started</span>
-            <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
-          </Link>
+          {dashboardHref ? (
+            <Link
+              href={dashboardHref}
+              className="px-5 py-2 neu-btn-primary text-white rounded-full text-xs font-bold transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 shadow-md"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-white shrink-0" />
+              <span>Go to Dashboard</span>
+              <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-4 py-2 rounded-full transition-all cursor-pointer whitespace-nowrap shrink-0"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                className="px-5 py-2 neu-btn-primary text-white rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              >
+                <span>Get Started</span>
+                <ArrowRight className="w-3.5 h-3.5 text-white shrink-0" />
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger Toggle Button */}
         <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 shrink-0">
-          <Link
-            href="/login"
-            className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-3 py-1.5 rounded-full hidden min-[440px]:block sm:hidden whitespace-nowrap shrink-0"
-          >
-            Sign In
-          </Link>
+          {dashboardHref ? (
+            <Link
+              href={dashboardHref}
+              className="text-xs font-bold text-white bg-[#ff6422] neu-btn px-3 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap shrink-0 shadow-xs"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>Dashboard</span>
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="text-xs font-semibold text-slate-700 hover:text-slate-900 neu-btn px-3 py-1.5 rounded-full hidden min-[440px]:block sm:hidden whitespace-nowrap shrink-0"
+            >
+              Sign In
+            </Link>
+          )}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -121,21 +161,35 @@ export function LandingNavbar() {
               />
 
               <div className="pt-3 border-t border-slate-200/80 flex flex-col gap-2.5">
-                <Link
-                  href="/signup"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-3 neu-btn-primary text-white rounded-full text-center text-xs font-bold flex items-center justify-center gap-2 shadow-md"
-                >
-                  <MessageSquare className="w-4 h-4 text-white" />
-                  Get Started Free
-                </Link>
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 neu-btn text-slate-700 rounded-full text-center text-xs font-semibold bg-white"
-                >
-                  Sign In to Workspace
-                </Link>
+                {dashboardHref ? (
+                  <Link
+                    href={dashboardHref}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-3 neu-btn-primary text-white rounded-full text-center text-xs font-bold flex items-center justify-center gap-2 shadow-md"
+                  >
+                    <LayoutDashboard className="w-4 h-4 text-white" />
+                    <span>Open Your Dashboard</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full py-3 neu-btn-primary text-white rounded-full text-center text-xs font-bold flex items-center justify-center gap-2 shadow-md"
+                    >
+                      <MessageSquare className="w-4 h-4 text-white" />
+                      Get Started Free
+                    </Link>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full py-2.5 neu-btn text-slate-700 rounded-full text-center text-xs font-semibold bg-white"
+                    >
+                      Sign In to Workspace
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </div>

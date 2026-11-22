@@ -52,7 +52,7 @@ export function createToken(data: SessionData): string {
     },
     JWT_SECRET,
     {
-      expiresIn: "7d",
+      expiresIn: "24h",
     }
   );
 }
@@ -74,7 +74,7 @@ export function verifyToken(token: string): SessionData | null {
   }
 }
 
-// 4. Cookie Management (HTTP-only, Secure, SameSite=Lax, 7-day TTL)
+// 4. Cookie Management (HTTP-only, Secure, SameSite=Lax, 24-hour TTL)
 export async function setSessionCookie(data: SessionData) {
   const token = createToken(data);
   const cookieStore = await cookies();
@@ -83,7 +83,7 @@ export async function setSessionCookie(data: SessionData) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
+    maxAge: 60 * 60 * 24, // 24 hours in seconds
   });
 }
 

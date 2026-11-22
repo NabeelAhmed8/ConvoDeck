@@ -14,6 +14,7 @@ import {
 import { getCurrentUser } from "@/actions/authActions";
 import { TourLauncherButton } from "@/components/tour/TourLauncherButton";
 import { ConnectedLineCard } from "@/components/settings/ConnectedLineCard";
+import { EmbeddedSignupCard } from "@/components/settings/EmbeddedSignupCard";
 import { MetaApiConnectionForm } from "@/components/settings/MetaApiConnectionForm";
 import { WebhookCard } from "@/components/settings/WebhookCard";
 import { WorkspaceProfileCard } from "@/components/settings/WorkspaceProfileCard";
@@ -32,6 +33,7 @@ export default function SettingsPage() {
   const [wabaId, setWabaId] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [webhookToken, setWebhookToken] = useState("");
+  const [connectMethod, setConnectMethod] = useState<"automatic" | "manual">("automatic");
 
   useEffect(() => {
     async function load() {
@@ -110,36 +112,101 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Connected Line Banner if active */}
-        {phoneNumber && (
-          <ConnectedLineCard
-            phoneNumber={phoneNumber}
-            onDisconnected={() => {
-              setPhoneNumber("");
-              setPhoneNumberId("");
-              setWabaId("");
-              setAccessToken("");
-            }}
-          />
+        {/* 1. Connected Line Banner if active */}
+        {phoneNumber ? (
+          <div className="space-y-5">
+            <ConnectedLineCard
+              phoneNumber={phoneNumber}
+              onDisconnected={() => {
+                setPhoneNumber("");
+                setPhoneNumberId("");
+                setWabaId("");
+                setAccessToken("");
+              }}
+            />
+
+            {/* Developer Configuration Details for Connected Line */}
+            <div className="pt-2 border-t border-slate-200/60">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold text-slate-700">
+                  Advanced Meta Cloud API &amp; Webhook Credentials
+                </span>
+              </div>
+              <div className="space-y-4">
+                <MetaApiConnectionForm
+                  initialPhone={phoneNumber}
+                  initialPhoneId={phoneNumberId}
+                  initialWabaId={wabaId}
+                  initialToken={accessToken}
+                  webhookToken={webhookToken}
+                  onSaved={(data) => {
+                    setPhoneNumber(data.phoneNumber);
+                    setPhoneNumberId(data.phoneNumberId);
+                    setWabaId(data.wabaId);
+                    setAccessToken(data.accessToken);
+                  }}
+                />
+                <WebhookCard webhookToken={webhookToken} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-5">
+            {/* Connection Mode Switcher: Automatic vs Manual */}
+            <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-2xl w-fit">
+              <button
+                type="button"
+                onClick={() => setConnectMethod("automatic")}
+                className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5 ${
+                  connectMethod === "automatic"
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span>⚡ Automatic (Recommended)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setConnectMethod("manual")}
+                className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5 ${
+                  connectMethod === "manual"
+                    ? "bg-white text-slate-900 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span>🛠️ Manual Setup (API &amp; Webhook)</span>
+              </button>
+            </div>
+
+            {connectMethod === "automatic" ? (
+              <EmbeddedSignupCard
+                currentPhoneNumber={phoneNumber}
+                onConnected={(newPhone) => {
+                  setPhoneNumber(newPhone);
+                }}
+              />
+            ) : (
+              <div className="space-y-5 animate-in fade-in">
+                <MetaApiConnectionForm
+                  initialPhone={phoneNumber}
+                  initialPhoneId={phoneNumberId}
+                  initialWabaId={wabaId}
+                  initialToken={accessToken}
+                  webhookToken={webhookToken}
+                  onSaved={(data) => {
+                    setPhoneNumber(data.phoneNumber);
+                    setPhoneNumberId(data.phoneNumberId);
+                    setWabaId(data.wabaId);
+                    setAccessToken(data.accessToken);
+                  }}
+                />
+
+                {/* Webhook Configuration Card */}
+                <WebhookCard webhookToken={webhookToken} />
+              </div>
+            )}
+          </div>
         )}
-
-        {/* Meta API Connection Form */}
-        <MetaApiConnectionForm
-          initialPhone={phoneNumber}
-          initialPhoneId={phoneNumberId}
-          initialWabaId={wabaId}
-          initialToken={accessToken}
-          webhookToken={webhookToken}
-          onSaved={(data) => {
-            setPhoneNumber(data.phoneNumber);
-            setPhoneNumberId(data.phoneNumberId);
-            setWabaId(data.wabaId);
-            setAccessToken(data.accessToken);
-          }}
-        />
-
-        {/* Webhook Configuration Card */}
-        <WebhookCard webhookToken={webhookToken} />
       </div>
 
       {/* 3. Transfer Workspace Ownership Card */}

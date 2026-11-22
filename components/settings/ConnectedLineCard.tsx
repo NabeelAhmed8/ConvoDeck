@@ -54,6 +54,10 @@ export function ConnectedLineCard({
                 <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                 Connected &amp; Live
               </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+                <ShieldCheck className="w-3 h-3 text-blue-600" />
+                Meta Cloud API • 100% Ban-Proof
+              </span>
             </div>
             <p className="text-xs text-slate-500 mt-1 flex items-center gap-1.5 leading-relaxed">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
