@@ -39,8 +39,20 @@ export async function getLeads(workspaceId?: string) {
 export async function createLead(leadData: Partial<ILead>) {
   try {
     await dbConnect();
-    const targetWorkspaceId = await getActiveWorkspaceId(leadData.workspaceId);
+    const session = await getSession();
+    if (!session || !session.userId) {
+      return { success: false, error: "Authentication required." };
+    }
 
+    // Role-based security check: Prevent fraudulent deal creation by sales agents
+    if (session.role === "agent") {
+      return {
+        success: false,
+        error: "Access Denied: Sales agents are not permitted to add deals directly. Only Administrators and Managers can create deals.",
+      };
+    }
+
+    const targetWorkspaceId = await getActiveWorkspaceId(leadData.workspaceId);
     const cleanPhone = (leadData.phone || "").replace(/\D/g, "");
 
     const newLead = await Lead.create({
@@ -55,6 +67,20 @@ export async function createLead(leadData: Partial<ILead>) {
       tags: leadData.tags || ["Manual Entry"],
       lastMessage: leadData.notes ? `Requirement: ${leadData.notes}` : "Lead added to pipeline",
       lastMessageAt: new Date(),
+    });
+
+    // Record audit trail for accountability
+    await AuditLog.create({
+      workspaceId: targetWorkspaceId,
+      actorId: session.userId,
+      actorName: session.name || "Admin",
+      actorEmail: session.email || "",
+      actorRole: session.role || "admin",
+      action: "CREATED_LEAD",
+      targetType: "lead",
+      targetId: newLead._id.toString(),
+      targetName: newLead.name,
+      details: `Created new deal for ${newLead.name} with value $${newLead.dealValue} in stage ${newLead.stage}`,
     });
 
     revalidatePath("/pipeline");
@@ -132,6 +158,18 @@ export async function updateLead(leadId: string, updates: Partial<ILead>) {
 export async function deleteLead(leadId: string) {
   try {
     await dbConnect();
+    const session = await getSession();
+    if (!session || !session.userId) {
+      return { success: false, error: "Authentication required." };
+    }
+
+    if (session.role === "agent") {
+      return {
+        success: false,
+        error: "Access Denied: Sales agents are not permitted to delete deals.",
+      };
+    }
+
     await Lead.findByIdAndDelete(leadId);
     await Message.deleteMany({ leadId });
 

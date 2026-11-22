@@ -41,7 +41,7 @@ export function WorkspaceSwitcher({
 
   // Close dropdown on outside click
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
@@ -52,9 +52,11 @@ export function WorkspaceSwitcher({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("touchstart", handleOutsideClick);
     }
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
     };
   }, [isOpen]);
 
@@ -115,28 +117,39 @@ export function WorkspaceSwitcher({
 
   return (
     <>
-      <div ref={containerRef} className="relative w-full">
+      <div
+        ref={containerRef}
+        className={`relative w-full ${isCollapsed ? "flex items-center justify-center" : ""} ${
+          isOpen ? "z-50" : ""
+        }`}
+      >
         {/* Trigger Button: Collapsed mode */}
         {isCollapsed ? (
           <button
             type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen((prev) => !prev);
+            }}
             aria-label={`Current Workspace: ${currentWorkspaceName}. Click to switch.`}
             title={`Workspace: ${currentWorkspaceName} (Click to switch)`}
             aria-expanded={isOpen}
-            className="w-12 h-12 neu-convex rounded-full flex items-center justify-center text-xs font-bold text-slate-900 hover:scale-105 transition-all relative group cursor-pointer"
+            className="w-12 h-12 neu-convex rounded-full flex items-center justify-center text-xs font-bold text-slate-900 hover:scale-105 active:scale-95 transition-all relative group cursor-pointer mx-auto shrink-0 select-none"
           >
             <span>{twoLetters}</span>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white shadow-xs" />
           </button>
         ) : (
           /* Trigger Button: Expanded mode */
           <button
             type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen((prev) => !prev);
+            }}
             aria-label={`Current Workspace: ${currentWorkspaceName}. Click to switch.`}
             aria-expanded={isOpen}
-            className="w-full p-2.5 neu-convex rounded-2xl flex items-center justify-between text-xs sm:text-sm transition-all group cursor-pointer hover:shadow-xs"
+            className="w-full p-2.5 neu-convex rounded-2xl flex items-center justify-between text-xs sm:text-sm transition-all group cursor-pointer hover:shadow-xs active:scale-[0.98] select-none"
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <div

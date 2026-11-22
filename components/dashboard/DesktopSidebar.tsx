@@ -47,10 +47,11 @@ export function DesktopSidebar({
   return (
     <aside
       aria-label="Main navigation sidebar"
-      className={`hidden lg:flex flex-col neu-dribbble-rail text-slate-900 shrink-0 overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed
+      className={`hidden lg:flex flex-col neu-dribbble-rail text-slate-900 shrink-0 overflow-visible transition-all duration-300 ease-in-out ${
+        isCollapsed
           ? "w-24 h-[calc(100vh-1.75rem)] my-3.5 ml-3.5 rounded-[36px] z-30"
           : "w-72 lg:w-80 h-[calc(100vh-1.75rem)] my-3.5 ml-3.5 rounded-[36px] shadow-[10px_10px_24px_rgba(166,180,200,0.45),-10px_-10px_24px_#ffffff] z-30"
-        }`}
+      }`}
     >
       {/* Brand Header */}
       {isCollapsed ? (
@@ -119,7 +120,9 @@ export function DesktopSidebar({
       {/* Dynamic Multi-Workspace Switcher */}
       <div
         className={
-          isCollapsed ? "px-2 py-1 flex flex-col items-center" : "px-4 py-1"
+          isCollapsed
+            ? "px-2 py-1 w-full flex flex-col items-center justify-center relative z-40"
+            : "px-4 py-1 relative z-40"
         }
       >
         <WorkspaceSwitcher
@@ -132,7 +135,7 @@ export function DesktopSidebar({
         <div
           className={
             isCollapsed
-              ? "neu-dribbble-divider my-2 w-full"
+              ? "neu-dribbble-divider my-2 w-10 mx-auto"
               : "neu-dribbble-divider-full my-2"
           }
           aria-hidden="true"

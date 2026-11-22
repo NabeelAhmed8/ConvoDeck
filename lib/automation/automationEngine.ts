@@ -12,6 +12,7 @@ import { evaluateMessageRules } from "./ruleEvaluator";
 import { routeLeadRoundRobin } from "./routingService";
 import { computePipelineMutation } from "./pipelineService";
 import { dispatchAutoReply } from "./autoReplyService";
+import { generateAiSupportReply } from "./aiAssistantService";
 
 export interface ProcessAutomationParams {
   lead: any;
@@ -112,14 +113,26 @@ export async function processSmartAutomation({
     // 6. Automated WhatsApp Response
     if (config.autoReplyEnabled && lead._id) {
       let replyText = "";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://convodeck.com";
 
       if (matches.hasHandoffRequest) {
         replyText = "We have notified a human agent to join this conversation right away.";
         result.triggeredRules.push("HANDOFF");
-      } else if (lead.unreadCount === 1 || !lead.lastMessageAt) {
-        // First message greeting
-        replyText = config.greetingMessage;
+      } else if (matches.hasPricingIntent) {
+        // Direct answer with plans page link as requested by user
+        replyText = `Here are our plans and pricing details: ${baseUrl}/pricing\n\nYou can explore our Starter, Growth, and Enterprise plans with a 14-day free trial. Let us know if you need help choosing!`;
         result.triggeredRules.push("AUTO_REPLY");
+      } else {
+        // AI Smart Solution & Question Answering
+        const aiSolution = await generateAiSupportReply(messageText, baseUrl);
+        if (aiSolution) {
+          replyText = aiSolution;
+          result.triggeredRules.push("AUTO_REPLY");
+        } else if (lead.unreadCount === 1 || !lead.lastMessageAt) {
+          // First message greeting fallback
+          replyText = config.greetingMessage;
+          result.triggeredRules.push("AUTO_REPLY");
+        }
       }
 
       if (replyText) {

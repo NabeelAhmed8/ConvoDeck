@@ -32,7 +32,7 @@ const AutomationConfigSchema = new Schema<IAutomationConfigDocument>(
     },
     pricingKeywords: {
       type: [String],
-      default: ["price", "pricing", "cost", "quote", "rate", "package"],
+      default: ["price", "pricing", "cost", "quote", "rate", "package", "plan", "plans"],
     },
     roundRobinEnabled: {
       type: Boolean,

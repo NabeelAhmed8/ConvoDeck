@@ -33,10 +33,14 @@ export function evaluateMessageRules(
   const matchesAny = (keywords: string[]) =>
     keywords.some((kw) => kw && cleanText.includes(kw.toLowerCase().trim()));
 
+  const pricingKeywords = Array.from(
+    new Set([...(config.pricingKeywords || []), "plan", "plans", "pricing", "package"])
+  );
+
   return {
-    hasDemoIntent: matchesAny(config.demoKeywords),
-    hasPricingIntent: matchesAny(config.pricingKeywords),
-    hasUrgentSentiment: matchesAny(config.urgentKeywords),
-    hasHandoffRequest: matchesAny(config.autoHandoffKeywords),
+    hasDemoIntent: matchesAny(config.demoKeywords || []),
+    hasPricingIntent: matchesAny(pricingKeywords),
+    hasUrgentSentiment: matchesAny(config.urgentKeywords || []),
+    hasHandoffRequest: matchesAny(config.autoHandoffKeywords || []),
   };
 }
