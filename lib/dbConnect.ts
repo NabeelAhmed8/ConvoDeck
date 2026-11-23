@@ -49,7 +49,7 @@ export async function dbConnect(): Promise<typeof mongoose> {
         cached.promise = null;
         if (err.message && err.message.includes("bad auth")) {
           throw new Error(
-            "MongoDB Authentication Failed: Username ya Password ghalat hai. MongoDB Atlas mein 'Database Access' tab mein ja kar database user ka password check karein."
+            "MongoDB Authentication Failed: Invalid username or password. Please verify your credentials in your MongoDB Atlas connection string."
           );
         }
         throw err;

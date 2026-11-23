@@ -75,6 +75,21 @@ export async function createTeamAgent(formData: {
     const workspace = await Workspace.findById(session.workspaceId);
     const workspaceName = workspace?.name || "ConvoDeck Workspace";
 
+    // Enforce Plan Seat Limits
+    const plan = workspace?.plan || "trial";
+    const maxSeats = plan === "starter" ? 2 : plan === "growth" ? 5 : plan === "trial" ? 5 : 50;
+    const currentMemberCount = await User.countDocuments({
+      workspaceId: session.workspaceId,
+      status: "active",
+    });
+
+    if (currentMemberCount >= maxSeats) {
+      return {
+        success: false,
+        error: `Active team seat limit reached (${currentMemberCount}/${maxSeats} seats). Please upgrade your workspace plan to invite more agents.`,
+      };
+    }
+
     // Hash the agent's unique password
     const hashedPassword = hashPassword(password);
 

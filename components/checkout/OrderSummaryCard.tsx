@@ -19,7 +19,15 @@ interface OrderSummaryCardProps {
   setCurrency: (currency: CurrencyCode) => void;
   totalPrice: number;
   symbol: string;
+  currentPlan?: string;
 }
+
+const PLAN_TIERS: Record<string, number> = {
+  trial: 0,
+  starter: 1,
+  growth: 2,
+  enterprise: 3,
+};
 
 export function OrderSummaryCard({
   planKey,
@@ -30,8 +38,10 @@ export function OrderSummaryCard({
   setCurrency,
   totalPrice,
   symbol,
+  currentPlan = "trial",
 }: OrderSummaryCardProps) {
   const activePlan = PRICING_TABLE[planKey] || PRICING_TABLE.growth;
+  const curTier = PLAN_TIERS[(currentPlan || "trial").toLowerCase()] ?? 0;
 
   return (
     <div className="space-y-5 sm:space-y-6">
@@ -61,20 +71,31 @@ export function OrderSummaryCard({
             aria-labelledby="subscription-plan-label"
             className="neu-tab-container p-1 rounded-full grid grid-cols-3 gap-1"
           >
-            {(["starter", "growth", "enterprise"] as PaidPlanKey[]).map((p) => (
-              <button
-                key={p}
-                type="button"
-                role="radio"
-                aria-checked={planKey === p}
-                onClick={() => setPlanKey(p)}
-                className={`px-1.5 py-2 sm:p-2.5 rounded-full text-[11px] sm:text-xs font-bold capitalize transition-all cursor-pointer text-center truncate ${
-                  planKey === p ? "neu-tab-active" : "neu-tab"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
+            {(["starter", "growth", "enterprise"] as PaidPlanKey[]).map((p) => {
+              const targetTier = PLAN_TIERS[p] ?? 1;
+              const isCur = curTier === targetTier && currentPlan !== "trial";
+              const isUp = targetTier > curTier;
+
+              return (
+                <button
+                  key={p}
+                  type="button"
+                  role="radio"
+                  aria-checked={planKey === p}
+                  onClick={() => setPlanKey(p)}
+                  className={`px-1.5 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold capitalize transition-all cursor-pointer text-center truncate ${
+                    planKey === p ? "neu-tab-active" : "neu-tab"
+                  }`}
+                >
+                  <span className="block truncate">{p}</span>
+                  {curTier > 0 && (
+                    <span className="block text-[8px] sm:text-[9px] font-normal opacity-85 leading-tight truncate">
+                      {isCur ? "Current" : isUp ? "↑ Upgrade" : "↓ Downgrade"}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -167,6 +188,25 @@ export function OrderSummaryCard({
         <span>
           30-day money-back guarantee. No questions asked. Cancel anytime from your billing settings.
         </span>
+      </div>
+
+      {/* Official Payment Methods Strip */}
+      <div className="p-3 px-4 rounded-2xl bg-white/80 border border-slate-200/80 flex items-center justify-between text-xs text-slate-500 shadow-xs">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          Official Gateways
+        </span>
+        <div className="flex items-center gap-3">
+          <img
+            src="/images/payments/jazzcash.png"
+            alt="JazzCash"
+            className="h-5 w-auto object-contain"
+          />
+          <img
+            src="/images/payments/easypaisa.png"
+            alt="EasyPaisa"
+            className="h-4 w-auto object-contain"
+          />
+        </div>
       </div>
     </div>
   );

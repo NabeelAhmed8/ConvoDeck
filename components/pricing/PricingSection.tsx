@@ -2,16 +2,56 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { Check, Sparkles, ArrowRight, ArrowDownRight, ShieldCheck } from "lucide-react";
 import { SubscriptionPlan, BillingFrequency, CurrencyCode } from "@/types";
 import { PRICING_TABLE, CURRENCY_SYMBOLS } from "@/constants/pricing";
 
-export function PricingSection({ className }: { className?: string }) {
-  const [currency, setCurrency] = useState<CurrencyCode>("USD");
+const PLAN_TIERS: Record<string, number> = {
+  trial: 0,
+  starter: 1,
+  growth: 2,
+  enterprise: 3,
+};
+
+export function PricingSection({
+  className,
+  currentPlan = "trial",
+}: {
+  className?: string;
+  currentPlan?: string;
+}) {
+  const [currency, setCurrency] = useState<CurrencyCode>("PKR");
   const [billingCycle, setBillingCycle] = useState<BillingFrequency>("monthly");
 
   const pricingData = PRICING_TABLE;
   const currencySymbols = CURRENCY_SYMBOLS;
+
+  const curTier = PLAN_TIERS[(currentPlan || "trial").toLowerCase()] ?? 0;
+
+  const getPlanStatus = (planKey: string) => {
+    const targetTier = PLAN_TIERS[planKey.toLowerCase()] ?? 1;
+    const isCurrent = curTier === targetTier && currentPlan !== "trial";
+    const isUpgrade = targetTier > curTier;
+    const isDowngrade = targetTier < curTier;
+
+    let buttonLabel = `Choose ${planKey.charAt(0).toUpperCase() + planKey.slice(1)}`;
+    if (isCurrent) {
+      buttonLabel = "Current Active Plan";
+    } else if (isUpgrade) {
+      buttonLabel =
+        curTier === 0
+          ? `Choose ${planKey.charAt(0).toUpperCase() + planKey.slice(1)}`
+          : `Upgrade to ${planKey.charAt(0).toUpperCase() + planKey.slice(1)}`;
+    } else if (isDowngrade) {
+      buttonLabel = `Downgrade to ${planKey.charAt(0).toUpperCase() + planKey.slice(1)}`;
+    }
+
+    return { isCurrent, isUpgrade, isDowngrade, buttonLabel };
+  };
+
+  const starterStatus = getPlanStatus("starter");
+  const growthStatus = getPlanStatus("growth");
+  const enterpriseStatus = getPlanStatus("enterprise");
 
   const getCheckoutUrl = (planKey: SubscriptionPlan) => {
     return `/checkout?plan=${planKey}&billing=${billingCycle}&currency=${currency}`;
@@ -88,14 +128,39 @@ export function PricingSection({ className }: { className?: string }) {
             </span>
           </button>
         </div>
+
+        {/* Local Payment Badges */}
+        <div className="mt-4 flex items-center justify-center gap-2 flex-wrap text-[11px] text-slate-600 font-semibold">
+          <span className="px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-bold">
+            📱 JazzCash
+          </span>
+          <span className="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold">
+            🟢 EasyPaisa
+          </span>
+          <span className="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-bold">
+            💳 Debit / Credit Card
+          </span>
+        </div>
       </div>
 
       {/* Pricing Cards Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
         {/* 1. Starter Plan */}
-        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-[#edf1f7] text-slate-800">
+        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-[#edf1f7] text-slate-800 relative">
+          {starterStatus.isCurrent && (
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-3.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1">
+              <Check className="w-3 h-3 stroke-[3]" /> Current Plan
+            </div>
+          )}
           <div>
-            <h3 className="font-bold text-lg text-slate-900">{pricingData.starter.name}</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">{pricingData.starter.name}</h3>
+              {starterStatus.isDowngrade && (
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
+                  Downgrade
+                </span>
+              )}
+            </div>
             <p className="text-xs text-slate-500 mt-1 min-h-[36px]">
               {pricingData.starter.description}
             </p>
@@ -128,21 +193,44 @@ export function PricingSection({ className }: { className?: string }) {
           </div>
 
           <div className="mt-8 pt-6 border-t border-slate-200/80">
-            <Link
-              href={getCheckoutUrl("starter")}
-              className="w-full py-3.5 rounded-full neu-btn text-slate-800 font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              Choose Starter
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            {starterStatus.isCurrent ? (
+              <div className="w-full py-3.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1.5 select-none shadow-xs">
+                <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                Current Active Plan
+              </div>
+            ) : (
+              <Link
+                href={getCheckoutUrl("starter")}
+                className={`w-full py-3.5 rounded-full font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs ${
+                  starterStatus.isDowngrade
+                    ? "neu-btn text-amber-800 border border-amber-300/80 bg-amber-50/60 hover:bg-amber-100"
+                    : starterStatus.isUpgrade && curTier > 0
+                    ? "neu-btn-primary text-white"
+                    : "neu-btn text-slate-800 hover:text-black"
+                }`}
+              >
+                {starterStatus.buttonLabel}
+                {starterStatus.isDowngrade ? (
+                  <ArrowDownRight className="w-3.5 h-3.5 text-amber-600" />
+                ) : (
+                  <ArrowRight className="w-3.5 h-3.5" />
+                )}
+              </Link>
+            )}
           </div>
         </div>
 
         {/* 2. Growth Plan (Featured) */}
         <div className="relative neu-convex rounded-3xl border-2 border-[#ff6422] p-6 sm:p-8 flex flex-col justify-between bg-[#edf1f7] text-slate-900 shadow-xl">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#ff6422] text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md">
-            Most Popular & Recommended
-          </div>
+          {growthStatus.isCurrent ? (
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-3.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1">
+              <Check className="w-3 h-3 stroke-[3]" /> Current Plan
+            </div>
+          ) : (
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#ff6422] text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md">
+              Most Popular & Recommended
+            </div>
+          )}
 
           <div>
             <div className="flex items-center justify-between">
@@ -181,20 +269,47 @@ export function PricingSection({ className }: { className?: string }) {
           </div>
 
           <div className="mt-8 pt-6 border-t border-slate-200/80">
-            <Link
-              href={getCheckoutUrl("growth")}
-              className="w-full py-3.5 rounded-full neu-btn-primary text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
-            >
-              Subscribe to Growth Plan
-              <ArrowRight className="w-3.5 h-3.5 text-white" />
-            </Link>
+            {growthStatus.isCurrent ? (
+              <div className="w-full py-3.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1.5 select-none shadow-xs">
+                <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                Current Active Plan
+              </div>
+            ) : (
+              <Link
+                href={getCheckoutUrl("growth")}
+                className={`w-full py-3.5 rounded-full font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md ${
+                  growthStatus.isDowngrade
+                    ? "neu-btn text-amber-800 border border-amber-300/80 bg-amber-50/60 hover:bg-amber-100"
+                    : "neu-btn-primary text-white"
+                }`}
+              >
+                {growthStatus.buttonLabel}
+                {growthStatus.isDowngrade ? (
+                  <ArrowDownRight className="w-3.5 h-3.5 text-amber-600" />
+                ) : (
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
+                )}
+              </Link>
+            )}
           </div>
         </div>
 
         {/* 3. Enterprise Plan */}
-        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-[#edf1f7] text-slate-800">
+        <div className="neu-card neu-card-hover rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all bg-[#edf1f7] text-slate-800 relative">
+          {enterpriseStatus.isCurrent && (
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-3.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm flex items-center gap-1">
+              <Check className="w-3 h-3 stroke-[3]" /> Current Plan
+            </div>
+          )}
           <div>
-            <h3 className="font-bold text-lg text-slate-900">{pricingData.enterprise.name}</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">{pricingData.enterprise.name}</h3>
+              {enterpriseStatus.isUpgrade && curTier > 0 && (
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                  Upgrade
+                </span>
+              )}
+            </div>
             <p className="text-xs text-slate-500 mt-1 min-h-[36px]">
               {pricingData.enterprise.description}
             </p>
@@ -227,13 +342,24 @@ export function PricingSection({ className }: { className?: string }) {
           </div>
 
           <div className="mt-8 pt-6 border-t border-slate-300/40">
-            <Link
-              href={getCheckoutUrl("enterprise")}
-              className="w-full py-3.5 rounded-full neu-btn text-slate-800 font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              Choose Enterprise
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            {enterpriseStatus.isCurrent ? (
+              <div className="w-full py-3.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1.5 select-none shadow-xs">
+                <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
+                Current Active Plan
+              </div>
+            ) : (
+              <Link
+                href={getCheckoutUrl("enterprise")}
+                className="w-full py-3.5 rounded-full neu-btn text-slate-800 font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+              >
+                {enterpriseStatus.buttonLabel}
+                {enterpriseStatus.isDowngrade ? (
+                  <ArrowDownRight className="w-3.5 h-3.5 text-amber-600" />
+                ) : (
+                  <ArrowRight className="w-3.5 h-3.5" />
+                )}
+              </Link>
+            )}
           </div>
         </div>
       </div>

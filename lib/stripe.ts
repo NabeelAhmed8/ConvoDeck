@@ -65,6 +65,14 @@ export async function createStripeSession(params: CreateCheckoutSessionParams) {
     }
   }
 
+  // Production Gate: In live production, reject unconfigured Stripe credentials immediately
+  if (process.env.NODE_ENV === "production" || process.env.STRICT_PAYMENTS === "true") {
+    return {
+      success: false,
+      error: "Stripe payment gateway is not configured on the server. Please contact administrator.",
+    };
+  }
+
   // Graceful fallback for local development or when Stripe keys are not yet added
   const mockSessionId = `cs_test_${Math.random().toString(36).substring(2, 12)}`;
   return {

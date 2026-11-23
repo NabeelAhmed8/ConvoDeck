@@ -68,13 +68,23 @@ export default async function BillingPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/checkout?plan=growth"
-              className="px-5 py-2.5 neu-btn-primary text-white rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md"
-            >
-              <Zap className="w-4 h-4 text-white" />
-              Upgrade to Growth Plan
-            </Link>
+            {currentPlan === "enterprise" ? (
+              <a
+                href="#plans"
+                className="px-5 py-2.5 neu-btn text-slate-800 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              >
+                <Sparkles className="w-4 h-4 text-[#ea5414]" />
+                Manage Plan
+              </a>
+            ) : (
+              <Link
+                href={currentPlan === "growth" ? "/checkout?plan=enterprise" : "/checkout?plan=growth"}
+                className="px-5 py-2.5 neu-btn-primary text-white rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md"
+              >
+                <Zap className="w-4 h-4 text-white" />
+                {currentPlan === "growth" ? "Upgrade to Enterprise" : "Upgrade to Growth Plan"}
+              </Link>
+            )}
           </div>
         </div>
 
@@ -114,7 +124,7 @@ export default async function BillingPage() {
 
       {/* Available Plans Section */}
       <div id="plans" className="neu-card rounded-3xl p-3.5 sm:p-6 md:p-10 text-slate-900 bg-white">
-        <PricingSection />
+        <PricingSection currentPlan={currentPlan} />
       </div>
 
       {/* Invoices Table */}

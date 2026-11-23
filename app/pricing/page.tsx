@@ -1,20 +1,24 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { PricingSection } from "@/components/pricing/PricingSection";
+import { getCurrentUser } from "@/actions/authActions";
 
 export const metadata = {
   title: "Pricing Plans & Multi-Agent Licenses | ConvoDeck",
   description: "Simple, flexible pricing plans for sales teams of any size. Choose your currency and upgrade your WhatsApp sales engine today.",
 };
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const authData = await getCurrentUser();
+  const currentPlan = authData?.workspace?.plan || "trial";
+
   return (
     <div className="min-h-dvh w-full max-w-full overflow-x-clip bg-[#ebf0f7] text-slate-900 selection:bg-[#ff6422] selection:text-white flex flex-col justify-between">
       {/* Top Floating Neumorphic Bar */}
       <nav className="fixed top-2.5 sm:top-5 inset-x-2.5 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-50 transition-all">
         <div className="neu-card rounded-2xl sm:rounded-full px-3.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
-          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+          <Link href="/dashboard" className="flex items-center gap-2.5 sm:gap-3 group">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl neu-convex flex items-center justify-center font-black text-slate-900 text-lg sm:text-xl shadow-sm shrink-0 group-hover:scale-105 transition-transform">
               C
             </div>
@@ -30,16 +34,10 @@ export default function PricingPage() {
 
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
-              href="/"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all neu-btn px-4 py-2 rounded-full"
+              href="/dashboard"
+              className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all neu-btn px-4 py-2 rounded-full cursor-pointer"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Back to</span> Home
-            </Link>
-            <Link
-              href="/signup"
-              className="px-5 py-2 neu-btn-primary text-white rounded-full text-xs font-bold transition-all shadow-md whitespace-nowrap shrink-0"
-            >
-              Start Free Trial
+              <ArrowLeft className="w-3.5 h-3.5" /> <span>Back to Dashboard</span>
             </Link>
           </div>
         </div>
@@ -47,7 +45,7 @@ export default function PricingPage() {
 
       {/* Main Content */}
       <main className="pt-28 sm:pt-36 pb-10 sm:pb-16 px-3 sm:px-6 w-full max-w-full overflow-x-clip">
-        <PricingSection />
+        <PricingSection currentPlan={currentPlan} />
       </main>
 
       {/* Footer */}
