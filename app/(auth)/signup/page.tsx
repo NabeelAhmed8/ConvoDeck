@@ -314,20 +314,6 @@ export default function SignupPage() {
                 />
               </div>
 
-              {previewUrl && (
-                <div className="p-3 bg-orange-50 border border-orange-200 rounded-2xl text-xs text-[#ea5414] flex items-center justify-between">
-                  <span>Development Preview Available</span>
-                  <a
-                    href={previewUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline font-bold flex items-center gap-1 hover:text-[#c2410c]"
-                  >
-                    View Email <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-              )}
-
               <Button
                 type="submit"
                 disabled={loading || otpCode.length < 6}

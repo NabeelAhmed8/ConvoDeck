@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/dbConnect";
 import { Workspace } from "@/models/Workspace";
+import { Invoice } from "@/models/Invoice";
 import { User } from "@/models/User";
 import { revalidatePath } from "next/cache";
+import { verifySafepaySignature } from "@/lib/safepay";
 
 async function handleCallback(req: NextRequest) {
   try {
@@ -13,7 +15,6 @@ async function handleCallback(req: NextRequest) {
       query[key] = val;
     });
 
-    // Check if JazzCash posted body parameters
     if (req.method === "POST") {
       try {
         const formData = await req.formData();
@@ -21,7 +22,6 @@ async function handleCallback(req: NextRequest) {
           query[key] = val.toString();
         });
       } catch {
-        // Fall back to url params
       }
     }
 
@@ -33,12 +33,34 @@ async function handleCallback(req: NextRequest) {
     const workspaceId = query.workspaceId || process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
     const billing = query.billing === "yearly" ? "yearly" : "monthly";
 
-    // Verify official bank response status
-    const isSuccess =
-      query.pp_ResponseCode === "000" ||
-      query.responseCode === "0000" ||
-      query.orderStatus === "PAID" ||
-      query.transactionStatus === "SUCCESS";
+    const tracker = query.tracker || "";
+    const signature = query.sig || query.signature || "";
+    const isStrict = process.env.STRICT_PAYMENTS === "true" || process.env.NODE_ENV === "production";
+
+    let isSuccess = false;
+
+    if (gateway === "safepay") {
+      if (tracker && signature) {
+        isSuccess = verifySafepaySignature(tracker, signature);
+      } else if (!isStrict) {
+        isSuccess =
+          query.orderStatus === "PAID" ||
+          query.transactionStatus === "SUCCESS" ||
+          (query.reference ? query.reference.startsWith("SAFEPAY_") : false);
+      }
+    } else if (gateway === "card") {
+      if (!isStrict) {
+        isSuccess = query.orderStatus === "PAID" || query.transactionStatus === "SUCCESS";
+      } else if (query.session_id) {
+        isSuccess = true;
+      }
+    } else {
+      isSuccess =
+        query.pp_ResponseCode === "000" ||
+        query.responseCode === "0000" ||
+        query.orderStatus === "PAID" ||
+        query.transactionStatus === "SUCCESS";
+    }
 
     if (!isSuccess) {
       return NextResponse.redirect(
@@ -49,16 +71,19 @@ async function handleCallback(req: NextRequest) {
     const daysToAdd = billing === "yearly" ? 365 : 30;
     const expiresAt = new Date(Date.now() + daysToAdd * 24 * 60 * 60 * 1000);
 
-    let paymentMethodLabel = "Hosted Gateway";
-    if (gateway === "jazzcash") {
+    let paymentMethodLabel = "Safepay Gateway";
+    if (gateway === "safepay") {
+      paymentMethodLabel = `Safepay (JazzCash, EasyPaisa & Cards)`;
+    } else if (gateway === "card") {
+      paymentMethodLabel = `Stripe International Card`;
+    } else if (gateway === "jazzcash") {
       paymentMethodLabel = `JazzCash Hosted Portal (Ref: ${query.pp_TxnRefNo || invoiceId})`;
     } else if (gateway === "easypaisa") {
       paymentMethodLabel = `EasyPaisa Hosted Portal (Order: ${invoiceId})`;
     } else {
-      paymentMethodLabel = `Stripe / Card Hosted Portal`;
+      paymentMethodLabel = `Hosted Payment Portal`;
     }
 
-    // Update workspace commercial license
     await Workspace.findByIdAndUpdate(
       workspaceId,
       {
@@ -76,7 +101,29 @@ async function handleCallback(req: NextRequest) {
       { new: true, upsert: true }
     );
 
-    // Enforce seat limit adjustment upon plan changes or downgrades
+    try {
+      await Invoice.findOneAndUpdate(
+        { invoiceNumber: invoiceId },
+        {
+          $setOnInsert: {
+            workspaceId,
+            invoiceNumber: invoiceId,
+            plan,
+            planName: `${plan.charAt(0).toUpperCase() + plan.slice(1)} License`,
+            amount,
+            currency,
+            billingFrequency: billing,
+            paymentMethod: paymentMethodLabel,
+            status: "completed",
+            paidAt: new Date(),
+          },
+        },
+        { upsert: true, new: true }
+      );
+    } catch (invErr) {
+      console.error("Failed to save invoice record:", invErr);
+    }
+
     const newMaxSeats = plan === "starter" ? 2 : plan === "growth" ? 5 : 50;
     const activeAgents = await User.find({
       workspaceId,

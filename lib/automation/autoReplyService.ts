@@ -23,7 +23,6 @@ export async function dispatchAutoReply({
   try {
     const workspace = await Workspace.findById(workspaceId).lean();
 
-    // 1. Send via WhatsApp Cloud API
     const res = await sendWhatsAppMessage({
       to: leadPhone,
       text: replyText,
@@ -31,7 +30,6 @@ export async function dispatchAutoReply({
       accessToken: workspace?.whatsappAccessToken,
     });
 
-    // 2. Record bot response in Message collection for conversation history
     await Message.create({
       leadId,
       workspaceId,

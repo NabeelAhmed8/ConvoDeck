@@ -8,7 +8,6 @@ const JWT_SECRET =
   process.env.SESSION_SECRET ||
   "convodeck_jwt_production_secret_key_2026_super_secure";
 
-// 1. Password Hashing using Node.js built-in pbkdf2
 export function hashPassword(password: string): string {
   const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto
@@ -29,7 +28,6 @@ export function verifyPassword(password: string, storedHash: string): boolean {
   }
 }
 
-// 2. JWT Session Payload Structure
 export interface SessionData {
   userId: string;
   email: string;
@@ -39,7 +37,6 @@ export interface SessionData {
   tokenVersion?: number;
 }
 
-// 3. JSON Web Token Creation & Verification using jsonwebtoken
 export function createToken(data: SessionData): string {
   return jwt.sign(
     {
@@ -74,7 +71,6 @@ export function verifyToken(token: string): SessionData | null {
   }
 }
 
-// 4. Cookie Management (HTTP-only, Secure, SameSite=Lax, 24-hour TTL)
 export async function setSessionCookie(data: SessionData) {
   const token = createToken(data);
   const cookieStore = await cookies();
@@ -98,11 +94,9 @@ export async function getSession(): Promise<SessionData | null> {
   }
 }
 
-// 5. Total Session Termination / Cookie Clearance
 export async function clearSessionCookie() {
   const cookieStore = await cookies();
 
-  // 1. Next.js explicit delete with root path & options
   cookieStore.delete({
     name: SESSION_COOKIE_NAME,
     path: "/",
@@ -110,7 +104,6 @@ export async function clearSessionCookie() {
     sameSite: "lax",
   });
 
-  // 2. Overwrite cookie with empty value and instant past expiration
   cookieStore.set(SESSION_COOKIE_NAME, "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

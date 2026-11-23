@@ -58,7 +58,6 @@ export function OrderSummaryCard({
           </p>
         </div>
 
-        {/* Plan Switcher Pills */}
         <div className="space-y-2">
           <p
             id="subscription-plan-label"
@@ -99,7 +98,6 @@ export function OrderSummaryCard({
           </div>
         </div>
 
-        {/* Currency & Billing Switcher */}
         <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3 pt-2">
           <div>
             <label
@@ -130,7 +128,6 @@ export function OrderSummaryCard({
           </div>
         </div>
 
-        {/* Line Item Breakdown */}
         <div className="border-t border-slate-200/80 pt-5 space-y-3 text-xs">
           <div className="flex items-center justify-between text-slate-700">
             <span>
@@ -168,7 +165,6 @@ export function OrderSummaryCard({
           </div>
         </div>
 
-        {/* What's Included */}
         <div className="border-t border-slate-300/40 pt-5 space-y-2.5">
           <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
             Plan Inclusions:
@@ -182,7 +178,6 @@ export function OrderSummaryCard({
         </div>
       </div>
 
-      {/* Guarantee Pill */}
       <div className="p-4 rounded-2xl neu-card flex items-center gap-3 text-xs text-slate-600 bg-[#edf1f7]">
         <Lock className="w-4 h-4 text-[#ff6422] shrink-0" />
         <span>
@@ -190,7 +185,6 @@ export function OrderSummaryCard({
         </span>
       </div>
 
-      {/* Official Payment Methods Strip */}
       <div className="p-3 px-4 rounded-2xl bg-white/80 border border-slate-200/80 flex items-center justify-between text-xs text-slate-500 shadow-xs">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
           Official Gateways

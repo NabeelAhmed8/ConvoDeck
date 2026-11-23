@@ -12,7 +12,6 @@ import { IUser, IAuditLog, UserRole, UserStatus } from "@/types";
 const DEFAULT_WORKSPACE_ID =
   process.env.DEFAULT_WORKSPACE_ID || "convodeck_default_workspace";
 
-// 1. Get all team agents for the current workspace
 export async function getTeamMembers(): Promise<{
   success: boolean;
   members?: IUser[];
@@ -38,7 +37,6 @@ export async function getTeamMembers(): Promise<{
   }
 }
 
-// 2. Create a new team agent with unique credentials & role (Admin Only)
 export async function createTeamAgent(formData: {
   name: string;
   email: string;
@@ -144,7 +142,6 @@ export async function createTeamAgent(formData: {
   }
 }
 
-// 3. Deactivate or Reactivate an Agent (Instant Access Revocation)
 export async function toggleAgentStatus(params: {
   agentId: string;
   newStatus: UserStatus;
@@ -196,7 +193,6 @@ export async function toggleAgentStatus(params: {
   }
 }
 
-// 4. Force Logout / Revoke Active Session
 export async function revokeAgentSession(agentId: string): Promise<{
   success: boolean;
   error?: string;
@@ -241,7 +237,6 @@ export async function revokeAgentSession(agentId: string): Promise<{
   }
 }
 
-// 5. Delete an Agent
 export async function deleteTeamAgent(agentId: string): Promise<{
   success: boolean;
   error?: string;
@@ -288,7 +283,6 @@ export async function deleteTeamAgent(agentId: string): Promise<{
   }
 }
 
-// 6. Get Workspace Audit Trail Logs
 export async function getWorkspaceAuditLogs(limitCount = 60): Promise<{
   success: boolean;
   logs?: IAuditLog[];
@@ -314,7 +308,6 @@ export async function getWorkspaceAuditLogs(limitCount = 60): Promise<{
   }
 }
 
-// 7. Update Team Member Role (Admin Only)
 export async function updateTeamMemberRole(params: {
   memberId: string;
   newRole: UserRole;

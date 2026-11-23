@@ -19,7 +19,6 @@ export interface ISecureQrSession {
   antiBanFingerprint: string;
 }
 
-// 1. Generate Cryptographically Secure QR Pairing Payload
 export function createSecureQrPayload(workspaceId: string): ISecureQrSession {
   const sessionId = "cd_qr_" + crypto.randomBytes(16).toString("hex");
   const randomSalt = crypto.randomBytes(32).toString("hex");
@@ -42,7 +41,6 @@ export function createSecureQrPayload(workspaceId: string): ISecureQrSession {
   };
 }
 
-// 2. Anti-Spam Content & Velocity Scanner
 const HIGH_RISK_SPAM_PATTERNS = [
   /\b(lottery|winner|claim your prize|free money|crypto pump|bank transfer alert)\b/i,
   /\b(urgent: click here|act now or account deleted|verify your password immediately)\b/i,

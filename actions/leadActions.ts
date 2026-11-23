@@ -18,7 +18,6 @@ async function getActiveWorkspaceId(providedWorkspaceId?: string): Promise<strin
   return DEFAULT_WORKSPACE_ID;
 }
 
-// 1. Fetch Leads from Database for Workspace
 export async function getLeads(workspaceId?: string) {
   try {
     await dbConnect();
@@ -35,7 +34,6 @@ export async function getLeads(workspaceId?: string) {
   }
 }
 
-// 2. Create Real Lead
 export async function createLead(leadData: Partial<ILead>) {
   try {
     await dbConnect();
@@ -95,7 +93,6 @@ export async function createLead(leadData: Partial<ILead>) {
   }
 }
 
-// 4. Update Lead Stage on Kanban (Drag & Drop or dropdown)
 export async function updateLeadStage(leadId: string, newStage: LeadStage) {
   try {
     await dbConnect();
@@ -132,7 +129,6 @@ export async function updateLeadStage(leadId: string, newStage: LeadStage) {
   }
 }
 
-// 5. Update Lead Details
 export async function updateLead(leadId: string, updates: Partial<ILead>) {
   try {
     await dbConnect();
@@ -154,7 +150,6 @@ export async function updateLead(leadId: string, updates: Partial<ILead>) {
   }
 }
 
-// 6. Delete Lead
 export async function deleteLead(leadId: string) {
   try {
     await dbConnect();
@@ -185,7 +180,6 @@ export async function deleteLead(leadId: string) {
   }
 }
 
-// 7. Public Website Inbound Lead Capture Form Action
 export async function capturePublicLead(data: {
   name: string;
   phone: string;

@@ -32,16 +32,13 @@ export async function processSmartAutomation({
   };
 
   try {
-    // 1. Fetch or initialize workspace automation settings
     let config = await AutomationConfig.findOne({ workspaceId });
     if (!config) {
       config = await AutomationConfig.create({ workspaceId });
     }
 
-    // 2. Evaluate keyword & intent rules
     const matches = evaluateMessageRules(messageText, config);
 
-    // 3. Smart Round-Robin Agent Routing (if lead unassigned & enabled)
     if (config.roundRobinEnabled && !lead.assignedTo) {
       const routing = await routeLeadRoundRobin(workspaceId);
       if (routing.assignedAgentId) {
@@ -61,7 +58,6 @@ export async function processSmartAutomation({
       }
     }
 
-    // 4. Pipeline & Tagging Automations
     if (config.pipelineAutomationEnabled) {
       const currentTags = Array.isArray(lead.tags) ? lead.tags : [];
       const mutation = computePipelineMutation(lead.stage, currentTags, matches);
@@ -99,7 +95,6 @@ export async function processSmartAutomation({
       }
     }
 
-    // 5. Update Lead in Database if mutated
     if (result.triggeredRules.length > 0 && lead._id) {
       await Lead.findByIdAndUpdate(lead._id, {
         $set: {
@@ -110,7 +105,6 @@ export async function processSmartAutomation({
       });
     }
 
-    // 6. Automated WhatsApp Response
     if (config.autoReplyEnabled && lead._id) {
       let replyText = "";
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://convodeck.com";

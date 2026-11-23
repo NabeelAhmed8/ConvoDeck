@@ -179,33 +179,6 @@ export function ForgotPasswordVerifyStep({
           </p>
         </div>
 
-        {/* Development Preview Mode Links */}
-        {previewUrl && (
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] text-amber-900 flex items-center justify-between gap-2">
-            <span>Dev Mode: Ethereal Test Mailbox</span>
-            <a
-              href={previewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-semibold text-amber-700 hover:text-amber-900 underline"
-            >
-              Open Email <ExternalLink className="w-3 h-3" aria-hidden="true" />
-            </a>
-          </div>
-        )}
-
-        {devCode && (
-          <div className="p-3 bg-orange-50 border border-orange-200 rounded-2xl text-[11px] text-orange-950 flex items-center justify-between gap-2">
-            <span className="flex items-center gap-1 font-semibold text-orange-900">
-              <KeyRound className="w-3.5 h-3.5 text-[#ff6422]" />
-              Dev Phone OTP:
-            </span>
-            <span className="font-mono font-bold text-[#ea5414] text-xs tracking-wider">
-              {devCode}
-            </span>
-          </div>
-        )}
-
         <Button
           type="submit"
           disabled={loading || otpCode.length !== 6}

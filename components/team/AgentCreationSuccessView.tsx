@@ -58,18 +58,6 @@ export function AgentCreationSuccessView({
         </span>
       </div>
 
-      {/* Dispatched Email Preview Link (if available) */}
-      {previewUrl && (
-        <a
-          href={previewUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="text-[11px] text-[#ea5414] hover:text-[#ff6422] underline font-semibold inline-flex items-center gap-1 transition-colors"
-        >
-          View Dispatched Email Preview <ExternalLink className="w-3 h-3" />
-        </a>
-      )}
-
       {/* Primary Action Button (Directly visible, ZERO scrolling needed) */}
       <div className="pt-2 w-full flex justify-center">
         <Button

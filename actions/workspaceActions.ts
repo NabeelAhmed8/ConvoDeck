@@ -642,22 +642,17 @@ export async function deleteWorkspace(workspaceIdToDelete?: string) {
 
     const nextWorkspaceId = remainingWorkspace._id.toString();
 
-    // 1. Delete all workspace-scoped leads & messages
     await Lead.deleteMany({ workspaceId: targetWorkspaceId });
     await Message.deleteMany({ workspaceId: targetWorkspaceId });
 
-    // 2. Delete all workspace automations and logs
     await AutomationConfig.deleteMany({ workspaceId: targetWorkspaceId });
     await AutomationLog.deleteMany({ workspaceId: targetWorkspaceId });
     await AuditLog.deleteMany({ workspaceId: targetWorkspaceId });
 
-    // 3. Delete team agents belonging to this workspace (do not delete the owner!)
     await User.deleteMany({ workspaceId: targetWorkspaceId, role: "agent" });
 
-    // 4. Delete the workspace document
     await Workspace.findByIdAndDelete(targetWorkspaceId);
 
-    // 5. Update session cookie and user record to point to remaining workspace
     const remainingIsOwner = (remainingWorkspace.ownerEmail || "").toLowerCase() === cleanEmail;
     const nextRole = remainingIsOwner ? "admin" : "member";
 
@@ -672,7 +667,6 @@ export async function deleteWorkspace(workspaceIdToDelete?: string) {
       role: nextRole,
     });
 
-    // 6. Revalidate all workspace-scoped paths
     revalidatePath("/dashboard");
     revalidatePath("/chat");
     revalidatePath("/pipeline");

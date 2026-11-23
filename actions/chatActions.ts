@@ -10,7 +10,6 @@ import { sendWhatsAppMessage } from "@/lib/whatsapp";
 import { getSession } from "@/lib/auth";
 import { DEFAULT_WORKSPACE_ID } from "@/constants/config";
 
-// 1. Fetch Real Chat History for a Lead
 export async function getMessages(leadId: string) {
   try {
     await dbConnect();
@@ -25,7 +24,6 @@ export async function getMessages(leadId: string) {
   }
 }
 
-// 2. Real Message Sending (Team Agent -> Customer WhatsApp)
 export async function sendMessage({
   leadId,
   text,
@@ -115,7 +113,6 @@ export async function sendMessage({
   }
 }
 
-// 3. Mark Lead Chat as Read
 export async function markChatAsRead(leadId: string) {
   try {
     await dbConnect();
@@ -128,7 +125,6 @@ export async function markChatAsRead(leadId: string) {
   }
 }
 
-// 4. Mark Lead Chat as Unread
 export async function markChatAsUnread(leadId: string) {
   try {
     await dbConnect();
@@ -141,7 +137,6 @@ export async function markChatAsUnread(leadId: string) {
   }
 }
 
-// 5. Toggle Mute / Unmute for Chat Notifications
 export async function toggleMuteChat(leadId: string, isMuted: boolean) {
   try {
     await dbConnect();
@@ -154,7 +149,6 @@ export async function toggleMuteChat(leadId: string, isMuted: boolean) {
   }
 }
 
-// 6. Toggle Block / Unblock Contact
 export async function toggleBlockContact(leadId: string, isBlocked: boolean) {
   try {
     await dbConnect();
@@ -167,7 +161,6 @@ export async function toggleBlockContact(leadId: string, isBlocked: boolean) {
   }
 }
 
-// 7. Clear All Messages for Lead (Preserves Contact Profile)
 export async function clearChatMessages(leadId: string) {
   try {
     await dbConnect();
@@ -186,7 +179,6 @@ export async function clearChatMessages(leadId: string) {
   }
 }
 
-// 8. Delete Entire Chat and Contact
 export async function deleteChat(leadId: string) {
   try {
     await dbConnect();

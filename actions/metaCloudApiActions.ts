@@ -14,7 +14,6 @@ export interface IMetaVerificationResult {
   error?: string;
 }
 
-// 1. Verify Meta Graph API Credentials directly with Meta servers
 export async function verifyMetaCredentials(params: {
   phoneNumberId: string;
   accessToken: string;
@@ -65,7 +64,6 @@ export async function verifyMetaCredentials(params: {
   }
 }
 
-// 2. Save Meta Cloud API configuration to Workspace
 export async function saveMetaApiConfig(formData: {
   whatsappPhoneNumber: string;
   whatsappPhoneNumberId: string;
@@ -111,7 +109,6 @@ export async function saveMetaApiConfig(formData: {
   }
 }
 
-// 3. Disconnect WhatsApp Line from Workspace
 export async function disconnectWhatsAppLine(): Promise<{ success: boolean; error?: string }> {
   try {
     await dbConnect();

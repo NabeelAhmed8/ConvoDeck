@@ -43,17 +43,14 @@ export function ChatMessageList({
     initialScrolledLeadIdRef.current = null;
   }, [activeLead._id]);
 
-  // 1. Initial Instant Snap to Bottom on Open / Lead Switch / Load Complete
   useEffect(() => {
     if (!activeLead._id || isLoadingMessages) return;
 
     if (initialScrolledLeadIdRef.current !== activeLead._id) {
       initialScrolledLeadIdRef.current = activeLead._id;
 
-      // Direct snap
       scrollToBottom("auto");
 
-      // Multiple frames to guarantee scroll position after browser layout paint
       const rafId = requestAnimationFrame(() => scrollToBottom("auto"));
       const t1 = setTimeout(() => scrollToBottom("auto"), 50);
       const t2 = setTimeout(() => scrollToBottom("auto"), 150);
@@ -66,7 +63,6 @@ export function ChatMessageList({
     }
   }, [activeLead._id, isLoadingMessages, messages.length]);
 
-  // 2. Smooth Auto-Scroll for New Incoming or Outgoing Messages during active conversation
   useEffect(() => {
     const isSameLead = prevLeadIdRef.current === activeLead._id;
     const isNewMessage = messages.length > prevMessagesCountRef.current;

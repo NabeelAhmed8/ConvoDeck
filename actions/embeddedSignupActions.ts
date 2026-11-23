@@ -35,7 +35,6 @@ export async function completeEmbeddedSignup(
     let finalToken = "";
     let finalPhoneNumber = "";
 
-    // 1. Exchange temporary auth code for permanent token
     if (payload.code && appId && appSecret) {
       try {
         const tokenUrl = `https://graph.facebook.com/v21.0/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&code=${payload.code}`;
@@ -49,7 +48,6 @@ export async function completeEmbeddedSignup(
       }
     }
 
-    // 2. Fetch verified display phone number from Meta
     if (payload.phoneNumberId && finalToken) {
       try {
         const phoneUrl = `https://graph.facebook.com/v21.0/${payload.phoneNumberId}?fields=display_phone_number,verified_name`;
@@ -65,7 +63,6 @@ export async function completeEmbeddedSignup(
       }
     }
 
-    // 3. Auto-subscribe our Webhook to the client's WABA (eliminates manual webhook copy-paste!)
     if (payload.wabaId && finalToken) {
       try {
         const subUrl = `https://graph.facebook.com/v21.0/${payload.wabaId}/subscribed_apps`;
@@ -81,7 +78,6 @@ export async function completeEmbeddedSignup(
       }
     }
 
-    // 4. Verify token and phone number retrieved from Meta
     if (!finalPhoneNumber || !finalToken) {
       return {
         success: false,
@@ -89,7 +85,6 @@ export async function completeEmbeddedSignup(
       };
     }
 
-    // 5. Update Workspace in DB
     await Workspace.findByIdAndUpdate(
       workspaceId,
       {

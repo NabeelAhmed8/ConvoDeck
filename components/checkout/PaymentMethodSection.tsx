@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { CreditCard, ShieldCheck, ExternalLink, Lock } from "lucide-react";
+import { CreditCard, ShieldCheck, ExternalLink, Lock, Zap } from "lucide-react";
 
-export type PaymentMethodType = "jazzcash" | "easypaisa" | "card";
+export type PaymentMethodType = "safepay" | "card";
 
 interface PaymentMethodSectionProps {
   paymentMethod: PaymentMethodType;
@@ -30,78 +30,57 @@ export function PaymentMethodSection({
         </div>
       </div>
 
-      {/* Payment Gateway Cards with Official Brand Logos */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {/* JazzCash Card */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <button
           type="button"
-          onClick={() => setPaymentMethod("jazzcash")}
-          className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between gap-3 cursor-pointer ${
-            paymentMethod === "jazzcash"
-              ? "bg-rose-50/80 border-rose-500 shadow-md ring-2 ring-rose-500/20"
+          onClick={() => setPaymentMethod("safepay")}
+          className={`p-4 sm:p-5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-3 cursor-pointer ${
+            paymentMethod === "safepay"
+              ? "bg-blue-50/80 border-blue-600 shadow-md ring-2 ring-blue-500/20"
               : "bg-[#edf1f7] border-slate-300/60 hover:bg-slate-100"
           }`}
         >
           <div className="flex items-center justify-between w-full h-8">
-            <img
-              src="/images/payments/jazzcash.png"
-              alt="JazzCash"
-              className="h-8 w-auto max-w-[100px] object-contain drop-shadow-xs"
-            />
-            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">
-              Official
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/images/payments/jazzcash.png"
+                alt="JazzCash"
+                className="h-7 w-auto object-contain"
+              />
+              <img
+                src="/images/payments/easypaisa.png"
+                alt="EasyPaisa"
+                className="h-5 w-auto object-contain"
+              />
+            </div>
+            <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700">
+              Safepay (PK)
             </span>
           </div>
           <div>
-            <p className="text-xs font-bold text-slate-900">JazzCash Portal</p>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
-              Mobile Account, Debit Card, or Voucher
+            <p className="text-xs font-bold text-slate-900 flex items-center gap-1">
+              <span>Safepay Official Gateway</span>
+              <Zap className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
+            </p>
+            <p className="text-[11px] text-slate-500 leading-tight mt-0.5">
+              Pay with JazzCash, EasyPaisa, or Pakistani Debit/Credit Cards
             </p>
           </div>
         </button>
 
-        {/* EasyPaisa Card */}
-        <button
-          type="button"
-          onClick={() => setPaymentMethod("easypaisa")}
-          className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between gap-3 cursor-pointer ${
-            paymentMethod === "easypaisa"
-              ? "bg-emerald-50/80 border-emerald-500 shadow-md ring-2 ring-emerald-500/20"
-              : "bg-[#edf1f7] border-slate-300/60 hover:bg-slate-100"
-          }`}
-        >
-          <div className="flex items-center justify-between w-full h-8">
-            <img
-              src="/images/payments/easypaisa.png"
-              alt="EasyPaisa"
-              className="h-6 w-auto max-w-[110px] object-contain drop-shadow-xs"
-            />
-            <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-              Official
-            </span>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-900">EasyPaisa EasyPay</p>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
-              EasyPaisa App, Debit Card, or OTC
-            </p>
-          </div>
-        </button>
-
-        {/* Stripe / Card Card */}
         <button
           type="button"
           onClick={() => setPaymentMethod("card")}
-          className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between gap-3 cursor-pointer ${
+          className={`p-4 sm:p-5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-3 cursor-pointer ${
             paymentMethod === "card"
               ? "bg-orange-50/80 border-[#ff6422] shadow-md ring-2 ring-[#ff6422]/20"
               : "bg-[#edf1f7] border-slate-300/60 hover:bg-slate-100"
           }`}
         >
           <div className="flex items-center justify-between w-full h-8">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-[#ff6422]" />
-              <span className="text-xs font-black text-slate-900">Card</span>
+              <span className="text-xs font-black text-slate-900">International Card</span>
             </div>
             <div className="flex items-center gap-1 text-[9px] font-extrabold text-slate-500 uppercase">
               <span className="px-1.5 py-0.5 rounded bg-white border border-slate-200">VISA</span>
@@ -110,39 +89,36 @@ export function PaymentMethodSection({
           </div>
           <div>
             <p className="text-xs font-bold text-slate-900">Stripe Card Checkout</p>
-            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
+            <p className="text-[11px] text-slate-500 leading-tight mt-0.5">
               Visa, Mastercard, & American Express
             </p>
           </div>
         </button>
       </div>
 
-      {/* Hosted Portal Assurance Notice with Brand Logo */}
       <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-3 text-xs text-slate-600">
         <Lock className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
         <div className="space-y-1.5 flex-1">
           <div className="flex items-center justify-between">
             <span className="font-bold text-slate-900 flex items-center gap-1.5">
-              {paymentMethod === "jazzcash"
-                ? "Official JazzCash Hosted Payment Gateway"
-                : paymentMethod === "easypaisa"
-                ? "Official EasyPaisa EasyPay Hosted Gateway"
+              {paymentMethod === "safepay"
+                ? "Official Safepay Gateway (JazzCash, EasyPaisa, & Pakistani Cards)"
                 : "Stripe 256-bit Encrypted Card Checkout"}
               <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
             </span>
-            {paymentMethod === "jazzcash" && (
-              <img
-                src="/images/payments/jazzcash.png"
-                alt="JazzCash"
-                className="h-5 w-auto object-contain"
-              />
-            )}
-            {paymentMethod === "easypaisa" && (
-              <img
-                src="/images/payments/easypaisa.png"
-                alt="EasyPaisa"
-                className="h-4 w-auto object-contain"
-              />
+            {paymentMethod === "safepay" && (
+              <div className="flex items-center gap-2">
+                <img
+                  src="/images/payments/jazzcash.png"
+                  alt="JazzCash"
+                  className="h-4 w-auto object-contain"
+                />
+                <img
+                  src="/images/payments/easypaisa.png"
+                  alt="EasyPaisa"
+                  className="h-3 w-auto object-contain"
+                />
+              </div>
             )}
           </div>
           <p className="text-[11px] text-slate-500 leading-relaxed">

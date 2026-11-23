@@ -13,6 +13,8 @@ import {
 import { PricingSection } from "@/components/pricing/PricingSection";
 import { getCurrentUser } from "@/actions/authActions";
 import { DownloadInvoiceButton } from "@/components/billing/DownloadInvoiceButton";
+import { dbConnect } from "@/lib/dbConnect";
+import { Invoice } from "@/models/Invoice";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +30,34 @@ export default async function BillingPage() {
   const currentPlan = workspace?.plan || "trial";
   const planStatus = workspace?.planStatus || "trial";
   const paymentMethod = workspace?.paymentMethod || "None on file";
+
+  // Fetch all historical invoices from MongoDB for this workspace
+  await dbConnect();
+  const workspaceId = workspace?._id ? workspace._id.toString() : "";
+  const dbInvoices = workspaceId
+    ? await Invoice.find({ workspaceId }).sort({ paidAt: -1, createdAt: -1 }).lean()
+    : [];
+
+  // If no records in Invoice collection yet but workspace has an active payment, show fallback
+  const invoices =
+    dbInvoices.length > 0
+      ? dbInvoices
+      : workspace?.amountPaid && workspace.amountPaid > 0
+      ? [
+          {
+            _id: workspace._id ? workspace._id.toString() : "001",
+            invoiceNumber: `INV-2026-${
+              workspace._id ? workspace._id.toString().slice(-5).toUpperCase() : "001"
+            }`,
+            paidAt: workspace.lastPaymentDate || new Date(),
+            plan: currentPlan,
+            planName: `${currentPlan.charAt(0).toUpperCase() + currentPlan.slice(1)} License`,
+            amount: workspace.amountPaid,
+            currency: workspace.planCurrency || "PKR",
+            status: "completed",
+          },
+        ]
+      : [];
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 w-full min-w-0">
@@ -145,37 +175,40 @@ export default async function BillingPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 text-slate-700">
-              {workspace?.amountPaid && workspace.amountPaid > 0 ? (
-                <tr>
-                  <td className="py-3 font-mono font-medium text-slate-900">
-                    INV-2026-{workspace._id ? workspace._id.toString().slice(-5).toUpperCase() : "001"}
-                  </td>
-                  <td className="py-3">
-                    {workspace.lastPaymentDate
-                      ? new Date(workspace.lastPaymentDate).toLocaleDateString([], {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })
-                      : "Paid"}
-                  </td>
-                  <td className="py-3 font-semibold text-slate-900 capitalize">
-                    {currentPlan} License
-                  </td>
-                  <td className="py-3 font-bold text-slate-900 font-mono">
-                    {workspace.planCurrency || "$"}{workspace.amountPaid.toLocaleString()}
-                  </td>
-                  <td className="py-3">
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-bold">
-                      Completed
-                    </span>
-                  </td>
-                  <td className="py-3 text-right">
-                    <DownloadInvoiceButton
-                      invoiceId={`INV-${workspace._id ? workspace._id.toString().slice(-6).toUpperCase() : "PAID"}`}
-                    />
-                  </td>
-                </tr>
+              {invoices.length > 0 ? (
+                invoices.map((inv) => (
+                  <tr
+                    key={inv._id ? inv._id.toString() : inv.invoiceNumber}
+                    className="hover:bg-slate-50/50 transition-colors"
+                  >
+                    <td className="py-3 font-mono font-medium text-slate-900">
+                      {inv.invoiceNumber}
+                    </td>
+                    <td className="py-3">
+                      {inv.paidAt
+                        ? new Date(inv.paidAt).toLocaleDateString([], {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : "Paid"}
+                    </td>
+                    <td className="py-3 font-semibold text-slate-900 capitalize">
+                      {inv.planName || `${inv.plan || currentPlan} License`}
+                    </td>
+                    <td className="py-3 font-bold text-slate-900 font-mono">
+                      {inv.currency || "$"}{inv.amount.toLocaleString()}
+                    </td>
+                    <td className="py-3">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-bold capitalize">
+                        {inv.status || "Completed"}
+                      </span>
+                    </td>
+                    <td className="py-3 text-right">
+                      <DownloadInvoiceButton invoiceId={inv.invoiceNumber} />
+                    </td>
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-xs text-slate-400">

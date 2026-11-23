@@ -25,7 +25,6 @@ export async function GET(req: NextRequest) {
 
     const serverTime = new Date().toISOString();
 
-    // 1. Fetch Delta Messages for the active lead
     let newMessages: unknown[] = [];
     let statusUpdates: unknown[] = [];
 
@@ -33,7 +32,6 @@ export async function GET(req: NextRequest) {
       if (after) {
         const afterDate = new Date(after);
         if (!isNaN(afterDate.getTime())) {
-          // Fetch newly created messages since 'after'
           newMessages = await Message.find({
             leadId,
             createdAt: { $gt: afterDate },
@@ -41,7 +39,6 @@ export async function GET(req: NextRequest) {
             .sort({ createdAt: 1 })
             .lean();
 
-          // Fetch messages whose delivery/read status changed since 'after'
           statusUpdates = await Message.find({
             leadId,
             updatedAt: { $gt: afterDate },
@@ -53,7 +50,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 2. Fetch Delta or Updated Leads for Sidebar live sync
     let leads: unknown[] = [];
     if (lastSync) {
       const lastSyncDate = new Date(lastSync);

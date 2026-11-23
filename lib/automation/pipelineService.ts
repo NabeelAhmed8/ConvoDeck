@@ -21,7 +21,6 @@ export function computePipelineMutation(
   let newStage: LeadStage | undefined = undefined;
   let suggestedDealValue: number | undefined = undefined;
 
-  // 1. Demo Scheduling Intent
   if (matches.hasDemoIntent) {
     if (currentStage === "NEW" || currentStage === "CONTACTED") {
       newStage = "DEMO_SCHEDULED";
@@ -31,7 +30,6 @@ export function computePipelineMutation(
     }
   }
 
-  // 2. Pricing or Quotation Intent
   if (matches.hasPricingIntent) {
     if (!newStage && currentStage === "NEW") {
       newStage = "CONTACTED";
@@ -41,14 +39,12 @@ export function computePipelineMutation(
     }
   }
 
-  // 3. Urgent Sentiment Flag
   if (matches.hasUrgentSentiment) {
     if (!currentTags.includes("Urgent")) {
       tagsToAdd.push("Urgent");
     }
   }
 
-  // 4. Human Handoff Flag
   if (matches.hasHandoffRequest) {
     if (!currentTags.includes("Needs Human")) {
       tagsToAdd.push("Needs Human");

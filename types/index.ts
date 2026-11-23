@@ -46,6 +46,22 @@ export interface IWorkspace {
   updatedAt?: string | Date;
 }
 
+export interface IInvoice {
+  _id?: string;
+  workspaceId: string;
+  invoiceNumber: string;
+  plan: string;
+  planName: string;
+  amount: number;
+  currency?: string;
+  billingFrequency?: string;
+  paymentMethod?: string;
+  status: "completed" | "pending" | "failed" | "refunded";
+  paidAt?: string | Date;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
 export type LeadStage =
   | "NEW"
   | "CONTACTED"

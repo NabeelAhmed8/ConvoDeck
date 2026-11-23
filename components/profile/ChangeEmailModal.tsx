@@ -293,19 +293,6 @@ export function ChangeEmailModal({
               />
             </div>
 
-            {/* Simulated Ethereal preview link for local development */}
-            {previewUrl && (
-              <a
-                href={previewUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="block text-center text-[10px] sm:text-[11px] text-[#ea5414] hover:underline"
-              >
-                <span>[Dev Mode] View Verification Code in Mail Preview</span>
-                <ExternalLink className="w-3 h-3 inline ml-1" />
-              </a>
-            )}
-
             <div className="flex items-center justify-between text-xs pt-0.5">
               <button
                 type="button"

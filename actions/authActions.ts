@@ -19,7 +19,6 @@ import {
   sendVerificationEmail,
 } from "@/lib/mail";
 
-// 1. User & Workspace Registration (Initiates Email Verification Code)
 export async function signupUser(formData: {
   name: string;
   companyName: string;
@@ -103,7 +102,6 @@ export async function signupUser(formData: {
   }
 }
 
-// 2. Verify Signup OTP Code & Complete Workspace Creation
 export async function verifySignupCode(params: {
   email: string;
   code: string;
@@ -219,7 +217,6 @@ function getPortalMismatchError(role: "agent" | "admin", name?: string, email?: 
   return `Admin account${label} — Please use Workspace Login.`;
 }
 
-// 3. User Login (Initiates 2FA Verification Code to Email)
 export async function loginUser(formData: {
   email: string;
   password: string;
@@ -257,8 +254,6 @@ export async function loginUser(formData: {
       return { success: false, error: "Invalid email or password" };
     }
 
-    // Role-based Portal Enforcement:
-    // 1. Workspace Login is strictly for Admins. Sales Agents MUST sign in through the Agent Portal.
     if (portal === "workspace" && user.role === "agent") {
       return {
         success: false,
@@ -267,7 +262,6 @@ export async function loginUser(formData: {
       };
     }
 
-    // 2. Agent Portal is strictly for Sales Agents. Admins MUST sign in through Workspace Login.
     if (portal === "agent" && user.role === "admin") {
       return {
         success: false,
@@ -338,7 +332,6 @@ export async function loginUser(formData: {
   }
 }
 
-// 4. Verify Login OTP Code & Establish Session
 export async function verifyLoginCode(params: {
   email: string;
   code: string;
@@ -487,7 +480,6 @@ export async function verifyLoginCode(params: {
   }
 }
 
-// 5. Resend Verification Code (Signup or Login)
 export async function resendVerificationCode(params: {
   email: string;
   type: "signup" | "login";
@@ -544,7 +536,6 @@ export async function resendVerificationCode(params: {
   }
 }
 
-// 6. User Logout (Session End & JWT Token Invalidation)
 export async function logoutUser(formData?: FormData) {
   let isAgent = false;
   try {
@@ -585,7 +576,6 @@ export async function logoutUser(formData?: FormData) {
   redirect(isAgent ? "/agent/login" : "/login");
 }
 
-// 7. Get Current Logged-in User & Workspace (Enforces RBAC & Active Status)
 export async function getCurrentUser() {
   try {
     const session = await getSession();

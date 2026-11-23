@@ -160,21 +160,6 @@ export function TwoFactorVerifyForm({
           </p>
         </div>
 
-        {/* Development preview email banner */}
-        {previewUrl && (
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] text-amber-900 flex items-center justify-between gap-2">
-            <span>Dev Mode: View test email</span>
-            <a
-              href={previewUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-semibold text-amber-700 hover:text-amber-900 underline"
-            >
-              Open Email <ExternalLink className="w-3 h-3" aria-hidden="true" />
-            </a>
-          </div>
-        )}
-
         <Button
           type="submit"
           disabled={loading || otpCode.length !== 6}

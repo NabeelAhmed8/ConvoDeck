@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ShieldCheck, ArrowLeft, AlertCircle, Lock, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import {
-  processSubscriptionCheckout,
   startHostedSubscriptionCheckout,
 } from "@/actions/subscriptionActions";
 import { getCurrentUser } from "@/actions/authActions";
@@ -29,7 +28,6 @@ function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Read initial params
   const rawParamPlan = searchParams.get("plan");
   const paramPlan: PaidPlanKey = isPaidPlan(rawParamPlan) ? rawParamPlan : "growth";
   const paramBilling = (searchParams.get("billing") as BillingFrequency) || "monthly";
@@ -44,10 +42,9 @@ function CheckoutContent() {
     CURRENCY_SYMBOLS[paramCurrency] ? paramCurrency : "PKR"
   );
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>(
-    paramCurrency === "PKR" ? "jazzcash" : "card"
+    paramCurrency === "PKR" ? "safepay" : "card"
   );
 
-  // Form State
   const [companyName, setCompanyName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [billingEmail, setBillingEmail] = useState("");
@@ -57,7 +54,6 @@ function CheckoutContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Auto-populate logged-in user profile & workspace data if available
   useEffect(() => {
     async function loadExistingInfo() {
       try {
@@ -148,7 +144,6 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-[#ebf0f7] text-slate-900 selection:bg-[#ff6422] selection:text-white">
-      {/* Top Header */}
       <header className="fixed top-2.5 sm:top-5 inset-x-2 sm:inset-x-6 lg:inset-x-8 max-w-6xl mx-auto z-40 transition-all">
         <div className="neu-card rounded-2xl sm:rounded-full px-3 sm:px-6 h-15 sm:h-18 flex items-center justify-between border border-white/80 bg-[#edf1f7]/95 backdrop-blur-md">
           <Link
@@ -184,10 +179,8 @@ function CheckoutContent() {
         </div>
       </header>
 
-      {/* Main Checkout Grid */}
       <main className="max-w-7xl mx-auto px-3 sm:px-6 pt-24 sm:pt-28 pb-8 sm:pb-10 md:pb-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-start">
-          {/* Left Column: Order Summary & Inclusions */}
           <div className="lg:col-span-5">
             <OrderSummaryCard
               planKey={planKey}
@@ -202,7 +195,6 @@ function CheckoutContent() {
             />
           </div>
 
-          {/* Right Column: Customer Details & Multi-Payment Method */}
           <div className="lg:col-span-7 neu-card rounded-3xl p-4 sm:p-8 md:p-10 space-y-5 sm:space-y-6 text-slate-800 bg-white">
             <div>
               <h2 className="text-xl font-bold text-slate-900">
@@ -213,7 +205,6 @@ function CheckoutContent() {
               </p>
             </div>
 
-            {/* Plan Tier Status Indicator (Upgrade / Downgrade / Current) */}
             {curTier > 0 && (
               <div
                 className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between ${
@@ -257,7 +248,6 @@ function CheckoutContent() {
             )}
 
             <form onSubmit={handleCompletePayment} className="space-y-5">
-              {/* Step 1: Customer Profile */}
               <CustomerBillingForm
                 ownerName={ownerName}
                 setOwnerName={setOwnerName}
@@ -269,7 +259,6 @@ function CheckoutContent() {
                 setWhatsappPhone={setWhatsappPhone}
               />
 
-              {/* Step 2: Multi-Method Payment Selector */}
               <PaymentMethodSection
                 paymentMethod={paymentMethod}
                 setPaymentMethod={setPaymentMethod}
@@ -277,7 +266,6 @@ function CheckoutContent() {
                 currencySymbol={symbol}
               />
 
-              {/* Step 3: Terms Agreement */}
               <div className="border-t border-slate-200/80 pt-4 flex items-start gap-2.5">
                 <input
                   id="checkout-agree-terms"
@@ -305,7 +293,6 @@ function CheckoutContent() {
                 </label>
               </div>
 
-              {/* Submit Button */}
               <Button
                 type="submit"
                 disabled={loading}
@@ -315,10 +302,8 @@ function CheckoutContent() {
                 <span>
                   {loading
                     ? "Redirecting to Hosted Portal..."
-                    : paymentMethod === "jazzcash"
-                    ? `Proceed to JazzCash Portal (${symbol}${totalPrice.toLocaleString()})`
-                    : paymentMethod === "easypaisa"
-                    ? `Proceed to EasyPaisa Portal (${symbol}${totalPrice.toLocaleString()})`
+                    : paymentMethod === "safepay"
+                    ? `Proceed to Safepay Checkout (${symbol}${totalPrice.toLocaleString()})`
                     : `Proceed to Stripe Card Checkout (${symbol}${totalPrice.toLocaleString()})`}
                 </span>
               </Button>

@@ -26,7 +26,38 @@ export interface CreateCheckoutSessionParams {
  * If STRIPE_SECRET_KEY is not configured, returns a mock session object for instant development testing.
  */
 export async function createStripeSession(params: CreateCheckoutSessionParams) {
-  if (stripe && stripeSecretKey) {
+  const isStrict = process.env.NODE_ENV === "production" || process.env.STRICT_PAYMENTS === "true";
+
+  if (!stripeSecretKey) {
+    if (isStrict) {
+      return {
+        success: false,
+        error: "Stripe payment gateway is not configured on the server. Please add STRIPE_SECRET_KEY in environment variables.",
+      };
+    }
+    // Graceful fallback ONLY in local non-strict demo development
+    const mockSessionId = `cs_test_${Math.random().toString(36).substring(2, 12)}`;
+    return {
+      success: true,
+      sessionId: mockSessionId,
+      url: null,
+      isMock: true,
+    };
+  }
+
+  const isDummy =
+    stripeSecretKey.includes("dummy") ||
+    stripeSecretKey.includes("placeholder") ||
+    stripeSecretKey.includes("mock");
+
+  if (isDummy && isStrict) {
+    return {
+      success: false,
+      error: "Active production Stripe credentials are required to process payments.",
+    };
+  }
+
+  if (stripe && !isDummy) {
     try {
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
@@ -65,15 +96,7 @@ export async function createStripeSession(params: CreateCheckoutSessionParams) {
     }
   }
 
-  // Production Gate: In live production, reject unconfigured Stripe credentials immediately
-  if (process.env.NODE_ENV === "production" || process.env.STRICT_PAYMENTS === "true") {
-    return {
-      success: false,
-      error: "Stripe payment gateway is not configured on the server. Please contact administrator.",
-    };
-  }
-
-  // Graceful fallback for local development or when Stripe keys are not yet added
+  // Graceful fallback for local development or when dummy/mock Stripe keys are configured
   const mockSessionId = `cs_test_${Math.random().toString(36).substring(2, 12)}`;
   return {
     success: true,

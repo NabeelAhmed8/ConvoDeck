@@ -8,7 +8,6 @@ import { processSmartAutomation } from "@/lib/automation/automationEngine";
 const VERIFY_TOKEN =
   process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || "convodeck_secure_token";
 
-// 1. Webhook Verification (Meta sends GET request when configuring webhook in Meta App Dashboard)
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const mode = searchParams.get("hub.mode");
@@ -44,7 +43,6 @@ export async function GET(req: NextRequest) {
   return new Response("Forbidden", { status: 403 });
 }
 
-// 2. Real Incoming Messages & Status Updates (Meta sends POST request)
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

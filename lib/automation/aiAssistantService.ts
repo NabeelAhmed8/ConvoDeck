@@ -29,7 +29,6 @@ Rules:
 4. Keep the tone professional, helpful, and concise. No markdown headers or lengthy lists.`;
 
   try {
-    // 1. Google Gemini Flash (default & fastest)
     if (geminiKey) {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
       const res = await fetch(url, {
@@ -59,7 +58,6 @@ Rules:
       }
     }
 
-    // 2. OpenAI Fallback
     if (openAiKey) {
       const res = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",

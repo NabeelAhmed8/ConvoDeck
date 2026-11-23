@@ -15,7 +15,6 @@ export async function routeLeadRoundRobin(
   workspaceId: string
 ): Promise<RoutingResult> {
   try {
-    // 1. Fetch all active agents/admins in workspace
     const eligibleAgents = await User.find({
       workspaceId,
       status: "active",
@@ -27,14 +26,12 @@ export async function routeLeadRoundRobin(
       return {};
     }
 
-    // 2. Fetch or initialize automation configuration
     const config = await AutomationConfig.findOne({ workspaceId });
     const currentIndex = config?.lastAssignedAgentIndex || 0;
     const nextIndex = (currentIndex + 1) % eligibleAgents.length;
 
     const assignedAgent = eligibleAgents[currentIndex % eligibleAgents.length];
 
-    // 3. Atomically update round-robin index pointer for next lead
     await AutomationConfig.updateOne(
       { workspaceId },
       { $set: { lastAssignedAgentIndex: nextIndex } },

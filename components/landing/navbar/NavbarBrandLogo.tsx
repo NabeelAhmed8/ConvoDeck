@@ -23,7 +23,6 @@ export function NavbarBrandLogo({
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     onNavigate?.();
 
-    // If currently on the homepage, smoothly scroll to top without full page reload
     if (pathname === "/" || pathname === "") {
       e.preventDefault();
       window.scrollTo({
@@ -32,7 +31,6 @@ export function NavbarBrandLogo({
         behavior: "smooth",
       });
 
-      // Clear any URL section hash (e.g. #features, #pricing) cleanly without reload
       if (window.location.hash) {
         window.history.pushState(null, "", window.location.pathname);
       }

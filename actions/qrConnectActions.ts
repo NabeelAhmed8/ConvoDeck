@@ -16,7 +16,6 @@ export interface IQrSessionResult {
   error?: string;
 }
 
-// 1. Generate new encrypted QR Code for WhatsApp Device Linking
 export async function generateQrCodeSession(): Promise<IQrSessionResult> {
   try {
     await dbConnect();
@@ -58,7 +57,6 @@ export async function generateQrCodeSession(): Promise<IQrSessionResult> {
   }
 }
 
-// 2. Confirm WhatsApp Device Linked after QR Scan
 export async function confirmQrDeviceConnection(params: {
   phoneNumber: string;
   sessionId: string;
